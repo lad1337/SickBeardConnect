@@ -16,7 +16,7 @@ function initContent() {
 
     var params = new Params();
     params.cmd = "future";
-    genericRequest(params, futureBuild, genricRequestError, 0, futureTimeout); // timeout 1 min -60000
+    genericRequest(params, futureBuild, genricRequestError, 60000, futureTimeout); // timeout 1 min
 }
 
 /**
