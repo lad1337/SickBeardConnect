@@ -13,6 +13,10 @@ function initContent() {
     params.cmd = "shows";
     params.sort = "name";
     genericRequest(params, showsBuild, genricRequestError, 300000, showsTimeout); // timeout 5 min
+
+    var params = new Params();
+    params.cmd = "future";
+    genericRequest(params, futureBuild, genricRequestError, 0, futureTimeout); // timeout 1 min -60000
 }
 
 /**
@@ -46,6 +50,6 @@ if (!closeWindow) {
     });
     // this is called after the above one
     window.onload = function() {
-        //initContent();
+        // what can we do here ?
     };
 }

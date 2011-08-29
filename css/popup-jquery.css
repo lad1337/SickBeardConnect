@@ -92,6 +92,14 @@
     border-width: 0;
     padding: 0;
     background: none;
+    left: 0px;
+    position: relative;
+}
+
+.ui-tabs .ui-tabs-hide {
+    position: absolute;
+    left: -1000px;
+    display: block !important;
 }
 
 .ui-dialog,.ui-dialog-buttonpane {

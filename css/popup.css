@@ -94,8 +94,15 @@ body.big {
 }
 
 .pannel.animated {
-    transition-property: height;
-    -webkit-transition-property: height;
+    transition-property: height, left;
+    -webkit-transition-property: height, left;
+    transition-duration: 0.5s;
+    -webkit-transition-duration: 0.5s;
+}
+
+.tab.animated {
+    transition-property: left;
+    -webkit-transition-property: left;
     transition-duration: 0.5s;
     -webkit-transition-duration: 0.5s;
 }
@@ -103,19 +110,6 @@ body.big {
 /*
  * shows
  */
-#shows ul {
-    padding: 0;
-}
-
-#shows li {
-    min-height: 20px;
-    list-style: none;
-    margin: 0px;
-    position: relative;
-    border-bottom: solid 1px #fff;
-    padding: 4px;
-}
-
 #shows li .name {
     font-weight: bold;
     cursor: pointer;
@@ -130,6 +124,30 @@ body.big {
 
 #show img.banner {
     width: 100%;
+}
+
+/*
+ * Future
+ */
+#future-arc .show_name {
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/*
+ * Lists
+ */
+#shows ul,#future-arc ul {
+    padding: 0;
+}
+
+#shows li,#future-arc li {
+    min-height: 20px;
+    list-style: none;
+    margin: 0px;
+    position: relative;
+    border-bottom: solid 1px #fff;
+    padding: 4px;
 }
 
 /*

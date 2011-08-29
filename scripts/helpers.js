@@ -1,5 +1,11 @@
 
-var settings = new Store("settings", { "sb_url" : "http://localhost:8081", "sb_api_key" : 1234, "config_log_lvl" : 10, "config_width" : "medium" });
+var settings = new Store("settings", { 
+    "sb_url" : "http://localhost:8081", 
+    "sb_api_key" : 1234, 
+    "config_log_lvl" : 10, 
+    "config_width" : "medium", 
+    "config_tab_animation" : false
+    });
 var localStorageFS = settings.toObject();
 var NOW = $.now();
 
@@ -166,6 +172,18 @@ function shouldLvlBeLoged(lvl) {
     return lvl >= parseInt(localStorageFS["config_log_lvl"]);
 
 }
+
+
+//http://www.electrictoolbox.com/pad-number-zeroes-javascript-improved/
+function pad(n, len) {
+    s = n.toString();
+    if (s.length < len) {
+        s = ('0000000000' + s).slice(-len);
+    }
+
+    return s;  
+}
+
 
 function onRequest(request, sender, callback) {
     console.log(request);

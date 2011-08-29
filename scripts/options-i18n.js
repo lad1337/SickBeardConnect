@@ -63,7 +63,11 @@ this.i18n = {
         "en": "Width:",
         "de": "Breite"
     },
-
+    "tab_animation": {
+        "en": "Animate tab change",
+        "de": "Tab wechsel animieren"
+    },
+    
     "feel":{
         "en": "Feel",
         "de": "Verhalten"

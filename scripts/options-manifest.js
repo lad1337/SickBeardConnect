@@ -44,6 +44,13 @@ this.manifest = {
                 ["medium", "Medium"],
                 ["big", "Big"],
             ]
+        },
+        {
+            "tab": i18n.get("style"),
+            "group": i18n.get("look"),
+            "name": "config_tab_animation",
+            "type": "checkbox",
+            "label": i18n.get("tab_animation")
         }
     ],
     "alignment": [

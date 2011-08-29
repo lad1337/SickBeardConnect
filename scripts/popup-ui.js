@@ -2,8 +2,8 @@ var lastHeight = {};
 var initialHeight = {};
 
 function _initGui() {
-    log("initialising the gui", "POP", DEBUG)
-    $("body").addClass(localStorage["config_width"]);
+    log("initialising the gui", "POP", DEBUG);
+    $("body").addClass(localStorageFS["config_width"]);
     // dummy data during testing
     // $(".pannel").html("stuff<br/>stuff<br/>stuff<br/>stuff<br/>stuff<br/>stuff<br/>stuff<br/>stuff");
 
@@ -35,6 +35,8 @@ function _initGui() {
     });
 
     var tab = $("#contend").tabs();
+    if(localStorageFS["config_tab_animation"])
+        $(".tab").addClass("animated");
     window.setTimeout(setMainContentHeight, 1000);
 }
 
@@ -64,7 +66,6 @@ function showsBuild(data, paramString) {
         liHTMLString += '<div class="clearer"></div>';
         li.append(nameSpan);
         li.append(liHTMLString);
-
         ul.append(li);
     });
     shows.append(ul);
@@ -83,17 +84,17 @@ function showsAfterDone() {
     });
     recalculateHeight("shows", true);
 }
+
 /*
  * Show
  */
-
 function showBuild(data, params) {
-    log("build show not implemented", "GUI", WARNING);
+    log("build show not FULLY implemented", "GUI", WARNING);
     var show = $("#show");
     // show.html("");
     $("#show .name").html(data.show_name);
     $("#show .banner").attr("src", constructShowBannerUrl(params.tvdbid));
-    $("#show .quality").attr("class", "quality "+data.quality);
+    $("#show .quality").attr("class", "quality " + data.quality);
     $("#show .quality").html(data.quality);
 
     // save the html for later
@@ -107,12 +108,51 @@ function showTimeout(params) {
 }
 
 function showAfterDone() {
-    window.setTimeout(function() {
-        recalculateHeight("show", true);
-    }, 100); // this timeout is needed
-    lastHeight["show"] = ""; // delete the height so the handleArccChange does not set the height for show
+    // recalculateHeight("show");
     $("#contend").tabs('select', 0);
+    lastHeight["show"] = "450px";
     $('#shows-arc').accordion('activate', 1);
+}
+
+/*
+ * Future
+ */
+function futureBuild(data, params) {
+    var types = [ "missed", "today", "soon", "later" ];
+    $.each(types, function(k, type) {
+        var curUl = $("<ul>");
+        $.each(data[type], function(key, value) {
+            var li = $("<li>");
+            var liHTMLString = '<span class="show_name" id="' + value.tvdbid + '">' + value.show_name + '</span><br/>\
+                                <span class="epSeasonEpisode">s' + pad(value.season, 2) + 'e'+pad(value.episode,2)+'</span>\
+                                <span class="ep_name">' + value.ep_name + '</span>';
+            liHTMLString += '<div class="clearer"></div>';
+            li.append(liHTMLString);
+            curUl.append(li);
+        });
+        $("#" + type).append(curUl);
+    });
+
+    localStorage["html_" + params] = $("#future-arc").html();
+    futureAfterDone();
+}
+
+function futureTimeout(params) {
+    $("#future-arc").html(localStorage["html_" + params]);
+    futureAfterDone();
+}
+
+function futureAfterDone() {
+    var types = [ "today", "soon", "later" ];
+    $.each(types, function(k, type) {
+        recalculateHeight(type);
+        $("#" + type).css("height", "0px");
+    });
+    recalculateHeight("missed", true);
+
+    $("#future-arc li .show_name").click(function(data) {
+        openShow($(this).attr("id"));
+    });
 }
 
 /*
@@ -137,6 +177,7 @@ function recalculateHeight(id, setHeight) {
     lastHeight[id] = element.css("height");
     log("saving height for " + id + ": " + lastHeight[id], "GUI", DEBUG);
     element.addClass("animated"); // add animation back to the pannel
+
     if (setHeight) {
         setHeightFor(id, lastHeight[id]);
     }
