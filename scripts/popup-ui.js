@@ -4,8 +4,6 @@ var initialHeight = {};
 function _initGui() {
     log("initialising the gui", "POP", DEBUG);
     $("body").addClass(localStorageFS["config_width"]);
-    // dummy data during testing
-    // $(".pannel").html("stuff<br/>stuff<br/>stuff<br/>stuff<br/>stuff<br/>stuff<br/>stuff<br/>stuff");
 
     var arccOptions = { animated : false, autoHeight : false, navigation : true };
     var showsArcc = $("#shows-arc").accordion(arccOptions);
@@ -35,7 +33,15 @@ function _initGui() {
     });
 
     var tab = $("#contend").tabs();
-    if(localStorageFS["config_tab_animation"])
+
+    $("#tabHeader li").live('click', function(e) {
+        var id = $(this).find("a").attr("id");
+        if (id) {
+            $("#contend").tabs('select', parseInt(id));
+        }
+    });
+
+    if (localStorageFS["config_tab_animation"])
         $(".tab").addClass("animated");
     window.setTimeout(setMainContentHeight, 1000);
 }
@@ -91,9 +97,19 @@ function showsAfterDone() {
 function showBuild(data, params) {
     log("build show not FULLY implemented", "GUI", WARNING);
     var show = $("#show");
-    // show.html("");
+
     $("#show .name").html(data.show_name);
-    $("#show .banner").attr("src", constructShowBannerUrl(params.tvdbid));
+    var bannerURL = constructShowBannerUrl(params.tvdbid);
+    if (bannerURL) {
+        if ($("#show img.banner").length > 0)
+            $("#show img.banner").attr("src", bannerURL);
+        else {
+            var img = $("<img>");
+            img.attr("src", bannerURL);
+            img.addClass("banner");
+            show.prepend(img);
+        }
+    }
     $("#show .quality").attr("class", "quality " + data.quality);
     $("#show .quality").html(data.quality);
 
@@ -121,16 +137,22 @@ function futureBuild(data, params) {
     var types = [ "missed", "today", "soon", "later" ];
     $.each(types, function(k, type) {
         var curUl = $("<ul>");
+        var entrys = false;
         $.each(data[type], function(key, value) {
             var li = $("<li>");
             var liHTMLString = '<span class="show_name" id="' + value.tvdbid + '">' + value.show_name + '</span><br/>\
-                                <span class="epSeasonEpisode">s' + pad(value.season, 2) + 'e'+pad(value.episode,2)+'</span>\
+                                <span class="epSeasonEpisode">s' + pad(value.season, 2) + 'e' + pad(value.episode, 2) + '</span>\
                                 <span class="ep_name">' + value.ep_name + '</span>';
             liHTMLString += '<div class="clearer"></div>';
             li.append(liHTMLString);
             curUl.append(li);
+            entrys = true;
         });
-        $("#" + type).append(curUl);
+        if (entrys) {
+            $("#" + type).html("");
+            $("#" + type).append(curUl);
+        }
+
     });
 
     localStorage["html_" + params] = $("#future-arc").html();
@@ -156,10 +178,43 @@ function futureAfterDone() {
 }
 
 /*
+ * History
+ */
+function historyBuild(data, params) {
+    var ul = $("<ul>");
+    $.each(data, function(key, value) {
+        var li = $("<li>");
+        var liHTMLString = '<span class="show_name" id="' + value.tvdbid + '">' + value.show_name + '</span><br/>\
+                            <span class="epSeasonEpisode">s' + pad(value.season, 2) + 'e' + pad(value.episode, 2) + '</span>\
+                            <span class="action">' + value.action + '</span>';
+        liHTMLString += '<div class="clearer"></div>';
+        li.append(liHTMLString);
+        ul.append(li);
+    });
+    $("#history").append(ul);
+
+    localStorage["html_" + params] = $("#history").html();
+    historyAfterDone();
+}
+
+function historyTimeout(params) {
+    $("#history").html(localStorage["html_" + params]);
+    historyAfterDone();
+}
+
+function historyAfterDone() {
+    recalculateHeight("history", true);
+    $("#history li .show_name").click(function(data) {
+        openShow($(this).attr("id"));
+    });
+}
+
+/*
  * generic gui helper functions
  */
 
 function handleArccChange(ui) {
+    console.log(ui.newContent.attr('id'));
     lastHeight[ui.oldContent.attr('id')] = ui.oldContent.css("height");
     ui.oldContent.css("display", "block");
     ui.oldContent.css("height", "0px");

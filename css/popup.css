@@ -77,6 +77,14 @@ body.big {
 /*
  * tabs
  */
+#tabHeader li {
+    cursor: pointer;
+}
+
+#tabHeader li.ui-tabs-selected {
+    cursor: default;
+}
+
 #tabHeader li:first-child {
     border-left: none;
     border-radius: 4px 0px 0px 0px;
@@ -109,13 +117,7 @@ body.big {
 
 /*
  * shows
- */
-#shows li .name {
-    font-weight: bold;
-    cursor: pointer;
-}
-
-/*
+ */ /*
  * show
  */
 #show {
@@ -128,8 +130,10 @@ body.big {
 
 /*
  * Future
+ */ /*
+ * For All Tabs
  */
-#future-arc .show_name {
+#shows li .name,#future-arc li .show_name,#history li .show_name {
     font-weight: bold;
     cursor: pointer;
 }
@@ -137,11 +141,11 @@ body.big {
 /*
  * Lists
  */
-#shows ul,#future-arc ul {
+#shows ul,#future-arc ul,#history ul {
     padding: 0;
 }
 
-#shows li,#future-arc li {
+#shows li,#future-arc li,#history li {
     min-height: 20px;
     list-style: none;
     margin: 0px;
@@ -187,4 +191,9 @@ span.Any {
  */
 .clearer {
     clear: both;
+}
+
+.noEntry {
+    display: block;
+    text-align: center;
 }

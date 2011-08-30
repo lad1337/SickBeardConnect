@@ -17,6 +17,10 @@ function initContent() {
     var params = new Params();
     params.cmd = "future";
     genericRequest(params, futureBuild, genricRequestError, 60000, futureTimeout); // timeout 1 min
+
+    var params = new Params();
+    params.cmd = "history";
+    genericRequest(params, historyBuild, genricRequestError, 60000, historyTimeout); // timeout 1 min
 }
 
 /**

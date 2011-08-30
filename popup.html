@@ -19,9 +19,9 @@
 <body>
     <div id="contend" style="height: 0px;overflow: hidden;">
         <ul id="tabHeader">
-            <li><a href="#shows-tab">Shows</a></li>
-            <li><a href="#future-tab">ComingEP</a></li>
-            <li><a href="#history-tab">History</a></li>
+            <li><a id="0" href="#shows-tab">Shows</a></li>
+            <li><a id="1" href="#future-tab">ComingEP</a></li>
+            <li><a id="2" href="#history-tab">History</a></li>
         </ul>
         <div class="tab" id="shows-tab">
             <div class="arccordion" id="shows-arc">
@@ -29,7 +29,6 @@
                 <div class="pannel animated" id="shows"></div>
                 <h3>Show</h3>
                 <div class="pannel animated" id="show">
-                    <img class="banner" src=""/>
                     <span class="name"></span>
                     <span class="quality"></span>
                 </div>
@@ -38,13 +37,29 @@
         <div class="tab" id="future-tab">
             <div class="arccordion" id="future-arc">
                 <h3>Missed</h3>
-                <div class="pannel animated" id="missed"></div>
+                <div class="pannel animated" id="missed">
+                    <ul>
+                        <li><span class="noEntry">No Entry's</span></li>
+                    </ul>
+                </div>
                 <h3>Today</h3>
-                <div class="pannel animated" id="today"></div>
+                <div class="pannel animated" id="today">
+                    <ul>
+                        <li><span class="noEntry">No Entry's</span></li>
+                    </ul>
+                </div>
                 <h3>Soon</h3>
-                <div class="pannel animated" id="soon"></div>
+                <div class="pannel animated" id="soon">
+                    <ul>
+                        <li><span class="noEntry">No Entry's</span></li>
+                    </ul>
+                </div>
                 <h3>Later</h3>
-                <div class="pannel animated" id="later"></div>
+                <div class="pannel animated" id="later">
+                    <ul>
+                        <li><span class="noEntry">No Entry's</span></li>
+                    </ul>
+                </div>
             </div>
         </div>
         <div class="tab" id="history-tab">
