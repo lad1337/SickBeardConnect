@@ -1,4 +1,5 @@
 
+
 function initGui() {
     _initGui();
 }
@@ -12,15 +13,15 @@ function initContent() {
     var params = new Params();
     params.cmd = "shows";
     params.sort = "name";
-    genericRequest(params, showsBuild, genricRequestError, 300000, showsTimeout); // timeout 5 min
+    genericRequest(params, showsBuild, genericResponseError, 300000, showsTimeout); // timeout 5 min
 
     var params = new Params();
     params.cmd = "future";
-    genericRequest(params, futureBuild, genricRequestError, 60000, futureTimeout); // timeout 1 min
+    genericRequest(params, futureBuild, genericResponseError, 60000, futureTimeout); // timeout 1 min
 
     var params = new Params();
     params.cmd = "history";
-    genericRequest(params, historyBuild, genricRequestError, 60000, historyTimeout); // timeout 1 min
+    genericRequest(params, historyBuild, genericResponseError, 0, historyTimeout); // timeout 1 min
 }
 
 /**
@@ -32,7 +33,7 @@ function openShow(tvdbid) {
     var params = new Params();
     params.cmd = "show";
     params.tvdbid = tvdbid;
-    genericRequest(params, showBuild, genricRequestError, 300000, showTimeout); // timeout 5 min
+    genericRequest(params, showBuild, genericResponseError, 300000, showTimeout); // timeout 5 min
 }
 
 var lastOpened = parseInt(localStorage["lastOpened"]);

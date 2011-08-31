@@ -130,12 +130,57 @@ body.big {
 
 /*
  * Future
- */ /*
+ */
+#future-arc li .ep_name.error {
+    color: #994444;
+}
+
+#future-arc li .ep_name.success {
+    color: #449944;
+}
+
+/*
+ * History
+ */
+#history .action.Snatched {
+    color: #444499;
+}
+
+#history .action.Downloaded {
+    color: #449944;
+}
+
+#history .historyQuality,#history .date {
+    float: right;
+}
+
+#history .historyQuality {
+    font-weight: bold;
+}
+
+/*
  * For All Tabs
  */
 #shows li .name,#future-arc li .show_name,#history li .show_name {
     font-weight: bold;
     cursor: pointer;
+    max-width: 80%;
+    display: inline-block;
+}
+
+img.search {
+    width: 16px;
+    float: right;
+    cursor: pointer;
+    display: none;
+}
+
+img.search.visible,li:hover img.search {
+    display: inline;
+}
+
+.epSeasonEpisode {
+    margin-right: 5px;
 }
 
 /*

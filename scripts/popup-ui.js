@@ -3,7 +3,7 @@ var initialHeight = {};
 
 function _initGui() {
     log("initialising the gui", "POP", DEBUG);
-    $("body").addClass(localStorageFS["config_width"]);
+    $("body").addClass(settings["config_width"]);
 
     var arccOptions = { animated : false, autoHeight : false, navigation : true };
     var showsArcc = $("#shows-arc").accordion(arccOptions);
@@ -41,7 +41,24 @@ function _initGui() {
         }
     });
 
-    if (localStorageFS["config_tab_animation"])
+    $("img.search").live('click', function(e) {
+        var id = $(this).attr("id");
+        var splitID = id.split("-");
+        var tvdbid = splitID[0];
+        var season = splitID[1];
+        var episode = splitID[2];
+
+        $("img." + id).attr("src", chrome.extension.getURL('images/loading32.gif'));
+        $("img." + id).addClass("visible");
+        var params = new Params();
+        params.cmd = "episode.search";
+        params.tvdbid = tvdbid;
+        params.season = season;
+        params.episode = episode;
+        genericRequest(params, searchSuccess, searchError, 0, null); // no timeout
+    });
+
+    if (settings["config_tab_animation"])
         $(".tab").addClass("animated");
     window.setTimeout(setMainContentHeight, 1000);
 }
@@ -140,10 +157,11 @@ function futureBuild(data, params) {
         var entrys = false;
         $.each(data[type], function(key, value) {
             var li = $("<li>");
-            var liHTMLString = '<span class="show_name" id="' + value.tvdbid + '">' + value.show_name + '</span><br/>\
-                                <span class="epSeasonEpisode">s' + pad(value.season, 2) + 'e' + pad(value.episode, 2) + '</span>\
-                                <span class="ep_name">' + value.ep_name + '</span>';
-            liHTMLString += '<div class="clearer"></div>';
+            var liHTMLString = '<span class="show_name" id="' + value.tvdbid + '">' + value.show_name + '</span><br/>';
+            liHTMLString += '<span class="epSeasonEpisode">s' + pad(value.season, 2) + 'e' + pad(value.episode, 2) + '</span>';
+            liHTMLString += '<span class="ep_name">' + value.ep_name + '</span>';
+
+            li.append(createSearchImg(value.tvdbid, value.season, value.episode));
             li.append(liHTMLString);
             curUl.append(li);
             entrys = true;
@@ -184,10 +202,11 @@ function historyBuild(data, params) {
     var ul = $("<ul>");
     $.each(data, function(key, value) {
         var li = $("<li>");
-        var liHTMLString = '<span class="show_name" id="' + value.tvdbid + '">' + value.show_name + '</span><br/>\
-                            <span class="epSeasonEpisode">s' + pad(value.season, 2) + 'e' + pad(value.episode, 2) + '</span>\
-                            <span class="action">' + value.action + '</span>';
-        liHTMLString += '<div class="clearer"></div>';
+        var liHTMLString = '<span class="show_name" id="' + value.tvdbid + '">' + value.show_name + '</span>';
+        liHTMLString += '<span class="date">' + getNiceHistoryDate(value.date) + '</span><br/>';
+        liHTMLString += '<span class="epSeasonEpisode">s' + pad(value.season, 2) + 'e' + pad(value.episode, 2) + '</span>';
+        liHTMLString += '<span class="action ' + value.action + '">' + value.action + '</span>';
+        liHTMLString += '<span class="historyQuality">' + value.quality + '</span>';
         li.append(liHTMLString);
         ul.append(li);
     });
@@ -210,11 +229,37 @@ function historyAfterDone() {
 }
 
 /*
+ * Episode Search
+ */
+
+function searchSuccess(data, params) {
+    var img = $("img." + params.tvdbid + "-" + params.season + "-" + params.episode);
+    img.attr("src", chrome.extension.getURL('images/yes16.png'));
+    img.siblings(".ep_name").addClass("success");
+    img.siblings(".ep_name").html('Snatched (' + data.result + ')');
+}
+
+function searchError(data, params) {
+    var img = $("img." + params.tvdbid + "-" + params.season + "-" + params.episode);
+    img.attr("src", chrome.extension.getURL('images/no16.png'));
+    img.siblings(".ep_name").addClass("error");
+    img.siblings(".ep_name").html("Unable to find episode");
+}
+
+function createSearchImg(tvdbid, season, episode) {
+    var img = $("<img>");
+    img.addClass("search " + tvdbid + "-" + season + "-" + episode);
+    img.attr("id", tvdbid + "-" + season + "-" + episode);
+    img.attr("src", chrome.extension.getURL('images/search16.png'));
+    return img;
+
+}
+
+/*
  * generic gui helper functions
  */
 
 function handleArccChange(ui) {
-    console.log(ui.newContent.attr('id'));
     lastHeight[ui.oldContent.attr('id')] = ui.oldContent.css("height");
     ui.oldContent.css("display", "block");
     ui.oldContent.css("height", "0px");
@@ -249,3 +294,45 @@ function setHeightFor(id, height) {
 function _setHeightFor(id, height) {
     $("#" + id).css("height", height);
 }
+
+function addErrorMsg(msg,lvl){
+    var identifier = msg.split(' ').join('').replace(".","").replace("!","");
+    if($("#errors #"+identifier).length > 0){
+        var numberString = $("#errors #"+identifier+" .counter").html().replace("(","").replace(")","");
+        var oldNumber = parseInt(numberString);
+        if(!oldNumber){
+            oldNumber = 1;
+        }
+        var newNumber = oldNumber+1;
+        $("#errors #"+identifier+" .counter").html("("+newNumber+") ");
+    }else{
+        if(lvl == ERROR)
+            $("#errors").append(createError(msg,"Error",identifier));
+        else
+            $("#errors").append(createWarning(msg,"Warning",identifier));
+    }
+
+    if(lvl == ERROR){
+        $("#errors .ui-state-error").show();
+        $("#errors .ui-state-error").delay(5000).hide(1000);
+    }else{
+        $("#errors .ui-state-highlight").show();
+        $("#errors .ui-state-highlight").delay(5000).hide(1000);
+    }
+}
+
+function createError(msg, lvl, identifier) {
+    return createErrorWarning(msg, lvl , "ui-state-error", identifier);
+}
+function createWarning(msg, lvl, identifier) {
+    return createErrorWarning(msg, lvl , "ui-state-highlight", identifier);
+}
+function createErrorWarning(msg,lvl,cssClass, identifier){
+    var div = '<div class="'+cssClass+' ui-corner-all" style="padding: 0 4px;" id="'+identifier+'">';
+    div += '<p style="margin: 5px 0 5px 0;"><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span>';
+    div += '<strong>' + lvl + ' : </strong>';
+    div += msg;
+    div += '<span class="counter" style="float: right;"></span></p></div>';
+    return div;
+}
+
