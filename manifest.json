@@ -1,5 +1,5 @@
 {
-   "name": "SBconnect",
+   "name": "SickBeardConnect",
    "version": "0.1.0",
    "permissions": [ "http://*/*", "https://*/*", "tabs", "notifications" ],
    "description": "SickBeard extension for Google Chrome.",

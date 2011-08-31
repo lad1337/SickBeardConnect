@@ -21,7 +21,7 @@ function initContent() {
 
     var params = new Params();
     params.cmd = "history";
-    genericRequest(params, historyBuild, genericResponseError, 0, historyTimeout); // timeout 1 min
+    genericRequest(params, historyBuild, genericResponseError, 60000, historyTimeout); // timeout 1 min
 }
 
 /**

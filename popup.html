@@ -19,13 +19,13 @@
 <body>
     <div id="errors">
     </div>
-    <div id="contend" style="height: 0px;overflow: hidden;">
+    <div id="contend" class="" style="overflow:hidden;">
         <ul id="tabHeader">
             <li><a id="0" href="#shows-tab">Shows</a></li>
             <li><a id="1" href="#future-tab">ComingEP</a></li>
             <li><a id="2" href="#history-tab">History</a></li>
         </ul>
-        <div class="tab" id="shows-tab">
+        <div class="tab hidden" id="shows-tab">
             <div class="arccordion" id="shows-arc">
                 <h3>Shows</h3>
                 <div class="pannel animated" id="shows"></div>
@@ -36,7 +36,7 @@
                 </div>
             </div>
         </div>
-        <div class="tab" id="future-tab">
+        <div class="tab hidden" id="future-tab">
             <div class="arccordion" id="future-arc">
                 <h3>Missed</h3>
                 <div class="pannel animated" id="missed">
@@ -64,13 +64,14 @@
                 </div>
             </div>
         </div>
-        <div class="tab" id="history-tab">
+        <div class="tab hidden" id="history-tab">
             <div class="arccordion"  id="history-arc">
                 <h3>History</h3>
                 <div class="pannel animated" id="history"></div>
             </div>
         </div>
     </div>
+    <div id="loadContainer" style="text-align:center;"><img src="images/loadingBar.gif"/></div>
     <div id="menu">
         <span id="open_sb">SickBeard</span>
         <span id="extension_settings">Settings</span>

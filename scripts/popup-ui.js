@@ -60,11 +60,41 @@ function _initGui() {
 
     if (settings["config_tab_animation"])
         $(".tab").addClass("animated");
-    window.setTimeout(setMainContentHeight, 1000);
+    //window.setTimeout(setMainContentHeight, 750);
+}
+
+var unlockShows = false;
+var unlockFuture = false;
+var unlockHistory = false;
+
+function unlockContent(area){
+    switch (area) {
+    case "shows":
+        unlockShows = true;
+        break;
+    case "future":
+        unlockFuture = true;
+        break;
+    case "history":
+        unlockHistory = true;
+        break;
+    default:
+        break;
+    }
+    
+    if(unlockShows && unlockFuture && unlockHistory){
+        log("every areay is UNlocked","POP",DEBUG);
+        window.setTimeout(setMainContentHeight, 300);
+        //setHeightForInital("contend","auto");
+        //setMainContentHeight();
+    }
 }
 
 function setMainContentHeight() {
-    $("#contend").css("height", "auto");
+    log("setting the content height to AUTO","POP",DEBUG);
+    $(".tab").removeClass("hidden");
+    $("#loadContainer").hide();
+    //$("#contend").css("height", "auto");
 }
 
 /*
@@ -106,6 +136,7 @@ function showsAfterDone() {
         openShow($(this).attr("id"));
     });
     recalculateHeight("shows", true);
+    unlockContent("shows");
 }
 
 /*
@@ -193,6 +224,8 @@ function futureAfterDone() {
     $("#future-arc li .show_name").click(function(data) {
         openShow($(this).attr("id"));
     });
+
+    unlockContent("future");
 }
 
 /*
@@ -226,6 +259,7 @@ function historyAfterDone() {
     $("#history li .show_name").click(function(data) {
         openShow($(this).attr("id"));
     });
+    unlockContent("history");
 }
 
 /*

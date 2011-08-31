@@ -123,7 +123,7 @@ Params.prototype.toString = function() {
  */
 function constructShowPosterUrl(tvdbid) {
     // /showPoster/?show=73741&amp;which=poster
-    var imgPart = "/showPoster/?show=" + tvdbid + "&which=poster";
+    var imgPart = "showPoster/?show=" + tvdbid + "&which=poster";
     return getUrl() + imgPart;
 
 }
@@ -133,7 +133,7 @@ function constructShowPosterUrl(tvdbid) {
  */
 function constructShowBannerUrl(tvdbid) {
     // /showPoster/?show=73741&amp;which=poster
-    var imgPart = "/showPoster/?show=" + tvdbid + "&which=banner";
+    var imgPart = "showPoster/?show=" + tvdbid + "&which=banner";
     return getUrl() + imgPart;
 
 }

@@ -242,3 +242,8 @@ span.Any {
     display: block;
     text-align: center;
 }
+
+.hidden {
+    height: 0px;
+    overflow: hidden;
+}
