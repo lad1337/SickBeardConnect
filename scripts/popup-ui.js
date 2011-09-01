@@ -210,16 +210,23 @@ function futureBuild(data, params) {
             $("#" + type).html("");
             $("#" + type).append(curUl);
         }
-
+        localStorage["html_" + params + "_" + type] = $("#" + type).html();
     });
 
     localStorage["html_" + params] = $("#future-arc").html();
     futureAfterDone();
 }
 
-function futureTimeout(params) {
+function futureTimeout(data, params) {
     if (localStorage["html_" + params]) {
-        $("#future-arc").html(localStorage["html_" + params]);
+        // this kills the hooked events :(
+        // $("#future-arc").html(localStorage["html_" + params]);
+        // this does not work for some reason the events get not reattached
+        // var futureArcc = $("#future-arc").accordion(arccOptions);
+        var types = [ "missed", "today", "soon", "later" ];
+        $.each(types, function(k, type) {
+            $("#" + type).html(localStorage["html_" + params + "_" + type]);
+        });
         futureAfterDone();
     } else {
         futureBuild(data, params);
