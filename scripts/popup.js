@@ -1,7 +1,6 @@
 function initGui() {
     _initGui();
 }
-var ignoreTimeout = false;
 /**
  * 
  */
@@ -22,12 +21,22 @@ function initContent() {
     params.cmd = "history";
     genericRequest(params, historyBuild, genericResponseError, 60000, historyTimeout); // timeout 1 min
 
-    ignoreTimeout = false;
+    IGNORETIMEOUT = false;
 }
 function refreshContent() {
-    ignoreTimeout = true;
+    IGNORETIMEOUT = true;
     $("#loadContainer").show();
     initContent();
+}
+
+function listenForNotificationsFast(lastFor) {
+    if(!lastFor)
+        lastFor = 60000; // default to 1 min
+    log("Will pull notifications from SickBeard faster for " + lastFor + " ms.", "POP", DEBUG);
+    chrome.extension.getBackgroundPage().setMSGTimer(1000);
+    window.setTimeout(function() {
+        chrome.extension.getBackgroundPage().setMSGTimer();
+    }, lastFor);
 }
 
 /**

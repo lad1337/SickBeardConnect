@@ -1,4 +1,4 @@
-// SAMPLE
+
 this.i18n = {
     "settings": {
         "en": "Settings",
@@ -68,8 +68,44 @@ this.i18n = {
         "de": "Tab wechsel animieren"
     },
     
+    
+    
     "feel":{
         "en": "Feel",
         "de": "Verhalten"
+    },
+    "refresh_rate":{
+        "en": "Refresh every (min)",
+        "de": "Aktualisiere alle (min)"
+    },
+    "notification_refresh_rate":{
+        "en": "Pull Notifications every (sec)",
+        "de": "Hole Notifications alle (sec)" 
+    },
+    "desc_notifo_rate":{
+        "en": 'the refresh rate is increades for 60 seconds when a notification is anticipated<br/>0 is off',
+        "de": "Die rate wird für 60 sekunden erhört wenn eine notification erwartet wird<br/>0 ist aus"
+    },
+    
+    
+    
+    "advanced":{
+        "en": "Advanced",
+        "de": "Erweiterte"
+    },
+    "chrome2growl":{
+        "en": "Activate Chrome2Growl",
+        "de": "Aktiviere Chrome2Growl"
+    },
+    "chrome2growl_icon_path":{
+        "en": "Absolute icon path",
+        "de": "Absoluter pfad zum icon"
+    },
+    "chrome2growl_host":{
+        "en": "Host",
+        "de": "Host"
     }
+    
+    
+    
 };

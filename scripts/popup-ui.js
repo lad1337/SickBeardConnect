@@ -56,18 +56,19 @@ function _initGui() {
         params.season = season;
         params.episode = episode;
         genericRequest(params, searchSuccess, searchError, 0, null); // no timeout
+        listenForNotificationsFast(60000); // for 1 min
     });
 
     if (settings["config_tab_animation"])
         $(".tab").addClass("animated");
-    //window.setTimeout(setMainContentHeight, 750);
+    // window.setTimeout(setMainContentHeight, 750);
 }
 
 var unlockShows = false;
 var unlockFuture = false;
 var unlockHistory = false;
 
-function unlockContent(area){
+function unlockContent(area) {
     switch (area) {
     case "shows":
         unlockShows = true;
@@ -81,20 +82,20 @@ function unlockContent(area){
     default:
         break;
     }
-    
-    if(unlockShows && unlockFuture && unlockHistory){
-        log("every areay is UNlocked","POP",DEBUG);
+
+    if (unlockShows && unlockFuture && unlockHistory) {
+        log("every areay is UNlocked", "POP", DEBUG);
         window.setTimeout(setMainContentHeight, 300);
-        //setHeightForInital("contend","auto");
-        //setMainContentHeight();
+        // setHeightForInital("contend","auto");
+        // setMainContentHeight();
     }
 }
 
 function setMainContentHeight() {
-    log("setting the content height to AUTO","POP",DEBUG);
+    log("setting the content height to AUTO", "POP", DEBUG);
     $(".tab").removeClass("hidden");
     $("#loadContainer").hide();
-    //$("#contend").css("height", "auto");
+    // $("#contend").css("height", "auto");
 }
 
 /*
@@ -105,7 +106,7 @@ function setMainContentHeight() {
  * Shows
  */
 
-function showsBuild(data, paramString) {
+function showsBuild(data, params) {
     var shows = $("#shows");
     shows.html("");
     var ul = $("<ul>");
@@ -124,12 +125,16 @@ function showsBuild(data, paramString) {
     shows.append(ul);
     showsAfterDone();
     // save the html for later
-    localStorage["html_" + paramString] = shows.html();
+    localStorage["html_" + params] = shows.html();
 }
 
-function showsTimeout(params) {
-    $("#shows").html(localStorage["html_" + params]);
-    showsAfterDone();
+function showsTimeout(data, params) {
+    if (localStorage["html_" + params]) {
+        $("#shows").html(localStorage["html_" + params]);
+        showsAfterDone();
+    } else {
+        showsBuild(data, params);
+    }
 }
 function showsAfterDone() {
     $("#shows li .name").click(function(data) {
@@ -167,8 +172,12 @@ function showBuild(data, params) {
 }
 
 function showTimeout(params) {
-    $("#show").html(localStorage["html_" + params]);
-    showAfterDone();
+    if (localStorage["html_" + params]) {
+        $("#show").html(localStorage["html_" + params]);
+        showAfterDone();
+    } else {
+        showBuild(data, params);
+    }
 }
 
 function showAfterDone() {
@@ -209,8 +218,12 @@ function futureBuild(data, params) {
 }
 
 function futureTimeout(params) {
-    $("#future-arc").html(localStorage["html_" + params]);
-    futureAfterDone();
+    if (localStorage["html_" + params]) {
+        $("#future-arc").html(localStorage["html_" + params]);
+        futureAfterDone();
+    } else {
+        futureBuild(data, params);
+    }
 }
 
 function futureAfterDone() {
@@ -250,8 +263,12 @@ function historyBuild(data, params) {
 }
 
 function historyTimeout(params) {
-    $("#history").html(localStorage["html_" + params]);
-    historyAfterDone();
+    if (localStorage["html_" + params]) {
+        $("#history").html(localStorage["html_" + params]);
+        historyAfterDone();
+    } else {
+        historyBuild(data, params);
+    }
 }
 
 function historyAfterDone() {
@@ -271,6 +288,7 @@ function searchSuccess(data, params) {
     img.attr("src", chrome.extension.getURL('images/yes16.png'));
     img.siblings(".ep_name").addClass("success");
     img.siblings(".ep_name").html('Snatched (' + data.result + ')');
+    listenForNotificationsFast(20000); // 20 sec
 }
 
 function searchError(data, params) {
@@ -278,6 +296,7 @@ function searchError(data, params) {
     img.attr("src", chrome.extension.getURL('images/no16.png'));
     img.siblings(".ep_name").addClass("error");
     img.siblings(".ep_name").html("Unable to find episode");
+    listenForNotificationsFast(20000); // 20 sec
 }
 
 function createSearchImg(tvdbid, season, episode) {
@@ -286,7 +305,6 @@ function createSearchImg(tvdbid, season, episode) {
     img.attr("id", tvdbid + "-" + season + "-" + episode);
     img.attr("src", chrome.extension.getURL('images/search16.png'));
     return img;
-
 }
 
 /*
@@ -329,44 +347,43 @@ function _setHeightFor(id, height) {
     $("#" + id).css("height", height);
 }
 
-function addErrorMsg(msg,lvl){
-    var identifier = msg.split(' ').join('').replace(".","").replace("!","");
-    if($("#errors #"+identifier).length > 0){
-        var numberString = $("#errors #"+identifier+" .counter").html().replace("(","").replace(")","");
+function addErrorMsg(msg, lvl) {
+    var identifier = msg.split(' ').join('').replace(".", "").replace("!", "");
+    if ($("#errors #" + identifier).length > 0) {
+        var numberString = $("#errors #" + identifier + " .counter").html().replace("(", "").replace(")", "");
         var oldNumber = parseInt(numberString);
-        if(!oldNumber){
+        if (!oldNumber) {
             oldNumber = 1;
         }
-        var newNumber = oldNumber+1;
-        $("#errors #"+identifier+" .counter").html("("+newNumber+") ");
-    }else{
-        if(lvl == ERROR)
-            $("#errors").append(createError(msg,"Error",identifier));
+        var newNumber = oldNumber + 1;
+        $("#errors #" + identifier + " .counter").html("(" + newNumber + ") ");
+    } else {
+        if (lvl == ERROR)
+            $("#errors").append(createError(msg, "Error", identifier));
         else
-            $("#errors").append(createWarning(msg,"Warning",identifier));
+            $("#errors").append(createWarning(msg, "Warning", identifier));
     }
 
-    if(lvl == ERROR){
+    if (lvl == ERROR) {
         $("#errors .ui-state-error").show();
         $("#errors .ui-state-error").delay(5000).hide(1000);
-    }else{
+    } else {
         $("#errors .ui-state-highlight").show();
         $("#errors .ui-state-highlight").delay(5000).hide(1000);
     }
 }
 
 function createError(msg, lvl, identifier) {
-    return createErrorWarning(msg, lvl , "ui-state-error", identifier);
+    return createErrorWarning(msg, lvl, "ui-state-error", identifier);
 }
 function createWarning(msg, lvl, identifier) {
-    return createErrorWarning(msg, lvl , "ui-state-highlight", identifier);
+    return createErrorWarning(msg, lvl, "ui-state-highlight", identifier);
 }
-function createErrorWarning(msg,lvl,cssClass, identifier){
-    var div = '<div class="'+cssClass+' ui-corner-all" style="padding: 0 4px;" id="'+identifier+'">';
+function createErrorWarning(msg, lvl, cssClass, identifier) {
+    var div = '<div class="' + cssClass + ' ui-corner-all" style="padding: 0 4px;" id="' + identifier + '">';
     div += '<p style="margin: 5px 0 5px 0;"><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span>';
     div += '<strong>' + lvl + ' : </strong>';
     div += msg;
     div += '<span class="counter" style="float: right;"></span></p></div>';
     return div;
 }
-

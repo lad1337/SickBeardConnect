@@ -1,7 +1,12 @@
-var settings = new Store("settings", { "sb_url" : "http://localhost:8081", "sb_api_key" : 1234, "config_log_lvl" : 10, "config_width" : "medium", "config_tab_animation" : false, "config_refresh_rate":5 });
-settings = settings.toObject();
+var settings;
+function setSettings() {
+    settings = new Store("settings", { "sb_url" : "http://localhost:8081", "sb_api_key" : 1234, "config_log_lvl" : 10, "config_width" : "medium", "config_tab_animation" : false, "config_refresh_rate" : 1, "config_notification_timeout" : 4000,"config_notification_default_rate": 20,"config_chromeToGrowl_use":false,"config_chromeToGrowl_icon_path":"/Applications/Sick-Beard/data/images/sickbeard_touch_icon.png" });
+    settings = settings.toObject();
+}
+setSettings();
 
 var NOW = $.now();
+var IGNORETIMEOUT = false;
 
 function getRefreshRate() {
     return parseInt(settings["refresh_rate"]) * 1000;
@@ -26,15 +31,18 @@ function genericRequest(params, succes_callback, error_callback, timeout, timeou
     // var paramString = getParamString(params);
 
     log("New Req for: " + params, "REG", DEBUG);
-    if (localStorage["html_" + params])
-        if (NOW - parseInt(localStorage["lastcall_" + params]) < timeout && !ignoreTimeout) {
+    if (localStorage["html_" + params] || localStorage["json_" + params])
+        if ($.now() - parseInt(localStorage["lastcall_" + params]) < timeout && !IGNORETIMEOUT) {
             log("Not refreshing for reg: " + params + ". Let the timeout_callback handle this", "REQ", INFO);
-            timeout_callback(params);
+            data = JSON.parse(localStorage["json_" + params]);
+            if (timeout_callback)
+                timeout_callback(data, params);
             return;
         }
     var apiUrl = getApiUrl();
     $.ajax( { type : "GET", url : apiUrl, data : params, dataType : 'json', success : function(data) {
-        localStorage["lastcall_" + params] = NOW;
+        localStorage["lastcall_" + params] = $.now(); // time of last successful call
+        localStorage["json_" + params] = JSON.stringify(data); // json string of last response
         checkForError(data, params, succes_callback, error_callback);
     }, error : function(data) {
         genricRequestError(data, params, succes_callback, error_callback);
@@ -53,13 +61,14 @@ function checkForError(data, params, succes_callback, error_callback) {
         log("Reg successful for BUT WITH ERROR: " + params, "REG", DEBUG);
         if (shouldLvlBeLoged(DEBUG))
             console.log(data);
-        error_callback(data, params);
+        if (error_callback)
+            error_callback(data, params);
     } else {
         log("Reg successful for: " + params, "REG", DEBUG);
         if (shouldLvlBeLoged(DEBUG))
             console.log(data);
-        localStorage["json_" + params] = JSON.stringify(data);
-        succes_callback(data, params);
+        if (succes_callback)
+            succes_callback(data, params);
     }
 }
 /**
@@ -74,11 +83,10 @@ function genricRequestError(data, params, succes_callback, error_callback) {
     if (localStorage["json_" + params]) {
         data = JSON.parse(localStorage["json_" + params]);
         checkForError(data, params, succes_callback, error_callback);
-        
-        addErrorMsg("No connection! Using old data.",WARNING);
-    }else{
+        addErrorMsg("No connection! Using old data.", WARNING);
+    } else {
         log("could not load old request data", "REQ", ERROR);
-        addErrorMsg("No connection and NO old data!",ERROR);
+        addErrorMsg("No connection and NO old data!", ERROR);
     }
 
 }
@@ -201,7 +209,12 @@ function checkEndSlash(input) {
         return output;
     }
 }
-
+function stripHtmlTags(strInputCode) {
+    // <[^<]+?>
+    // (?<=^|>)[^><]+?(?=<|$)
+    // <\/?[^>]+(>|$)
+    return strInputCode.replace(/<[^<]+?>/g, "");
+}
 var monthNames = [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ];
 function getNiceHistoryDate(date) {
     var dateSplit = date.split("-");
