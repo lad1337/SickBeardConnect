@@ -73,9 +73,9 @@
     </div>
     <div id="loadContainer" style="text-align:center;"><img src="images/loadingBar.gif"/></div>
     <div id="menu">
-        <span id="open_sb">SickBeard</span>
-        <span id="extension_settings">Settings</span>
-        <span id="refresh">Refresh</span>
+        <span id="open_sb" onclick="openSBPage()">SickBeard</span>
+        <span id="extension_settings" onclick="chrome.tabs.create({url: 'options.html'});window.close();">Settings</span>
+        <span id="refresh" onclick="refreshContent();">Refresh</span>
     <div>
 </body>
 

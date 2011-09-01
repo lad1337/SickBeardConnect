@@ -27,7 +27,7 @@ function genericRequest(params, succes_callback, error_callback, timeout, timeou
 
     log("New Req for: " + params, "REG", DEBUG);
     if (localStorage["html_" + params])
-        if (NOW - parseInt(localStorage["lastcall_" + params]) < timeout) {
+        if (NOW - parseInt(localStorage["lastcall_" + params]) < timeout && !ignoreTimeout) {
             log("Not refreshing for reg: " + params + ". Let the timeout_callback handle this", "REQ", INFO);
             timeout_callback(params);
             return;

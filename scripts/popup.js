@@ -1,15 +1,14 @@
-
-
 function initGui() {
     _initGui();
 }
-
+var ignoreTimeout = false;
 /**
  * 
  */
 function initContent() {
     log("opening the popup", "POP", DEBUG);
     // load shows into gui
+
     var params = new Params();
     params.cmd = "shows";
     params.sort = "name";
@@ -22,6 +21,13 @@ function initContent() {
     var params = new Params();
     params.cmd = "history";
     genericRequest(params, historyBuild, genericResponseError, 60000, historyTimeout); // timeout 1 min
+
+    ignoreTimeout = false;
+}
+function refreshContent() {
+    ignoreTimeout = true;
+    $("#loadContainer").show();
+    initContent();
 }
 
 /**
@@ -36,13 +42,18 @@ function openShow(tvdbid) {
     genericRequest(params, showBuild, genericResponseError, 300000, showTimeout); // timeout 5 min
 }
 
-var lastOpened = parseInt(localStorage["lastOpened"]);
 var closeWindow = false;
+var lastOpened = parseInt(localStorage["lastOpened"]);
+
+function openSBPage() {
+    chrome.tabs.create( { url : getUrl() });
+    closeWindow = true;
+    window.close();
+}
+
 if (lastOpened > 0) {
     if (NOW - lastOpened < 700) {
-        chrome.tabs.create( { url : getUrl() });
-        closeWindow = true;
-        window.close();
+        openSBPage();
     }
 }
 
