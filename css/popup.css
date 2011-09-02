@@ -127,6 +127,26 @@ body.big {
 #show img.banner {
     width: 100%;
 }
+#show #showInfos{
+    padding: 4px 4px 0 4px;
+}
+#show img {
+    vertical-align: middle;
+}
+
+#show .name {
+    font-size: 20px;
+}
+
+#show .info {
+    min-width: 83px;
+    display: inline-block;
+    line-height: 16px;
+}
+
+#show #location.broken {
+    color: #994444;
+}
 
 /*
  * Future

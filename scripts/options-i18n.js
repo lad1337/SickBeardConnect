@@ -104,6 +104,22 @@ this.i18n = {
     "chrome2growl_host":{
         "en": "Host",
         "de": "Host"
+    },
+    "localStorage":{
+        "en": "Settings and Cache",
+        "de": "Einstellungen and Cache",
+    },
+    "localStorage":{
+        "en": "Settings and Cache",
+        "de": "Einstellungen and Cache",
+    },
+    "reset_txt":{
+        "en": "Reset to Default Settings",
+        "de": "Standard Einstellungen wiederherstellen"
+    },
+    "clear_cache_txt":{
+        "en": "Clear the Cache",
+        "de": "Cache leeren"
     }
     
     

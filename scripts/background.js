@@ -64,7 +64,14 @@ function setMSGTimer(rate) {
     }
 }
 
+function reloadBackgroundPage(){
+    window.location.reload();
+}
+
+
 setHistoryTimer();
 setMSGTimer();
+
+
 if (settings["config_chromeToGrowl_use"])
     chrome2growl.init(settings["config_chromeToGrowl_host"], settings["config_chromeToGrowl_icon_path"]);

@@ -1,12 +1,12 @@
 var settings;
+var defaultSettings = { "sb_url" : "http://localhost:8080", "config_log_lvl" : 20, "config_width" : "medium", "config_tab_animation" : true, "config_refresh_rate" : 1, "config_notification_timeout" : 4000,"config_notification_default_rate": 20,"config_chromeToGrowl_use":false,"config_chromeToGrowl_icon_path":"/Applications/Sick-Beard/data/images/sickbeard_touch_icon.png" };
 function setSettings() {
-    settings = new Store("settings", { "sb_url" : "http://localhost:8081", "sb_api_key" : 1234, "config_log_lvl" : 10, "config_width" : "medium", "config_tab_animation" : false, "config_refresh_rate" : 1, "config_notification_timeout" : 4000,"config_notification_default_rate": 20,"config_chromeToGrowl_use":false,"config_chromeToGrowl_icon_path":"/Applications/Sick-Beard/data/images/sickbeard_touch_icon.png" });
-    settings = settings.toObject();
+    var tmp = new Store("settings", defaultSettings);
+    settings = tmp.toObject();
 }
 setSettings();
 
 var NOW = $.now();
-var IGNORETIMEOUT = false;
 
 function getRefreshRate() {
     return parseInt(settings["refresh_rate"]) * 1000;
@@ -32,7 +32,7 @@ function genericRequest(params, succes_callback, error_callback, timeout, timeou
 
     log("New Req for: " + params, "REG", DEBUG);
     if (localStorage["html_" + params] || localStorage["json_" + params])
-        if ($.now() - parseInt(localStorage["lastcall_" + params]) < timeout && !IGNORETIMEOUT) {
+        if ($.now() - parseInt(localStorage["lastcall_" + params]) < timeout) {
             log("Not refreshing for reg: " + params + ". Let the timeout_callback handle this", "REQ", INFO);
             data = JSON.parse(localStorage["json_" + params]);
             if (timeout_callback)
@@ -40,7 +40,7 @@ function genericRequest(params, succes_callback, error_callback, timeout, timeou
             return;
         }
     var apiUrl = getApiUrl();
-    $.ajax( { type : "GET", url : apiUrl, data : params, dataType : 'json', success : function(data) {
+    $.ajax( { type : "POST", url : apiUrl, data : params, dataType : 'json', success : function(data) {
         localStorage["lastcall_" + params] = $.now(); // time of last successful call
         localStorage["json_" + params] = JSON.stringify(data); // json string of last response
         checkForError(data, params, succes_callback, error_callback);
@@ -100,6 +100,8 @@ function genricRequestError(data, params, succes_callback, error_callback) {
 function genericResponseError(data, params) {
     log("an error in response for reg: " + params, "REQ", WARNING);
     console.log(data);
+
+    addErrorMsg(data.error, ERROR);
 }
 
 /**
@@ -214,6 +216,12 @@ function stripHtmlTags(strInputCode) {
     // (?<=^|>)[^><]+?(?=<|$)
     // <\/?[^>]+(>|$)
     return strInputCode.replace(/<[^<]+?>/g, "");
+}
+function stripDotsAndStuff(strInputCode) {
+    // <[^<]+?>
+    // (?<=^|>)[^><]+?(?=<|$)
+    // <\/?[^>]+(>|$)
+    return strInputCode.replace(/[.' !]/g, "");
 }
 var monthNames = [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ];
 function getNiceHistoryDate(date) {

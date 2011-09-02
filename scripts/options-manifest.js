@@ -123,6 +123,20 @@ this.manifest = {
             "type": "text",
             "label": i18n.get("chrome2growl_host"),
             "text": "127.0.0.1:8000"
+        },
+        {
+            "tab": i18n.get("advanced"),
+            "group": i18n.get("localStorage"),
+            "name": "reset_to_default",
+            "type": "button",
+            "text": i18n.get("reset_txt")
+        },
+        {
+            "tab": i18n.get("advanced"),
+            "group": i18n.get("localStorage"),
+            "name": "clear_cache",
+            "type": "button",
+            "text": i18n.get("clear_cache_txt")
         }
     ],
     "alignment": [

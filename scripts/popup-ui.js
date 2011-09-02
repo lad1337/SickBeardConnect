@@ -152,17 +152,26 @@ function showBuild(data, params) {
     var show = $("#show");
 
     $("#show .name").html(data.show_name);
-    var bannerURL = constructShowBannerUrl(params.tvdbid);
-    if (bannerURL) {
-        if ($("#show img.banner").length > 0)
-            $("#show img.banner").attr("src", bannerURL);
-        else {
-            var img = $("<img>");
-            img.attr("src", bannerURL);
-            img.addClass("banner");
-            show.prepend(img);
-        }
+
+    $("#airs").html(data.airs);
+    if (data.location) {
+        $("#location").html(data.location);
+        $("#location").removeClass("broken");
+    } else {
+        $("#location").html("broken path");
+        $("#location").addClass("broken");
     }
+    $("#language").html(data.language);
+    $("#paused").attr("src", yesORnoPic(data.paused));
+    $("#season_folder").attr("src", yesORnoPic(data.season_folders));
+    $("#active").attr("src", yesORnoPic(data.active));
+    $("#air_by_date").attr("src", yesORnoPic(data.air_by_date));
+
+    var bannerURL = constructShowBannerUrl(params.tvdbid);
+    if (bannerURL)
+        $("#show .banner").attr("src", bannerURL);
+    else
+        $("#show .banner").attr("src", "images/spacer.gif");
     $("#show .quality").attr("class", "quality " + data.quality);
     $("#show .quality").html(data.quality);
 
@@ -355,7 +364,7 @@ function _setHeightFor(id, height) {
 }
 
 function addErrorMsg(msg, lvl) {
-    var identifier = msg.split(' ').join('').replace(".", "").replace("!", "");
+    var identifier = stripDotsAndStuff(msg);
     if ($("#errors #" + identifier).length > 0) {
         var numberString = $("#errors #" + identifier + " .counter").html().replace("(", "").replace(")", "");
         var oldNumber = parseInt(numberString);
@@ -393,4 +402,11 @@ function createErrorWarning(msg, lvl, cssClass, identifier) {
     div += msg;
     div += '<span class="counter" style="float: right;"></span></p></div>';
     return div;
+}
+function yesORnoPic(int) {
+    if (int == 0)
+        return "images/no16.png";
+    else
+        return "images/yes16.png";
+
 }
