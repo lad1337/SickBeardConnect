@@ -12,9 +12,9 @@
             $("title").set("text", name);
             $("favicon").set("href", icon);
             $("icon").set("src", icon);
-            $("settings-label").set("text", (i18n.get("settings") || "Settings"));
-            $("search-label").set("text", (i18n.get("search") || "Search"));
-            $("search").set("placeholder", (i18n.get("search") || "Search") + "...");
+            $("settings-label").set("text", chrome.i18n.getMessage("settings") );
+            $("search-label").set("text", chrome.i18n.getMessage("search") );
+            $("search").set("placeholder", chrome.i18n.getMessage("search") + "...");
             
             this.tab = new Tab($("tab-container"), $("content"));
             this.search = new Search($("search"), $("search-result-container"));
@@ -37,7 +37,7 @@
                 this.search.bind(tab.content.tab);
 
                 var anchor = location.hash.substring(1);
-                if (params.tab == i18n.get(anchor) || params.tab == anchor) {
+                if (params.tab == chrome.i18n.getMessage(anchor) || params.tab == anchor) {
                     tab.content.activate();
                 }
 

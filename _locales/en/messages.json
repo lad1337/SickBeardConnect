@@ -7,6 +7,17 @@
     },
     
     
+    "settings": {
+        "message": "Settings"
+    },
+    "search": {
+        "message": "Search"
+    },
+    "settings_search_nothingFound": {
+        "message": "No matches were found."
+    },
+    
+    
     "options_tab_sickbeard": {
         "message": "SickBeard"
     },
