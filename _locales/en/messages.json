@@ -1,0 +1,86 @@
+{
+    "ext_name":{
+        "message": "SickBeardConnect"
+    },
+    "sb_name": {
+        "message": "SickBeard" 
+    },
+    
+    
+    "options_tab_sickbeard": {
+        "message": "SickBeard"
+    },
+    "options_group_connection": {
+        "message": "Connection"
+    },
+    "options_tab_lookAndFeel": {
+        "message": "Look & Feel"
+    },
+    "options_group_look": {
+        "message": "Look"
+    },
+    "options_group_feel": {
+        "message": "Feel"
+    },
+    "options_tab_advanced":{
+        "message": "Advanced"
+    },
+    "options_group_special":{
+        "message": "Special"
+    },
+    "options_group_localStorage": {
+        "message": "LocalStorage"
+    },
+    
+    
+    "options_url_label": {
+        "message": "SickBeard Url"
+    },
+    "options_url_example": {
+        "message": "http://your-dyn-dns:8080"
+    },
+    "options_apiKey_label": {
+        "message": "SickBeard ApiKey"
+    },
+    "options_apiKey_example": {
+        "message": "32 chars"
+    },
+    "options_apiKey_description": {
+        "message": "Get the ApiKey from the SickBeard config page"
+    },
+    "option_testCon_text": {
+        "message": "Test Connection"
+    },
+    "options_tabAnimation_label": {
+        "message": "Animate tab change"
+    },
+    "options_badgeRefreshRate_label": {
+        "message": "Refresh badge counter every (minutes)"
+    },
+    "options_notificationRefreshRate_label": {
+        "message": "Look for Notifications every (seconds)"
+    },
+    "options_notificationRefreshRate_description": {
+        "message": "The refresh rate is increades for 60 seconds when a notification is anticipated<br/>0 is off"
+    },
+    "options_useChrome2growl_label": {
+        "message": "Activate Chrome2Growl"
+    },
+    "options_useChrome2growl_describtion": {
+        "message": "TODO: write description how to use that/install server"
+    },
+    "options_chrome2growlIconPath_label": {
+        "message": "Absolute icon path"
+    },
+    "options_chrome2growlHost_label": {
+        "message": "NodeJS Host"
+    },
+    "options_resetSettings_text": {
+        "message": "Reset to default settings"
+    },
+    "options_clearCache_text": {
+        "message": "Clear the Cache"
+    }
+    
+    
+}

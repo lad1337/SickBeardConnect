@@ -1,10 +1,11 @@
 {
-   "name": "SickBeardConnect",
+   "name": "__MSG_ext_name__",
    "version": "0.1.0",
    "permissions": [ "http://*/*", "https://*/*", "tabs", "notifications" ],
    "description": "SickBeard extension for Google Chrome.",
    "background_page": "background.html",
    "options_page": "options.html",
+   "default_locale": "en",
    "browser_action": {
       "default_icon": "images/icon19.png",
       "default_popup": "popup.html",

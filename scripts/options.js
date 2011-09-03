@@ -14,7 +14,8 @@ window.addEvent("domready", function() {
         });
 
         settings.manifest.reset_to_default.addEvent("action", function(value) {
-            setDefaultSettings();
+            if (confirm("This will reset this extension's settings.  Are you sure?"))
+                setDefaultSettings();
         });
 
         settings.manifest.clear_cache.addEvent("action", function(value) {
