@@ -3,13 +3,13 @@ var initialHeight = {};
 
 function _initGui() {
     log("initialising the gui", "POP", DEBUG);
-    $("body").addClass(settings["config_width"]);
+    $("body").addClass(settings.getItem("config_width"));
 
     var arccOptions = { animated : false, autoHeight : false, navigation : true };
     var showsArcc = $("#shows-arc").accordion(arccOptions);
     var futureArcc = $("#future-arc").accordion(arccOptions);
     var historyArcc = $("#history-arc").accordion(arccOptions);
-    $.each($(".pannel"), function(k, v) {
+    $.each($(".panel"), function(k, v) {
         var id = v.getAttribute("id");
         var element = $("#" + id);
         lastHeight[id] = element.css("height");
@@ -56,12 +56,11 @@ function _initGui() {
         params.season = season;
         params.episode = episode;
         genericRequest(params, searchSuccess, searchError, 0, null); // no timeout
-        listenForNotificationsFast(60000); // for 1 min
+        listenForNotificationsFast(); // for 1 min
     });
 
-    if (settings["config_tab_animation"])
+    if (settings.getItem("config_tab_animation"))
         $(".tab").addClass("animated");
-    // window.setTimeout(setMainContentHeight, 750);
 }
 
 var unlockShows = false;
@@ -86,16 +85,17 @@ function unlockContent(area) {
     if (unlockShows && unlockFuture && unlockHistory) {
         log("every areay is UNlocked", "POP", DEBUG);
         window.setTimeout(setMainContentHeight, 300);
-        // setHeightForInital("contend","auto");
-        // setMainContentHeight();
     }
 }
 
 function setMainContentHeight() {
     log("setting the content height to AUTO", "POP", DEBUG);
+    
     $(".tab").removeClass("hidden");
     $("#loadContainer").hide();
-    // $("#contend").css("height", "auto");
+
+    
+    
 }
 
 /*
@@ -125,12 +125,13 @@ function showsBuild(data, params) {
     shows.append(ul);
     showsAfterDone();
     // save the html for later
-    localStorage["html_" + params] = shows.html();
+    cache.setItem("html_" + params, shows.html());
+    age.setItem("html_" + params, $.now());
 }
 
-function showsTimeout(data, params) {
-    if (localStorage["html_" + params]) {
-        $("#shows").html(localStorage["html_" + params]);
+function showsTimeout(data, params, timeout) {
+    if (cache.getItem("html_" + params) && ($.now() - age.getItem("html_"+params) < timeout)) {
+        $("#shows").html(cache.getItem("html_" + params));
         showsAfterDone();
     } else {
         showsBuild(data, params);
@@ -168,21 +169,25 @@ function showBuild(data, params) {
     $("#air_by_date").attr("src", yesORnoPic(data.air_by_date));
 
     var bannerURL = constructShowBannerUrl(params.tvdbid);
-    if (bannerURL)
-        $("#show .banner").attr("src", bannerURL);
-    else
-        $("#show .banner").attr("src", "images/spacer.gif");
+    var img = $("#show .banner");
+    img.addClass("hidden");
+    if (bannerURL && settings.getItem("config_images_banner")){
+        img.attr("src", bannerURL);
+        img.removeClass("hidden");
+    }else
+        img.attr("src", "images/spacer.gif");
     $("#show .quality").attr("class", "quality " + data.quality);
     $("#show .quality").html(data.quality);
 
     // save the html for later
-    localStorage["html_" + params] = show.html();
+    cache.setItem("html_" + params, show.html());
+    age.setItem("html_" + params, $.now());
     showAfterDone();
 }
 
-function showTimeout(params) {
-    if (localStorage["html_" + params]) {
-        $("#show").html(localStorage["html_" + params]);
+function showTimeout(data, params, timeout) {
+    if (cache.getItem("html_" + params) && ($.now() - age.getItem("html_"+params) < timeout)) {
+        $("#show").html(cache.getItem("html_" + params));
         showAfterDone();
     } else {
         showBuild(data, params);
@@ -219,22 +224,21 @@ function futureBuild(data, params) {
             $("#" + type).html("");
             $("#" + type).append(curUl);
         }
-        localStorage["html_" + params + "_" + type] = $("#" + type).html();
+        cache.setItem("html_" + params + "_" + type, $("#" + type).html());
     });
 
-    localStorage["html_" + params] = $("#future-arc").html();
+    cache.setItem("html_" + params, $("#future-arc").html());
+    age.setItem("html_" + params, $.now());
+    // refresh the badge
+    chrome.extension.getBackgroundPage().setBadge(data, params);
     futureAfterDone();
 }
 
-function futureTimeout(data, params) {
-    if (localStorage["html_" + params]) {
-        // this kills the hooked events :(
-        // $("#future-arc").html(localStorage["html_" + params]);
-        // this does not work for some reason the events get not reattached
-        // var futureArcc = $("#future-arc").accordion(arccOptions);
+function futureTimeout(data, params, timeout) {
+    if (cache.getItem("html_" + params) && ($.now() - age.getItem("html_"+params) < timeout)) {
         var types = [ "missed", "today", "soon", "later" ];
         $.each(types, function(k, type) {
-            $("#" + type).html(localStorage["html_" + params + "_" + type]);
+            $("#" + type).html(cache.getItem("html_" + params + "_" + type));
         });
         futureAfterDone();
     } else {
@@ -274,13 +278,14 @@ function historyBuild(data, params) {
     });
     $("#history").append(ul);
 
-    localStorage["html_" + params] = $("#history").html();
+    cache.setItem("html_" + params, $("#history").html());
+    age.setItem("html_" + params, $.now());
     historyAfterDone();
 }
 
-function historyTimeout(params) {
-    if (localStorage["html_" + params]) {
-        $("#history").html(localStorage["html_" + params]);
+function historyTimeout(data, params, timeout) {
+    if (cache.getItem("html_" + params) && ($.now() - age.getItem("html_"+params) < timeout)) {
+        $("#history").html(cache.getItem("html_" + params));
         historyAfterDone();
     } else {
         historyBuild(data, params);
@@ -344,7 +349,7 @@ function recalculateHeight(id, setHeight) {
     setHeightFor(id, "auto");
     lastHeight[id] = element.css("height");
     log("saving height for " + id + ": " + lastHeight[id], "GUI", DEBUG);
-    element.addClass("animated"); // add animation back to the pannel
+    element.addClass("animated"); // add animation back to the panel
 
     if (setHeight) {
         setHeightFor(id, lastHeight[id]);

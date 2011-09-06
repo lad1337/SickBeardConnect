@@ -1,44 +1,48 @@
-var historyTimer;
+
 var msgTimer;
 var futureTimer;
-/**
- * start the refresh timer or not set it
- */
-function setHistoryTimer() {
-    setSettings();
-    var refreshRate = settings["config_refresh_rate"] * 1000 * 60;
-    if (refreshRate > 0) {
-        log("Will refresh from SickBeard every " + settings["config_refresh_rate"] + " min.", "BAK", INFO);
-        historyTimer = setInterval(refreshHistory, refreshRate);
-    } else {
-        if (historyTimer)
-            clearInterval(historyTimer);
-        log("Will NOT refresh from SickBeard automatically (refresh disabled in options).", "BAK", INFO);
-    }
-}
+
+var connectionStatus = false;
+
+var defaultSettings = { "sb_url" : "",
+        "sb_api_key": "",
+        "sb_username": "",
+        "sb_password": "",
+        "config_log_lvl" : 20, "config_width" : "medium",
+        "config_tab_animation" : true,
+        "config_images_banner" : false,
+        "config_icon_badge" : "auto",
+        "config_refresh_rate" : 5,
+        "config_notification_timeout" : 4,
+        "config_notification_default_rate" : 20,
+        "config_chromeToGrowl_use" : false,
+        "config_chromeToGrowl_icon_path" : "" };
+var settings = new Store("settings", defaultSettings); // globaly used
+var cache = new Store("cache");
+var age = new Store("age");
+
 
 function setMSGTimer(rate) {
-    setSettings();
     if (msgTimer)
         clearInterval(msgTimer);
     if (!rate)
-        rate = settings["config_notification_default_rate"] * 1000;
+        rate = settings.getItem("config_notification_default_rate") * 1000;
     if (rate > 0) {
-        log("Will pull notifications from SickBeard every " + rate + " ms.", "BAK", INFO);
+        log("Will pull notifications from SickBeard every " + settings.getItem("config_notification_default_rate") + " s.", "BAK", INFO);
         msgTimer = setInterval(refreshMSG, rate);
     } else {
         log("Will NOT pull notifications from SickBeard automatically (refresh disabled in options).", "BAK", INFO);
     }
 }
-// TODO: use the normal refresh rate! not notifications
+
 function setFutureTimer(rate) {
-    setSettings();
     if (futureTimer)
         clearInterval(futureTimer);
     if (!rate)
-        rate = settings["config_notification_default_rate"] * 1000;
+        rate = settings.getItem("config_refresh_rate") * 1000 * 60;
     if (rate > 0) {
-        log("Will pull future / badge info from SickBeard every " + rate + " ms.", "BAK", INFO);
+        log("Will pull future / badge info from SickBeard every " + settings.getItem("config_refresh_rate") + " min.", "BAK", INFO);
+        refreshFuture();
         msgTimer = setInterval(refreshFuture, rate);
     } else {
         log("Will NOT pull future / badge info from SickBeard automatically (refresh disabled in options).", "BAK", INFO);
@@ -51,13 +55,13 @@ function refreshHistory() {
 
     var params = new Params();
     params.cmd = "history";
-    genericRequest(params, null, genericResponseError, 0, null); // timeout disabeld
+    genericRequest(params, null, null, 0, null); // timeout disabeld
 
 }
 function refreshMSG() {
     var params = new Params();
     params.cmd = "sb.getmessages";
-    genericRequest(params, msgCallback, genericResponseError, 0, null); // timeout disabeld
+    genericRequest(params, msgCallback, null, 0, null); // timeout disabeld
 
 }
 
@@ -67,7 +71,7 @@ function refreshFuture() {
 
     var params = new Params();
     params.cmd = "future";
-    genericRequest(params, setBadge, genericResponseError, 0, null); // timeout disabeld
+    genericRequest(params, setBadge, null, 0, null); // timeout disabeld
 
 }
 function msgCallback(data, params) {
@@ -79,20 +83,22 @@ function msgCallback(data, params) {
 
         notification.show();
         // timeout to hide the notifications 0 = always display
-        if (settings["config_notification_timeout"] > 0)
+        if (settings.getItem("config_notification_timeout") > 0)
             window.setTimeout(function() {
                 notification.cancel();
-            }, settings["config_notification_timeout"]);
+            }, settings.getItem("config_notification_timeout")*1000);
     });
     if (data.length > 0)
         setMSGTimer();
 }
 
 function setBadge(data, params) {
-    if (data.missed.length > 0) {
+    var mode = settings.getItem("config_icon_badge");
+
+    if (data.missed.length > 0 && mode != "today") {
         chrome.browserAction.setBadgeText( { text : "" + data.missed.length });
         chrome.browserAction.setBadgeBackgroundColor( { color : [ 255, 0, 0, 100 ] });
-    } else if (data.missed.today > 0) {
+    } else if (data.missed.today > 0 && mode != "missed") {
         chrome.browserAction.setBadgeText( { text : "" + data.today.length });
         chrome.browserAction.setBadgeBackgroundColor( { color : [ 255, 0, 0, 100 ] });
     } else {
@@ -101,13 +107,29 @@ function setBadge(data, params) {
 
 }
 
+function testConnection(){
+    log("Testing connection","BAK",INFO);
+    var params = new Params();
+    params.cmd = "sb.ping";
+    genericRequest(params, connectionEstablished, noConnection, 0, null); // timeout disabeld
+}
+
+function connectionEstablished(){
+    connectionStatus = true;
+}
+
+function noConnection(){
+    connectionStatus = false;
+}
+
 function reloadBackgroundPage() {
     window.location.reload();
 }
 
-setHistoryTimer();
 setMSGTimer();
 setFutureTimer();
+testConnection();
 
-if (settings["config_chromeToGrowl_use"])
-    chrome2growl.init(settings["config_chromeToGrowl_host"], settings["config_chromeToGrowl_icon_path"]);
+if (settings.getItem("config_chromeToGrowl_use")){
+    chrome2growl.init(settings.getItem("config_chromeToGrowl_host"), settings.getItem("config_chromeToGrowl_icon_path"));
+}

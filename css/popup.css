@@ -97,11 +97,11 @@ body.big {
     -webkit-border-top-right-radius: 4px;
 }
 
-.pannel {
+.panel {
     max-height: 450px;
 }
 
-.pannel.animated {
+.panel.animated {
     transition-property: height, left;
     -webkit-transition-property: height, left;
     transition-duration: 0.5s;

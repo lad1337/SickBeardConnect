@@ -29,16 +29,40 @@ this.manifest = {
         {
             "tab": chrome.i18n.getMessage("options_tab_sickbeard"),
             "group": chrome.i18n.getMessage("options_group_connection"),
-            "text": chrome.i18n.getMessage("option_testCon_text"),
-            "name": "test_con",
-            "type": "button"
+            "text": chrome.i18n.getMessage("options_connectionStatus_label")+' <img style="width:16px;vertical-align:middle;" src="images/loading32.gif" id="connectionStatus"/>',
+            "name": "myDescription_connection_status",
+            "type": "description"
+        },
+        {
+            "tab": chrome.i18n.getMessage("options_tab_sickbeard"),
+            "group": chrome.i18n.getMessage(""),
+            "label": chrome.i18n.getMessage("options_username_label"),
+            "text": chrome.i18n.getMessage("options_username_example"),
+            "name": "sb_username",
+            "type": "text"
+        },
+        {
+            "tab": chrome.i18n.getMessage("options_tab_sickbeard"),
+            "group": chrome.i18n.getMessage(""),
+            "label": chrome.i18n.getMessage("options_password_label"),
+            "text": chrome.i18n.getMessage("options_password_example"),
+            "name": "sb_password",
+            "type": "text",
+            "masked": true
+        },
+        {
+            "tab": chrome.i18n.getMessage("options_tab_sickbeard"),
+            "group": chrome.i18n.getMessage(""),
+            "text": chrome.i18n.getMessage("options_usernamePassword_description"),
+            "name": "myDescription_username_password",
+            "type": "description"
         },
         {
             "tab": chrome.i18n.getMessage("options_tab_lookAndFeel"),
             "group": chrome.i18n.getMessage("options_group_look"),
+            "label": chrome.i18n.getMessage("options_width_label"),
             "name": "config_width",
             "type": "popupButton",
-            "label": chrome.i18n.getMessage("width"),
             "options": [
                 ["small", "Small"],
                 ["medium", "Medium"],
@@ -54,6 +78,13 @@ this.manifest = {
         },
         {
             "tab": chrome.i18n.getMessage("options_tab_lookAndFeel"),
+            "group": chrome.i18n.getMessage("options_group_look"),
+            "label": chrome.i18n.getMessage("options_imageBanner_label"),
+            "name": "config_images_banner",
+            "type": "checkbox"
+        },
+        {
+            "tab": chrome.i18n.getMessage("options_tab_lookAndFeel"),
             "group": chrome.i18n.getMessage("options_group_feel"),
             "label": chrome.i18n.getMessage("options_badgeRefreshRate_label"),
             "name": "config_refresh_rate",
@@ -61,7 +92,15 @@ this.manifest = {
             "min":  0,
             "max": 60,
             "step": 1,
-            "display": true
+            "display": true,
+            "displayModifier": function (value) {
+                if(!value)
+                    return "Off";
+                if(value == 1)
+                    return value + " " + chrome.i18n.getMessage("options_minute");
+                else
+                    return value + " " + chrome.i18n.getMessage("options_minutes");
+            }
         },
         {
             "tab": chrome.i18n.getMessage("options_tab_lookAndFeel"),
@@ -72,7 +111,15 @@ this.manifest = {
             "min":  0,
             "max": 50,
             "step": 1,
-            "display": true
+            "display": true,
+            "displayModifier": function (value) {
+                if(!value)
+                    return "Off";
+                if(value == 1)
+                    return value + " " + chrome.i18n.getMessage("options_second");
+                else
+                    return value + " " + chrome.i18n.getMessage("options_seconds");
+            }
         },
         {
             "tab": chrome.i18n.getMessage("options_tab_lookAndFeel"),
@@ -80,6 +127,37 @@ this.manifest = {
             "text": chrome.i18n.getMessage("options_notificationRefreshRate_description"),
             "name": "myDescription_notifo_rate",
             "type": "description"
+        },
+        {
+            "tab": chrome.i18n.getMessage("options_tab_lookAndFeel"),
+            "group": chrome.i18n.getMessage("options_group_feel"),
+            "label": chrome.i18n.getMessage("options_notificationVisable_label"),
+            "name": "config_notification_timeout",
+            "type": "slider",
+            "min":  0,
+            "max": 60,
+            "step": 1,
+            "display": true,
+            "displayModifier": function (value) {
+                if(!value)
+                    return "Ever";
+                if(value == 1)
+                    return value + " " + chrome.i18n.getMessage("options_second");
+                else
+                    return value + " " + chrome.i18n.getMessage("options_seconds");
+            }
+        },
+        {
+            "tab": chrome.i18n.getMessage("options_tab_lookAndFeel"),
+            "group": chrome.i18n.getMessage("options_group_feel"),
+            "label": chrome.i18n.getMessage("options_iconBadge_label"),
+            "name": "config_icon_badge",
+            "type": "popupButton",
+            "options": [
+                        ["auto", "Automatic"],
+                        ["missed", "Missed"],
+                        ["today", "Today"]
+                    ]
         },
         {
             "tab": chrome.i18n.getMessage("options_tab_advanced"),
@@ -114,7 +192,8 @@ this.manifest = {
             "label": chrome.i18n.getMessage("options_chrome2growlIconPath_label"),
             "group": "Chrome2Growl",
             "name": "config_chromeToGrowl_icon_path",
-            "type": "text"
+            "type": "text",
+            "text": "/Applications/Sick-Beard/data/images/sickbeard_touch_icon.png"
         },
         {
             "tab": chrome.i18n.getMessage("options_tab_advanced"),
@@ -122,7 +201,14 @@ this.manifest = {
             "group": "Chrome2Growl",
             "name": "config_chromeToGrowl_host",
             "type": "text",
-            "text": "127.0.0.1:8000"
+            "text": "localhost:8000"
+        },
+        {
+            "tab": chrome.i18n.getMessage("options_tab_advanced"),
+            "group": "Chrome2Growl",
+            "text": chrome.i18n.getMessage("options_connectionStatus_label")+' <img style="width:16px;vertical-align:middle;" src="images/loading32.gif" id="connectionStatus_c2g"/>',
+            "name": "myDescription_connection_status_c2g",
+            "type": "description"
         },
         {
             "tab": chrome.i18n.getMessage("options_tab_advanced"),
@@ -142,6 +228,6 @@ this.manifest = {
     "alignment": [
         ["sb_url","sb_api_key"],
         ["config_chromeToGrowl_host","config_chromeToGrowl_icon_path"],
-        ["config_notification_default_rate","config_refresh_rate"]
+        ["config_notification_default_rate","config_refresh_rate","config_notification_timeout"]
     ]
 };

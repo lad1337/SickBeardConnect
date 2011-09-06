@@ -17,6 +17,18 @@
         "message": "No matches were found."
     },
     
+    "options_minute": {
+        "message": "minute"
+    },
+    "options_minutes": {
+        "message": "minutes"
+    },
+    "options_second": {
+        "message": "second"
+    },
+    "options_seconds": {
+        "message": "seconds"
+    },
     
     "options_tab_sickbeard": {
         "message": "SickBeard"
@@ -59,20 +71,47 @@
     "options_apiKey_description": {
         "message": "Get the ApiKey from the SickBeard config page"
     },
-    "option_testCon_text": {
-        "message": "Test Connection"
+    "options_connectionStatus_label": {
+        "message": "Connections status"
+    },
+    "options_username_label": {
+        "message": "Username"
+    },
+    "options_password_label": {
+        "message": "Password"
+    },
+    "options_username_example": {
+        "message": "SickBeard Username"
+    },
+    "options_password_example": {
+        "message": "SickBeard Password"
+    },
+    "options_usernamePassword_description": {
+        "message": "You only need to provide the Username and password if you want to display images"
+    },
+    "options_width_label": {
+        "message": "Popup width"
     },
     "options_tabAnimation_label": {
         "message": "Animate tab change"
     },
+    "options_imageBanner_label": {
+        "message": "Display the show banner"
+    },
+    "options_iconBadge_label": {
+        "message": "Icon badge displays"
+    },
     "options_badgeRefreshRate_label": {
-        "message": "Refresh badge counter every (minutes)"
+        "message": "Refresh badge counter every"
     },
     "options_notificationRefreshRate_label": {
-        "message": "Look for Notifications every (seconds)"
+        "message": "Look for Notifications every"
     },
     "options_notificationRefreshRate_description": {
-        "message": "The refresh rate is increades for 60 seconds when a notification is anticipated<br/>0 is off"
+        "message": "The refresh rate is increades for 60 seconds when a notification is anticipated"
+    },
+    "options_notificationVisable_label": {
+        "message": "Display Notification for"
     },
     "options_useChrome2growl_label": {
         "message": "Activate Chrome2Growl"
@@ -89,9 +128,48 @@
     "options_resetSettings_text": {
         "message": "Reset to default settings"
     },
+    "options_resetSettings_question": {
+        "message": "This will reset this extension's settings.  Are you sure?"
+    },
     "options_clearCache_text": {
         "message": "Clear the Cache"
+    },
+
+
+    "gui_month_january": {
+        "message": "January"
+    },
+    "gui_month_february": {
+        "message": "February"
+    },
+    "gui_month_march": {
+        "message": "March"
+    },
+    "gui_month_april": {
+        "message": "April"
+    },
+    "gui_month_may": {
+        "message": "May"
+    },
+    "gui_month_june": {
+        "message": "June"
+    },
+    "gui_month_july": {
+        "message": "July"
+    },
+    "gui_month_august": {
+        "message": "August"
+    },
+    "gui_month_september": {
+        "message": "September"
+    },
+    "gui_month_october": {
+        "message": "October"
+    },
+    "gui_month_november": {
+        "message": "November"
+    },
+    "gui_month_december": {
+        "message": "December"
     }
-    
-    
 }

@@ -1,23 +1,32 @@
-var settings;
-var defaultSettings = { "sb_url" : "http://localhost:8080", "config_log_lvl" : 20, "config_width" : "medium", "config_tab_animation" : true, "config_refresh_rate" : 1, "config_notification_timeout" : 4000,"config_notification_default_rate": 20,"config_chromeToGrowl_use":false,"config_chromeToGrowl_icon_path":"/Applications/Sick-Beard/data/images/sickbeard_touch_icon.png" };
-function setSettings() {
-    var tmp = new Store("settings", defaultSettings);
-    settings = tmp.toObject();
-}
-setSettings();
+var settings = chrome.extension.getBackgroundPage().settings;
+var cache = chrome.extension.getBackgroundPage().cache;
+var age = chrome.extension.getBackgroundPage().age;
+
+var connectionStatus = chrome.extension.getBackgroundPage().connectionStatus;
 
 var NOW = $.now();
 
 function getRefreshRate() {
-    return parseInt(settings["refresh_rate"]) * 1000;
+    return settings.getItem("refresh_rate") * 1000;
 }
 
 function getUrl() {
-    return checkEndSlash(settings["sb_url"]);
+    var url = settings.getItem("sb_url");
+    if (url.search("http://") != 0)
+        url = "http://" + url;
+    return checkEndSlash(url);
+}
+function getHTTPLoginUrl() {
+    if (settings.getItem("sb_username") && settings.getItem("sb_password")) {
+        var url = getUrl();
+        url = url.substr(7, url.length - 7);
+       return "http://"+settings.getItem("sb_username")+":"+settings.getItem("sb_password")+"@"+url;
+    }
+    return getUrl();
 }
 
 function getApiUrl() {
-    return getUrl() + "api/" + settings["sb_api_key"];
+    return getUrl() + "api/" + settings.getItem("sb_api_key");
 }
 
 /**
@@ -28,21 +37,20 @@ function getApiUrl() {
  * @param error_callback
  */
 function genericRequest(params, succes_callback, error_callback, timeout, timeout_callback) {
-    // var paramString = getParamString(params);
 
     log("New Req for: " + params, "REG", DEBUG);
-    if (localStorage["html_" + params] || localStorage["json_" + params])
-        if ($.now() - parseInt(localStorage["lastcall_" + params]) < timeout) {
+    if (cache.getItem("html_" + params) || cache.getItem("json_" + params))
+        if ($.now() - age.getItem("json_" + params) < timeout) {
             log("Not refreshing for reg: " + params + ". Let the timeout_callback handle this", "REQ", INFO);
-            data = JSON.parse(localStorage["json_" + params]);
+            data = cache.getItem("json_" + params);
             if (timeout_callback)
-                timeout_callback(data, params);
+                timeout_callback(data, params, timeout);
             return;
         }
     var apiUrl = getApiUrl();
     $.ajax( { type : "POST", url : apiUrl, data : params, dataType : 'json', success : function(data) {
-        localStorage["lastcall_" + params] = $.now(); // time of last successful call
-        localStorage["json_" + params] = JSON.stringify(data); // json string of last response
+        age.setItem("json_" + params, $.now()); // time of last successful call
+        cache.setItem("json_" + params, data); // json string of last response
         checkForError(data, params, succes_callback, error_callback);
     }, error : function(data) {
         genricRequestError(data, params, succes_callback, error_callback);
@@ -59,12 +67,18 @@ function genericRequest(params, succes_callback, error_callback, timeout, timeou
 function checkForError(data, params, succes_callback, error_callback) {
     if (data.error) {
         log("Reg successful for BUT WITH ERROR: " + params, "REG", DEBUG);
+        if (data.error.search("ACCESS DENIED") != -1) {
+            connectionStatus = false;
+            log("Api Key not accepted", "REQ", WARNING);
+        } else {
+            connectionStatus = true;
+        }
         if (shouldLvlBeLoged(DEBUG))
             console.log(data);
         if (error_callback)
             error_callback(data, params);
     } else {
-        log("Reg successful for: " + params, "REG", DEBUG);
+        log("Reg successful for: " + params, "REQ", DEBUG);
         if (shouldLvlBeLoged(DEBUG))
             console.log(data);
         if (succes_callback)
@@ -77,16 +91,26 @@ function checkForError(data, params, succes_callback, error_callback) {
  * @param data
  */
 function genricRequestError(data, params, succes_callback, error_callback) {
+    connectionStatus = false;
     log("request error", "REQ", ERROR);
     console.log(data);
     log("trying to load old data", "REQ", INFO);
-    if (localStorage["json_" + params]) {
-        data = JSON.parse(localStorage["json_" + params]);
+    if (cache.getItem("json_" + params) && params.cmd != "sb.ping") {
+        data = cache.getItem("json_" + params);
+        var msg = "No connection! Using old data.";
+        log(msg, WARNING);
+        try {
+            addErrorMsg(msg, WARNING);
+        } catch (e) {
+        }
         checkForError(data, params, succes_callback, error_callback);
-        addErrorMsg("No connection! Using old data.", WARNING);
     } else {
-        log("could not load old request data", "REQ", ERROR);
-        addErrorMsg("No connection and NO old data!", ERROR);
+        var msg = "No connection and NO old data!";
+        log(msg, ERROR);
+        try {
+            addErrorMsg(msg, ERROR);
+        } catch (e) {
+        }
     }
 
 }
@@ -120,9 +144,16 @@ function Params() {
  */
 Params.prototype.toString = function() {
     var string = "";
+    var first = true;
     $.each(this, function(key, value) {
-        if (key != "toString")
-            string += "?" + key + "=" + value;
+        if (key != "toString") {
+            var splitter = "&";
+            if (first) {
+                splitter = "?";
+                first = false;
+            }
+            string += splitter + key + "=" + value;
+        }
     });
     return string;
 };
@@ -134,7 +165,7 @@ Params.prototype.toString = function() {
 function constructShowPosterUrl(tvdbid) {
     // /showPoster/?show=73741&amp;which=poster
     var imgPart = "showPoster/?show=" + tvdbid + "&which=poster";
-    return getUrl() + imgPart;
+    return getHTTPLoginUrl() + imgPart;
 
 }
 /**
@@ -144,18 +175,17 @@ function constructShowPosterUrl(tvdbid) {
 function constructShowBannerUrl(tvdbid) {
     // /showPoster/?show=73741&amp;which=poster
     var imgPart = "showPoster/?show=" + tvdbid + "&which=banner";
-    return getUrl() + imgPart;
-
+    return getHTTPLoginUrl() + imgPart;
 }
+
 /**
  * @param provider
  * @returns {String}
  */
 function constructProviderImgUrl(provider) {
-    provider = provider.replace(/ /gi, "_").toLowerCase();
-
+    provider = provider.replace(/ /g, "_").toLowerCase();
     var imgPart = "images/providers/" + provider + ".gif";
-    return getUrl() + imgPart;
+    return getHTTPLoginUrl() + imgPart;
 }
 
 var DEBUG = 10;
@@ -184,12 +214,19 @@ function log(msg, sections, lvl) {
             if (value == lvl)
                 curLogLvl = key;
         });
-        console.log($.now() + "-[" + curLogLvl + "-" + sections + "]: " + msg);
+
+        if (lvl >= ERROR)
+            console.error($.now() + "-[" + curLogLvl + "-" + sections + "]: " + msg);
+        else if (lvl >= WARNING)
+            console.warn($.now() + "-[" + curLogLvl + "-" + sections + "]: " + msg);
+        else
+            console.log($.now() + "-[" + curLogLvl + "-" + sections + "]: " + msg);
+
     }
 }
 
 function shouldLvlBeLoged(lvl) {
-    return lvl >= parseInt(settings["config_log_lvl"]);
+    return lvl >= settings.getItem("config_log_lvl");
 
 }
 
@@ -218,12 +255,21 @@ function stripHtmlTags(strInputCode) {
     return strInputCode.replace(/<[^<]+?>/g, "");
 }
 function stripDotsAndStuff(strInputCode) {
-    // <[^<]+?>
-    // (?<=^|>)[^><]+?(?=<|$)
-    // <\/?[^>]+(>|$)
     return strInputCode.replace(/[.' !]/g, "");
 }
-var monthNames = [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ];
+
+var monthNames = [ chrome.i18n.getMessage("gui_month_january"),
+                   chrome.i18n.getMessage("gui_month_february"),
+                   chrome.i18n.getMessage("gui_month_march"),
+                   chrome.i18n.getMessage("gui_month_april"),
+                   chrome.i18n.getMessage("gui_month_may"),
+                   chrome.i18n.getMessage("gui_month_june"),
+                   chrome.i18n.getMessage("gui_month_july"),
+                   chrome.i18n.getMessage("gui_month_august"),
+                   chrome.i18n.getMessage("gui_month_september"),
+                   chrome.i18n.getMessage("gui_month_october"),
+                   chrome.i18n.getMessage("gui_month_november"),
+                   chrome.i18n.getMessage("gui_month_december")];
 function getNiceHistoryDate(date) {
     var dateSplit = date.split("-");
     var yeahr = dateSplit[0];

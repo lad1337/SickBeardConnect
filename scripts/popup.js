@@ -1,4 +1,5 @@
 function initGui() {
+    // see popup-ui.js
     _initGui();
 }
 /**
@@ -24,17 +25,7 @@ function initContent() {
 }
 function refreshContent() {
     // deleting all last call times
-
-    var storageLenght = localStorage.length;
-    while(storageLenght--){
-        var curStorageKey = localStorage.key(storageLenght);
-        console.log(curStorageKey.search("lastcall_")+"asda");
-        if (curStorageKey.search("lastcall_") == 0) {
-            log("setting "+curStorageKey+" to 0", "GEN", DEBUG);
-            localStorage[curStorageKey] = 0;
-        }
-        
-    }
+    age.clear();
     $("#loadContainer").show();
     initContent();
 }
@@ -43,14 +34,17 @@ function listenForNotificationsFast(lastFor) {
     if (!lastFor)
         lastFor = 60000; // default to 1 min
     log("Will pull notifications from SickBeard faster for " + lastFor + " ms.", "POP", DEBUG);
-    chrome.extension.getBackgroundPage().setMSGTimer(1000);
+    chrome.extension.getBackgroundPage().setMSGTimer(1000); // pull msgs every second
     window.setTimeout(function() {
-        chrome.extension.getBackgroundPage().setMSGTimer();
-    }, lastFor);
+        chrome.extension.getBackgroundPage().setMSGTimer(2000);// pull msgs every 2 seconds
+        window.setTimeout(function() {
+            chrome.extension.getBackgroundPage().setMSGTimer();// second pull interval
+        }, lastFor/2);
+    }, lastFor/2); // first pull interval
 }
 
 /**
- * open the show pannel with the requested show info for the tvdbid
+ * open the show panel with the requested show info for the tvdbid
  * 
  * @param tvdbid
  */
@@ -58,11 +52,11 @@ function openShow(tvdbid) {
     var params = new Params();
     params.cmd = "show";
     params.tvdbid = tvdbid;
-    genericRequest(params, showBuild, genericResponseError, 0, showTimeout); // timeout 5 min
+    genericRequest(params, showBuild, genericResponseError, 150000, showTimeout); // timeout 5 min
 }
 
 var closeWindow = false;
-var lastOpened = parseInt(localStorage["lastOpened"]);
+var lastOpened = age.getItem("lastOpened");
 
 function openSBPage() {
     chrome.tabs.create( { url : getUrl() });
@@ -77,7 +71,7 @@ if (lastOpened > 0) {
 }
 
 if (!closeWindow) {
-    localStorage["lastOpened"] = NOW;
+    age.setItem("lastOpened", NOW);
     // this comes before the bottom one
     $(document).ready(function() {
         initGui();
