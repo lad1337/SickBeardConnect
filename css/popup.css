@@ -1,3 +1,15 @@
+/*
+     the light green #c7db39
+      the dark green #215f2f
+           the brown #57442B
+      the sand color #F5F1E4
+            the grey #EFEFEF
+        nearly black #333
+snatched Custom blue #449
+    downloaded green #C3E3C8
+              SD red #944
+            HD green #494
+*/
 * {
     font-size: 12px;
     font-family: tahoma, sans-serif;
@@ -24,12 +36,13 @@ body.big {
 }
 
 #menu {
-    background: #DFDACF;
+    background: #EFEFEF;
     text-align: center;
-    border: 1px solid #DFDACF;
+    border-top: 1px solid white ! important;
     border-radius: 0px 0px 4px 4px;
     -webkit-border-bottom-right-radius: 4px;
     -webkit-border-bottom-left-radius: 4px;
+    border-radius: 0px 0px 4px 4px;
 }
 
 #menu span {
@@ -46,7 +59,7 @@ body.big {
 }
 
 #menu span:hover,.menu #showActionButton:hover {
-    background-color: #333; /*the light green #c7db40*/
+    background-color: #333;
     color: whitesmoke;
 }
 
@@ -86,15 +99,20 @@ body.big {
 }
 
 #tabHeader li:first-child {
-    border-left: none;
+    border-right: none ! important;
     border-radius: 4px 0px 0px 0px;
     -webkit-border-top-left-radius: 4px;
 }
 
 #tabHeader li:last-child {
-    border-right: none;
+    border-left: none ! important;
     border-radius: 0px 4px 0px 0px;
     -webkit-border-top-right-radius: 4px;
+}
+
+#tabHeader li:nth-child(2){
+    border-right: solid 1px white ! important;
+    border-left: solid 1px white ! important;
 }
 
 .panel {
@@ -127,9 +145,11 @@ body.big {
 #show img.banner {
     width: 100%;
 }
-#show #showInfos{
+
+#show #showInfos {
     padding: 4px 4px 0 4px;
 }
+
 #show img {
     vertical-align: middle;
 }
@@ -144,38 +164,70 @@ body.big {
     line-height: 16px;
 }
 
+#show .infoValue {
+    min-width: 35px;
+    display: inline-block;
+}
+
 #show #location.broken {
     color: #994444;
+    font-style: italic;
+}
+
+#show #seasonList {
+    margin: 0;
+    padding: 0;
+    display: inline;
+    float: left;
+}
+
+#show #seasonList li {
+    list-style: none;
+    display: inline;
+    margin: 0 2px;
+    padding: 0 2px;
+    cursor: pointer;
+}
+
+#show #seasonList li.active,#show #seasonList li:hover {
+    background: #333;
+    color: whiteSmoke;
+}
+
+#show #seasonEpisodes {
+    height: 179px;
+    overflow: auto;
+    border-top: solid 1px white;
+}
+
+#seasonEpisodes .ep_name {
+    font-weight: bold;
+    line-height: 16px;
 }
 
 /*
- * Future
+ * Season / Future
  */
-#future-arc li .ep_name.error {
+#seasonEpisodes li .status.error,#future-arc li .ep_name.error {
     color: #994444;
 }
 
-#future-arc li .ep_name.success {
+#seasonEpisodes li .status.success,#future-arc li .ep_name.success {
     color: #449944;
 }
 
 /*
  * History
  */
-#history .action.Snatched {
-    color: #444499;
-}
-
-#history .action.Downloaded {
-    color: #449944;
-}
-
-#history .historyQuality,#history .date {
-    float: right;
-}
-
 #history .historyQuality {
     font-weight: bold;
+}
+
+/*
+ * Season / History
+ */
+#seasonEpisodes .date,#history .historyQuality,#history .date {
+    float: right;
 }
 
 /*
@@ -199,18 +251,19 @@ img.search.visible,li:hover img.search {
     display: inline;
 }
 
-.epSeasonEpisode {
+.episode,.epSeasonEpisode {
     margin-right: 5px;
 }
 
 /*
  * Lists
  */
-#shows ul,#future-arc ul,#history ul {
+#seasonEpisodes ul,#shows ul,#future-arc ul,#history ul {
     padding: 0;
+    margin: 2px;
 }
 
-#shows li,#future-arc li,#history li {
+#seasonEpisodes li,#shows li,#future-arc li,#history li {
     min-height: 20px;
     list-style: none;
     margin: 0px;
@@ -219,10 +272,14 @@ img.search.visible,li:hover img.search {
     padding: 4px;
 }
 
+#seasonEpisodes li:nth-child(even),#shows li:nth-child(even),#future-arc li:nth-child(even),#history li:nth-child(even) {
+    background: #EFEFEF;
+}
+
 /*
  * quality span
  */
-span.quality {
+span.status,span.quality {
     font: bold 1em/1.2em verdana, sans-serif;
     background: none repeat scroll 0 0 #999999;
     color: #FFFFFF;
@@ -252,8 +309,53 @@ span.Any {
 }
 
 /*
+ * quality span
+ */
+span.status {
+    color: #333;
+    float: none;
+}
+
+span.Wanted {
+    background: #FFB0B0;
+}
+
+span.Ignored {
+    background: #BEDEED;
+}
+
+span.Snatched {
+    background: #444499;
+    color: whitesmoke;
+}
+
+span.Downloaded {
+    background: #C3E3C8;
+}
+
+.status.Unaired,span.Skipped {
+    color: whiteSmoke;
+}
+
+/*
  * helpers / common things
  */
+.floatRight {
+    float: right;
+}
+
+.floatLeft {
+    float: left;
+}
+
+.clearRight {
+    clear: right;
+}
+
+.clearLeft {
+    clear: left;
+}
+
 .clearer {
     clear: both;
 }

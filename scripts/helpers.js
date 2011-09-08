@@ -255,7 +255,7 @@ function stripHtmlTags(strInputCode) {
     return strInputCode.replace(/<[^<]+?>/g, "");
 }
 function stripDotsAndStuff(strInputCode) {
-    return strInputCode.replace(/[.' !]/g, "");
+    return strInputCode.replace(/[:.' !]/g, "");
 }
 
 var monthNames = [ chrome.i18n.getMessage("gui_month_january"),
@@ -270,6 +270,7 @@ var monthNames = [ chrome.i18n.getMessage("gui_month_january"),
                    chrome.i18n.getMessage("gui_month_october"),
                    chrome.i18n.getMessage("gui_month_november"),
                    chrome.i18n.getMessage("gui_month_december")];
+
 function getNiceHistoryDate(date) {
     var dateSplit = date.split("-");
     var yeahr = dateSplit[0];
@@ -279,6 +280,16 @@ function getNiceHistoryDate(date) {
     var time = dayAndTime[1];
 
     return day + ". " + monthNames[parseInt(month, 10) - 1] + " " + time;
+
+}
+
+function getAirDate(date) {
+    var dateSplit = date.split("-");
+    var yeahr = dateSplit[0];
+    var month = dateSplit[1];
+    var day = dateSplit[2];
+
+    return day + ". " + monthNames[parseInt(month, 10) - 1];
 
 }
 

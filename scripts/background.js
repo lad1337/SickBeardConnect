@@ -98,9 +98,9 @@ function setBadge(data, params) {
     if (data.missed.length > 0 && mode != "today") {
         chrome.browserAction.setBadgeText( { text : "" + data.missed.length });
         chrome.browserAction.setBadgeBackgroundColor( { color : [ 255, 0, 0, 100 ] });
-    } else if (data.missed.today > 0 && mode != "missed") {
+    } else if (data.today.length > 0 && mode != "missed") {
         chrome.browserAction.setBadgeText( { text : "" + data.today.length });
-        chrome.browserAction.setBadgeBackgroundColor( { color : [ 255, 0, 0, 100 ] });
+        chrome.browserAction.setBadgeBackgroundColor( { color : [ 0, 255, 0, 100 ] });
     } else {
         chrome.browserAction.setBadgeText( { text : "" });
     }
@@ -128,7 +128,7 @@ function reloadBackgroundPage() {
 
 setMSGTimer();
 setFutureTimer();
-testConnection();
+//testConnection();
 
 if (settings.getItem("config_chromeToGrowl_use")){
     chrome2growl.init(settings.getItem("config_chromeToGrowl_host"), settings.getItem("config_chromeToGrowl_icon_path"));

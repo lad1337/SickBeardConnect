@@ -5,6 +5,7 @@
     <link rel="stylesheet" type="text/css" href="third_party/jquery/css/smoothness/jquery-ui-1.8.16.custom.css" />
     <link rel="stylesheet" type="text/css" href="css/popup.css" />
     <link rel="stylesheet" type="text/css" href="css/popup-jquery.css" />
+    <link rel="stylesheet" type="text/css" href="css/shorthand.css" />
     
     <script src="third_party/jquery/js/jquery-1.6.2.min.js"></script>
     <script src="third_party/jquery/js/jquery-ui-1.8.16.custom.min.js"></script>
@@ -35,13 +36,33 @@
                     <div id="showInfos">
                         <span class="name"></span>
                         <span class="quality"></span><br/>
-                        <span class="info">Airs:</span><span id="airs"></span><br/>
-                        <span class="info">Location:</span><span id="location"></span><br/>
-                        <span class="info">Language:</span><span id="language"></span><br/>
-                        <span class="info">Paused:</span><img id="paused" src="images/spacer.gif"/><br/>
-                        <span class="info">Season Folder:</span><img id="season_folder" src="images/spacer.gif"/><br/>
-                        <span class="info">Active:</span><img id="active" src="images/spacer.gif"/><br/>
-                        <span class="info">Air-by-Date:</span><img id="air_by_date" src="images/spacer.gif"/><br/>
+                        <span class="infoPair"><span class="info">Airs:</span><span id="airs"></span></span><br/>
+                        <span class="infoPair"><span class="info">Location:</span><span id="location"></span></span><br/>
+                        
+                        <span class="infoPair">
+                            <span class="info">Air-by-Date:</span>
+                            <span class="infoValue"><img id="air_by_date" src="images/spacer.gif"/></span>
+                        </span>
+                        <span class="infoPair">
+                            <span class="info">Season Folder:</span>
+                            <span class="infoValue"><img id="season_folder" src="images/spacer.gif"/></span>
+                        </span>
+                        <br/>
+                        <span class="infoPair">
+                            <span class="info">Active:</span>
+                            <span class="infoValue"><img id="active" src="images/spacer.gif"/></span>
+                        </span>
+                        <span class="infoPair">
+                            <span class="info">Language:</span>
+                            <span class="infoValue" id="language"></span>
+                        </span>
+                        <div class="clearer"></div>
+                        <span style="float:left;">Seasons:</span><ul id="seasonList"></ul>
+                        <div class="clearer"></div>
+                    </div>
+                    <div id="seasonEpisodes">
+                    <div id="loadContainerSeasonEpisodes" style="text-align:center;position: absolute;bottom: 0;width:100%;"><img src="images/loadingBar.gif"/></div>
+                    <ul></ul>
                     </div>
                 </div>
             </div>

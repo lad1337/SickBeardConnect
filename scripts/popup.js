@@ -39,8 +39,8 @@ function listenForNotificationsFast(lastFor) {
         chrome.extension.getBackgroundPage().setMSGTimer(2000);// pull msgs every 2 seconds
         window.setTimeout(function() {
             chrome.extension.getBackgroundPage().setMSGTimer();// second pull interval
-        }, lastFor/2);
-    }, lastFor/2); // first pull interval
+        }, lastFor / 2);
+    }, lastFor / 2); // first pull interval
 }
 
 /**
@@ -53,6 +53,15 @@ function openShow(tvdbid) {
     params.cmd = "show";
     params.tvdbid = tvdbid;
     genericRequest(params, showBuild, genericResponseError, 150000, showTimeout); // timeout 5 min
+}
+
+function displaySeaoson(tvdbid, season) {
+
+    var params = new Params();
+    params.cmd = "show.seasons";
+    params.tvdbid = tvdbid;
+    params.season = season;
+    genericRequest(params, seasonBuild, genericResponseError, 150000, seasonTimeout); // timeout 5 min
 }
 
 var closeWindow = false;

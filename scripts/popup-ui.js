@@ -59,8 +59,7 @@ function _initGui() {
         listenForNotificationsFast(); // for 1 min
     });
 
-    if (settings.getItem("config_tab_animation"))
-        $(".tab").addClass("animated");
+
 }
 
 var unlockShows = false;
@@ -89,13 +88,13 @@ function unlockContent(area) {
 }
 
 function setMainContentHeight() {
+    if (settings.getItem("config_tab_animation"))
+        $(".tab").addClass("animated");
     log("setting the content height to AUTO", "POP", DEBUG);
-    
+
     $(".tab").removeClass("hidden");
     $("#loadContainer").hide();
 
-    
-    
 }
 
 /*
@@ -130,7 +129,7 @@ function showsBuild(data, params) {
 }
 
 function showsTimeout(data, params, timeout) {
-    if (cache.getItem("html_" + params) && ($.now() - age.getItem("html_"+params) < timeout)) {
+    if (cache.getItem("html_" + params) && ($.now() - age.getItem("html_" + params) < timeout)) {
         $("#shows").html(cache.getItem("html_" + params));
         showsAfterDone();
     } else {
@@ -163,22 +162,27 @@ function showBuild(data, params) {
         $("#location").addClass("broken");
     }
     $("#language").html(data.language);
-    $("#paused").attr("src", yesORnoPic(data.paused));
     $("#season_folder").attr("src", yesORnoPic(data.season_folders));
     $("#active").attr("src", yesORnoPic(data.active));
     $("#air_by_date").attr("src", yesORnoPic(data.air_by_date));
 
     var bannerURL = constructShowBannerUrl(params.tvdbid);
     var img = $("#show .banner");
-    img.addClass("hidden");
-    if (bannerURL && settings.getItem("config_images_banner")){
+    img.hide();
+    if (bannerURL && settings.getItem("config_images_banner")) {
         img.attr("src", bannerURL);
-        img.removeClass("hidden");
-    }else
+        img.show();
+    } else
         img.attr("src", "images/spacer.gif");
     $("#show .quality").attr("class", "quality " + data.quality);
     $("#show .quality").html(data.quality);
-
+    // season stuff
+    $("#seasonList").html("");
+    $("#seasonEpisodes ul").html("");
+    $("#loadContainerSeasonEpisodes").show();
+    $.each(data.season_list, function(k, v) {
+        $("#seasonList").append('<li id="' + params.tvdbid + '-' + v + '">' + v + '</li>');
+    });
     // save the html for later
     cache.setItem("html_" + params, show.html());
     age.setItem("html_" + params, $.now());
@@ -186,7 +190,7 @@ function showBuild(data, params) {
 }
 
 function showTimeout(data, params, timeout) {
-    if (cache.getItem("html_" + params) && ($.now() - age.getItem("html_"+params) < timeout)) {
+    if (cache.getItem("html_" + params) && ($.now() - age.getItem("html_" + params) < timeout)) {
         $("#show").html(cache.getItem("html_" + params));
         showAfterDone();
     } else {
@@ -199,6 +203,57 @@ function showAfterDone() {
     $("#contend").tabs('select', 0);
     lastHeight["show"] = "450px";
     $('#shows-arc').accordion('activate', 1);
+    $("#seasonList li").bind("click", function() {
+        var tvdbid = $(this).attr("id").split("-")[0];
+        var season = $(this).attr("id").split("-")[1];
+        $("#seasonList li").removeClass("active");
+        $(this).addClass("active");
+        displaySeaoson(tvdbid, season);
+    });
+    window.setTimeout(function() {
+        $("#seasonList li:first-child").click();
+    }, 1000);
+}
+
+/*
+ * Seasons
+ */
+function seasonBuild(data, params) {
+    $("#seasonEpisodes ul").html("");
+    var arrayData = [];
+    $.each(data, function(key, value) {
+        value.episode = key;
+        arrayData.push(value);
+    });
+
+    $.each(arrayData.reverse(), function(key, value) {
+        var li = $("<li>");
+        var liHTMLString = '<span class="episode">' + pad(value.episode, 2) + '</span>';
+        liHTMLString += '<span class="ep_name">' + value.name + '</span><br/>';
+        liHTMLString += '<span class="status ' + value.status + '">' + value.status + '</span>';
+        liHTMLString += '<span class="date">' + getAirDate(value.airdate) + '</span>';
+
+        li.append(createSearchImg(params.tvdbid, params.season, key));
+        li.append(liHTMLString);
+        $("#seasonEpisodes ul").append(li);
+    });
+    cache.setItem("html_" + params, $("#seasonEpisodes ul").html());
+    age.setItem("html_" + params, $.now());
+    seasonAfterDone();
+}
+
+function seasonTimeout(data, params, timeout) {
+    if (cache.getItem("html_" + params) && ($.now() - age.getItem("html_" + params) < timeout)) {
+        $("#seasonEpisodes ul").html(cache.getItem("html_" + params));
+        seasonAfterDone();
+    } else {
+        seasonBuild(data, params);
+    }
+}
+
+function seasonAfterDone() {
+    $("#loadContainerSeasonEpisodes").hide();
+    $("#seasonEpisodes").css('height', 450 - (parseInt($("#show #showInfos").css("height"), 10) + parseInt($("#show .banner").css("height"), 10) + 5) + "px");
 }
 
 /*
@@ -235,7 +290,7 @@ function futureBuild(data, params) {
 }
 
 function futureTimeout(data, params, timeout) {
-    if (cache.getItem("html_" + params) && ($.now() - age.getItem("html_"+params) < timeout)) {
+    if (cache.getItem("html_" + params) && ($.now() - age.getItem("html_" + params) < timeout)) {
         var types = [ "missed", "today", "soon", "later" ];
         $.each(types, function(k, type) {
             $("#" + type).html(cache.getItem("html_" + params + "_" + type));
@@ -271,7 +326,7 @@ function historyBuild(data, params) {
         var liHTMLString = '<span class="show_name" id="' + value.tvdbid + '">' + value.show_name + '</span>';
         liHTMLString += '<span class="date">' + getNiceHistoryDate(value.date) + '</span><br/>';
         liHTMLString += '<span class="epSeasonEpisode">s' + pad(value.season, 2) + 'e' + pad(value.episode, 2) + '</span>';
-        liHTMLString += '<span class="action ' + value.action + '">' + value.action + '</span>';
+        liHTMLString += '<span class="status ' + value.action + '">' + value.action + '</span>';
         liHTMLString += '<span class="historyQuality">' + value.quality + '</span>';
         li.append(liHTMLString);
         ul.append(li);
@@ -284,7 +339,7 @@ function historyBuild(data, params) {
 }
 
 function historyTimeout(data, params, timeout) {
-    if (cache.getItem("html_" + params) && ($.now() - age.getItem("html_"+params) < timeout)) {
+    if (cache.getItem("html_" + params) && ($.now() - age.getItem("html_" + params) < timeout)) {
         $("#history").html(cache.getItem("html_" + params));
         historyAfterDone();
     } else {
