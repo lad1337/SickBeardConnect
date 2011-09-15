@@ -117,13 +117,13 @@
         "message": "Activate Chrome2Growl"
     },
     "options_useChrome2growl_describtion": {
-        "message": "TODO: write description how to use that/install server"
+        "message": "TODO: write description how to use that/install server<br/>This is very advanced !<br/>You need <a href='http://nodejs.org/'>NodeJS</a> and <a href='https://gist.github.com/1219028' >this</a> file"
     },
     "options_chrome2growlIconPath_label": {
         "message": "Absolute icon path"
     },
     "options_chrome2growlHost_label": {
-        "message": "NodeJS Host"
+        "message": "NodeJS Server"
     },
     "options_resetSettings_text": {
         "message": "Reset to default settings"

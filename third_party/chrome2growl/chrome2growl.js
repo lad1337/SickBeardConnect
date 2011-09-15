@@ -1,4 +1,3 @@
-var chrome2growlReconect;
 
 var chrome2growl = { ws : null, opened : false, queue : [], icon : false, host : "127.0.0.1:8000", proxy : function(func) {
     var ctx = this;
@@ -23,11 +22,6 @@ var chrome2growl = { ws : null, opened : false, queue : [], icon : false, host :
     this.ws.onopen = this.proxy(this.onOpen);
     this.ws.onmessage = this.proxy(this.onMessage);
     this.ws.onclose = this.proxy(this.onClose);
-
-    var ctx = this;
-    chrome2growlReconect = setInterval(function() {
-        ctx.reconnect();
-    }, 30000);
 
 }, setIcon : function(path) {
     this.icon = path;

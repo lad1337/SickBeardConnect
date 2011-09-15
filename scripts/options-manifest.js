@@ -29,7 +29,7 @@ this.manifest = {
         {
             "tab": chrome.i18n.getMessage("options_tab_sickbeard"),
             "group": chrome.i18n.getMessage("options_group_connection"),
-            "text": chrome.i18n.getMessage("options_connectionStatus_label")+' <img style="width:16px;vertical-align:middle;" src="images/loading32.gif" id="connectionStatus"/>',
+            "text": chrome.i18n.getMessage("options_connectionStatus_label")+' <img style="width:16px;vertical-align:middle;" src="images/throbber.svg" id="connectionStatus"/>',
             "name": "myDescription_connection_status",
             "type": "description"
         },
@@ -206,7 +206,7 @@ this.manifest = {
         {
             "tab": chrome.i18n.getMessage("options_tab_advanced"),
             "group": "Chrome2Growl",
-            "text": chrome.i18n.getMessage("options_connectionStatus_label")+' <img style="width:16px;vertical-align:middle;" src="images/loading32.gif" id="connectionStatus_c2g"/>',
+            "text": chrome.i18n.getMessage("options_connectionStatus_label")+' <img style="width:16px;vertical-align:middle;" src="images/throbber.svg" id="connectionStatus_c2g"/>',
             "name": "myDescription_connection_status_c2g",
             "type": "description"
         },

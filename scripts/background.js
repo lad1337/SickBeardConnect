@@ -132,4 +132,8 @@ setFutureTimer();
 
 if (settings.getItem("config_chromeToGrowl_use")){
     chrome2growl.init(settings.getItem("config_chromeToGrowl_host"), settings.getItem("config_chromeToGrowl_icon_path"));
+    var chrome2growlTImmer = setInterval(function() {
+        chrome2growl.reconnect();
+    }, 30000);
+
 }

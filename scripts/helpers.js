@@ -60,29 +60,39 @@ function genericRequest(params, succes_callback, error_callback, timeout, timeou
 /**
  * checks id data has the attr "error" if not noErrorCallback is called with data and paramString as arguments
  * 
- * @param data
+ * @param response
  * @param paramString
  * @param succes_callback
  */
-function checkForError(data, params, succes_callback, error_callback) {
-    if (data.error) {
-        log("Reg successful for BUT WITH ERROR: " + params, "REG", DEBUG);
-        if (data.error.search("ACCESS DENIED") != -1) {
+function checkForError(response, params, succes_callback, error_callback) {
+    /*
+    {RESULT_SUCCESS:"success",
+        RESULT_FAILURE:"failure",
+        RESULT_TIMEOUT:"timeout",
+        RESULT_ERROR:"error",
+        RESULT_DENIED:"denied",
+        }
+*/
+    
+    if (response.result != "success") {
+        log("Reg recived for BUT not successful : " + params, "REG", DEBUG);
+        if (response.result == "denied") {
             connectionStatus = false;
             log("Api Key not accepted", "REQ", WARNING);
         } else {
             connectionStatus = true;
         }
         if (shouldLvlBeLoged(DEBUG))
-            console.log(data);
+            console.log(response);
         if (error_callback)
-            error_callback(data, params);
+            error_callback(response.data, params);
     } else {
         log("Reg successful for: " + params, "REQ", DEBUG);
+        connectionStatus = true;
         if (shouldLvlBeLoged(DEBUG))
-            console.log(data);
+            console.log(response);
         if (succes_callback)
-            succes_callback(data, params);
+            succes_callback(response.data, params);
     }
 }
 /**

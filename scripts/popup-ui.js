@@ -48,7 +48,7 @@ function _initGui() {
         var season = splitID[1];
         var episode = splitID[2];
 
-        $("img." + id).attr("src", chrome.extension.getURL('images/loading32.gif'));
+        $("img." + id).attr("src", chrome.extension.getURL('images/throbber.svg'));
         $("img." + id).addClass("visible");
         var params = new Params();
         params.cmd = "episode.search";
@@ -58,7 +58,6 @@ function _initGui() {
         genericRequest(params, searchSuccess, searchError, 0, null); // no timeout
         listenForNotificationsFast(); // for 1 min
     });
-
 
 }
 
@@ -363,7 +362,7 @@ function searchSuccess(data, params) {
     var img = $("img." + params.tvdbid + "-" + params.season + "-" + params.episode);
     img.attr("src", chrome.extension.getURL('images/yes16.png'));
     img.siblings(".ep_name").addClass("success");
-    img.siblings(".ep_name").html('Snatched (' + data.result + ')');
+    img.siblings(".ep_name").html('Snatched (' + data.quality + ')');
     listenForNotificationsFast(20000); // 20 sec
 }
 

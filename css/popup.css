@@ -260,7 +260,7 @@ img.search.visible,li:hover img.search {
  */
 #seasonEpisodes ul,#shows ul,#future-arc ul,#history ul {
     padding: 0;
-    margin: 2px;
+    margin: 0;
 }
 
 #seasonEpisodes li,#shows li,#future-arc li,#history li {

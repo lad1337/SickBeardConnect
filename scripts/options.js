@@ -23,23 +23,23 @@ window.addEvent("domready", function() {
 
         settings.manifest.config_chromeToGrowl_use.addEvent("action", function(value) {
             var img = document.id("connectionStatus_c2g");
-            if(img.getProperty("src") != "images/loading32.gif")
-                document.id("connectionStatus_c2g").setProperty('src', "images/loading32.gif");
+            if(img.getProperty("src") != "images/throbber.svg")
+                document.id("connectionStatus_c2g").setProperty('src', "images/throbber.svg");
             chrome.extension.getBackgroundPage().reloadBackgroundPage();
         });
 
         settings.manifest.sb_url.addEvent("action", function(value) {
             chrome.extension.getBackgroundPage().testConnection();
             var img = document.id("connectionStatus");
-            if(img.getProperty("src") != "images/loading32.gif")
-                document.id("connectionStatus").setProperty('src', "images/loading32.gif");
+            if(img.getProperty("src") != "images/throbber.svg")
+                document.id("connectionStatus").setProperty('src', "images/throbber.svg");
             //chrome.extension.getBackgroundPage().reloadBackgroundPage();
         });
         settings.manifest.sb_api_key.addEvent("action", function(value) {
             chrome.extension.getBackgroundPage().testConnection();
             var img = document.id("connectionStatus");
-            if(img.getProperty("src") != "images/loading32.gif")
-                document.id("connectionStatus").setProperty('src', "images/loading32.gif");
+            if(img.getProperty("src") != "images/throbber.svg")
+                document.id("connectionStatus").setProperty('src', "images/throbber.svg");
             //chrome.extension.getBackgroundPage().reloadBackgroundPage();
         });
         settings.manifest.config_icon_badge.addEvent("action", function(value) {
@@ -68,7 +68,10 @@ window.addEvent("domready", function() {
             img.setProperty('src', "images/no16.png");
         }
     }, 3000);
-
+    var p = document.id("connectionStatus").getParent();
+    p.setStyle('color', "black");
+    var p = document.id("connectionStatus_c2g").getParent();
+    p.setStyle('color', "black");
     chrome.extension.getBackgroundPage().testConnection();
     
 });
