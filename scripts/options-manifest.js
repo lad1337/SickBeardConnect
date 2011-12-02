@@ -72,6 +72,30 @@ this.manifest = {
         {
             "tab": chrome.i18n.getMessage("options_tab_lookAndFeel"),
             "group": chrome.i18n.getMessage("options_group_look"),
+            "label": chrome.i18n.getMessage("options_iconBadge_label"),
+            "name": "config_icon_badge",
+            "type": "popupButton",
+            "options": [
+                        ["auto", "Automatic"],
+                        ["missed", "Missed"],
+                        ["today", "Today"]
+                    ]
+        },
+        {
+            "tab": chrome.i18n.getMessage("options_tab_lookAndFeel"),
+            "group": chrome.i18n.getMessage("options_group_look"),
+            "label": chrome.i18n.getMessage("options_iconBadge_label"),
+            "name": "config_history_filter",
+            "type": "popupButton",
+            "options": [
+                        ["both", "Snatched & Downloaded"],
+                        ["Snatched", "Snatched"],
+                        ["Downloaded", "Downloaded"]
+                    ]
+        },
+        {
+            "tab": chrome.i18n.getMessage("options_tab_lookAndFeel"),
+            "group": chrome.i18n.getMessage("options_group_look"),
             "label": chrome.i18n.getMessage("options_tabAnimation_label"),
             "name": "config_tab_animation",
             "type": "checkbox"
@@ -148,18 +172,6 @@ this.manifest = {
             }
         },
         {
-            "tab": chrome.i18n.getMessage("options_tab_lookAndFeel"),
-            "group": chrome.i18n.getMessage("options_group_feel"),
-            "label": chrome.i18n.getMessage("options_iconBadge_label"),
-            "name": "config_icon_badge",
-            "type": "popupButton",
-            "options": [
-                        ["auto", "Automatic"],
-                        ["missed", "Missed"],
-                        ["today", "Today"]
-                    ]
-        },
-        {
             "tab": chrome.i18n.getMessage("options_tab_advanced"),
             "group": chrome.i18n.getMessage("options_group_special"),
             "name": "config_log_lvl",
@@ -227,6 +239,7 @@ this.manifest = {
     ],
     "alignment": [
         ["sb_url","sb_api_key"],
+        ["config_width","config_icon_badge","config_history_filter"],
         ["config_chromeToGrowl_host","config_chromeToGrowl_icon_path"],
         ["config_notification_default_rate","config_refresh_rate","config_notification_timeout"]
     ]

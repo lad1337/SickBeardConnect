@@ -9,6 +9,7 @@ function _initGui() {
     var showsArcc = $("#shows-arc").accordion(arccOptions);
     var futureArcc = $("#future-arc").accordion(arccOptions);
     var historyArcc = $("#history-arc").accordion(arccOptions);
+    
     $.each($(".panel"), function(k, v) {
         var id = v.getAttribute("id");
         var element = $("#" + id);
@@ -21,7 +22,7 @@ function _initGui() {
             setHeightForInital(id, lastHeight[id]);
         }
     });
-
+    
     $("#shows-arc").bind("accordionchange", function(event, ui) {
         handleArccChange(ui);
     });
@@ -31,7 +32,7 @@ function _initGui() {
     $("#history-arc").bind("accordionchange", function(event, ui) {
         handleArccChange(ui);
     });
-
+    
     var tab = $("#contend").tabs();
 
     $("#tabHeader li").live('click', function(e) {
@@ -132,7 +133,7 @@ function showsTimeout(data, params, timeout) {
         $("#shows").html(cache.getItem("html_" + params));
         showsAfterDone();
     } else {
-        showsBuild(data, params);
+        showsBuild(data['data'], params);
     }
 }
 function showsAfterDone() {
@@ -151,8 +152,14 @@ function showBuild(data, params) {
     var show = $("#show");
 
     $("#show .name").html(data.show_name);
-
-    $("#airs").html(data.airs);
+    
+    if(data.airs){
+        $("#airs").show();
+        $("#airs").html(data.airs);
+    }else{
+        $("#airs").hide();
+        $("#airs").html("");
+    }
     if (data.location) {
         $("#location").html(data.location);
         $("#location").removeClass("broken");
@@ -162,15 +169,19 @@ function showBuild(data, params) {
     }
     $("#language").html(data.language);
     $("#season_folder").attr("src", yesORnoPic(data.season_folders));
-    $("#active").attr("src", yesORnoPic(data.active));
+    
+    yesORnoActive = data.paused == 0 && data.status != "Ended";
+    $("#active").attr("src", yesORnoPic(yesORnoActive));
     $("#air_by_date").attr("src", yesORnoPic(data.air_by_date));
 
     var bannerURL = constructShowBannerUrl(params.tvdbid);
     var img = $("#show .banner");
     img.hide();
+    img.css("height","0px")
     if (bannerURL && settings.getItem("config_images_banner")) {
         img.attr("src", bannerURL);
         img.show();
+        img.css("height","auto")
     } else
         img.attr("src", "images/spacer.gif");
     $("#show .quality").attr("class", "quality " + data.quality);
@@ -193,7 +204,7 @@ function showTimeout(data, params, timeout) {
         $("#show").html(cache.getItem("html_" + params));
         showAfterDone();
     } else {
-        showBuild(data, params);
+        showBuild(data['data'], params);
     }
 }
 
@@ -246,7 +257,7 @@ function seasonTimeout(data, params, timeout) {
         $("#seasonEpisodes ul").html(cache.getItem("html_" + params));
         seasonAfterDone();
     } else {
-        seasonBuild(data, params);
+        seasonBuild(data['data'], params);
     }
 }
 
@@ -263,7 +274,9 @@ function futureBuild(data, params) {
     $.each(types, function(k, type) {
         var curUl = $("<ul>");
         var entrys = false;
+        console.log("data",data);
         $.each(data[type], function(key, value) {
+
             var li = $("<li>");
             var liHTMLString = '<span class="show_name" id="' + value.tvdbid + '">' + value.show_name + '</span><br/>';
             liHTMLString += '<span class="epSeasonEpisode">s' + pad(value.season, 2) + 'e' + pad(value.episode, 2) + '</span>';
@@ -296,7 +309,7 @@ function futureTimeout(data, params, timeout) {
         });
         futureAfterDone();
     } else {
-        futureBuild(data, params);
+        futureBuild(data['data'], params);
     }
 }
 
@@ -319,16 +332,19 @@ function futureAfterDone() {
  * History
  */
 function historyBuild(data, params) {
+    var filter = settings.getItem("config_history_filter")
     var ul = $("<ul>");
     $.each(data, function(key, value) {
-        var li = $("<li>");
-        var liHTMLString = '<span class="show_name" id="' + value.tvdbid + '">' + value.show_name + '</span>';
-        liHTMLString += '<span class="date">' + getNiceHistoryDate(value.date) + '</span><br/>';
-        liHTMLString += '<span class="epSeasonEpisode">s' + pad(value.season, 2) + 'e' + pad(value.episode, 2) + '</span>';
-        liHTMLString += '<span class="status ' + value.action + '">' + value.action + '</span>';
-        liHTMLString += '<span class="historyQuality">' + value.quality + '</span>';
-        li.append(liHTMLString);
-        ul.append(li);
+        if(filter == "both" || filter == value.status){
+            var li = $("<li>");
+            var liHTMLString = '<span class="show_name" id="' + value.tvdbid + '">' + value.show_name + '</span>';
+            liHTMLString += '<span class="date">' + getNiceHistoryDate(value.date) + '</span><br/>';
+            liHTMLString += '<span class="epSeasonEpisode">s' + pad(value.season, 2) + 'e' + pad(value.episode, 2) + '</span>';
+            liHTMLString += '<span class="status ' + value.status + '">' + value.status + '</span>';
+            liHTMLString += '<span class="historyQuality">' + value.quality + '</span>';
+            li.append(liHTMLString);
+            ul.append(li);
+        }
     });
     $("#history").append(ul);
 
@@ -342,7 +358,7 @@ function historyTimeout(data, params, timeout) {
         $("#history").html(cache.getItem("html_" + params));
         historyAfterDone();
     } else {
-        historyBuild(data, params);
+        historyBuild(data['data'], params);
     }
 }
 
@@ -404,7 +420,7 @@ function recalculateHeight(id, setHeight) {
     lastHeight[id] = element.css("height");
     log("saving height for " + id + ": " + lastHeight[id], "GUI", DEBUG);
     element.addClass("animated"); // add animation back to the panel
-
+    return false;
     if (setHeight) {
         setHeightFor(id, lastHeight[id]);
     }
@@ -419,7 +435,8 @@ function setHeightFor(id, height) {
     _setHeightFor(id, height);
 }
 function _setHeightFor(id, height) {
-    $("#" + id).css("height", height);
+    element = $("#" + id)
+    element.css("height", height);
 }
 
 function addErrorMsg(msg, lvl) {
@@ -462,8 +479,8 @@ function createErrorWarning(msg, lvl, cssClass, identifier) {
     div += '<span class="counter" style="float: right;"></span></p></div>';
     return div;
 }
-function yesORnoPic(int) {
-    if (int == 0)
+function yesORnoPic(yesORno) {
+    if (yesORno)
         return "images/no16.png";
     else
         return "images/yes16.png";

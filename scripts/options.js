@@ -19,6 +19,7 @@ window.addEvent("domready", function() {
         settings.manifest.clear_cache.addEvent("action", function(value) {
             chrome.extension.getBackgroundPage().cache.clear();
             chrome.extension.getBackgroundPage().age.clear();
+            alert(chrome.i18n.getMessage("options_clearCache_message"))
         });
 
         settings.manifest.config_chromeToGrowl_use.addEvent("action", function(value) {
@@ -46,6 +47,9 @@ window.addEvent("domready", function() {
             chrome.extension.getBackgroundPage().setFutureTimer();
         });
         settings.manifest.config_images_banner.addEvent("action", function(value) {
+            chrome.extension.getBackgroundPage().age.clear();
+        });
+        settings.manifest.config_history_filter.addEvent("action", function(value) {
             chrome.extension.getBackgroundPage().age.clear();
         });
 

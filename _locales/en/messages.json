@@ -134,6 +134,9 @@
     "options_clearCache_text": {
         "message": "Clear the Cache"
     },
+    "options_clearCache_message": {
+        "message": "The cache was cleard"
+    },
 
 
     "gui_month_january": {
