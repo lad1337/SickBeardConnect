@@ -109,6 +109,18 @@ this.manifest = {
         },
         {
             "tab": chrome.i18n.getMessage("options_tab_lookAndFeel"),
+            "group": chrome.i18n.getMessage("options_group_look"),
+            "label": chrome.i18n.getMessage("options_imageBanner_label"),
+            "name": "config_images_future",
+            "type": "popupButton",
+            "options": [
+                ["none", "None"],
+                ["poster", "Poster"],
+                ["banner", "Banner"],
+            ]
+        },
+        {
+            "tab": chrome.i18n.getMessage("options_tab_lookAndFeel"),
             "group": chrome.i18n.getMessage("options_group_feel"),
             "label": chrome.i18n.getMessage("options_badgeRefreshRate_label"),
             "name": "config_refresh_rate",

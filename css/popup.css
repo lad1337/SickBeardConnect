@@ -215,6 +215,31 @@ body.big {
 #seasonEpisodes li .status.success,#future-arc li .ep_name.success {
     color: #449944;
 }
+#future-tab li{
+    postition: relative;
+    overflow: hidden;
+}
+#future-tab li.banner{
+    min-height: 100px;
+}
+.future_banner{
+    width: 100%;
+}
+.future_poster{
+    float: left;
+    max-width: 50px;
+}
+#future-tab li.banner .future_text{
+    position: absolute;
+    top: 20px;
+    display: none;
+}
+#future-tab li.banner:hover .future_banner{
+    opacity: 0;
+}
+#future-tab li.banner:hover .future_text{
+    display: block;
+}
 
 /*
  * History
