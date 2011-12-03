@@ -52,6 +52,9 @@ window.addEvent("domready", function() {
         settings.manifest.config_history_filter.addEvent("action", function(value) {
             chrome.extension.getBackgroundPage().age.clear();
         });
+        settings.manifest.config_images_future.addEvent("action", function(value) {
+            chrome.extension.getBackgroundPage().age.clear();
+        });
 
     });
     window.setInterval(function() {

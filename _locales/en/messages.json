@@ -98,6 +98,9 @@
     "options_imageBanner_label": {
         "message": "Display the show banner"
     },
+    "options_imageFuture_label": {
+        "message": "Images in CommingEp Tab"
+    },
     "options_iconBadge_label": {
         "message": "Icon badge displays"
     },

@@ -84,6 +84,18 @@ this.manifest = {
         {
             "tab": chrome.i18n.getMessage("options_tab_lookAndFeel"),
             "group": chrome.i18n.getMessage("options_group_look"),
+            "label": chrome.i18n.getMessage("options_imageFuture_label"),
+            "name": "config_images_future",
+            "type": "popupButton",
+            "options": [
+                ["none", "None"],
+                ["poster", "Poster"],
+                ["banner", "Banner"],
+            ]
+        },
+        {
+            "tab": chrome.i18n.getMessage("options_tab_lookAndFeel"),
+            "group": chrome.i18n.getMessage("options_group_look"),
             "label": chrome.i18n.getMessage("options_iconBadge_label"),
             "name": "config_history_filter",
             "type": "popupButton",
@@ -106,18 +118,6 @@ this.manifest = {
             "label": chrome.i18n.getMessage("options_imageBanner_label"),
             "name": "config_images_banner",
             "type": "checkbox"
-        },
-        {
-            "tab": chrome.i18n.getMessage("options_tab_lookAndFeel"),
-            "group": chrome.i18n.getMessage("options_group_look"),
-            "label": chrome.i18n.getMessage("options_imageBanner_label"),
-            "name": "config_images_future",
-            "type": "popupButton",
-            "options": [
-                ["none", "None"],
-                ["poster", "Poster"],
-                ["banner", "Banner"],
-            ]
         },
         {
             "tab": chrome.i18n.getMessage("options_tab_lookAndFeel"),
@@ -251,7 +251,7 @@ this.manifest = {
     ],
     "alignment": [
         ["sb_url","sb_api_key"],
-        ["config_width","config_icon_badge","config_history_filter"],
+        ["config_width","config_icon_badge","config_history_filter","config_images_future"],
         ["config_chromeToGrowl_host","config_chromeToGrowl_icon_path"],
         ["config_notification_default_rate","config_refresh_rate","config_notification_timeout"]
     ]

@@ -271,6 +271,7 @@ function seasonAfterDone() {
  */
 function futureBuild(data, params) {
     var imgType = settings.getItem("config_images_future");
+    var popWidth = settings.getItem("config_width");
     
     var types = [ "missed", "today", "soon", "later" ];
     $.each(types, function(k, type) {
@@ -279,22 +280,30 @@ function futureBuild(data, params) {
         console.log("data",data);
         $.each(data[type], function(key, value) {
             
-            var li = $('<li class="'+imgType+'">');
-            var textCon = $('<div class="future_text">');
-            var liHTMLString = '<span class="show_name" id="' + value.tvdbid + '">' + value.show_name + '</span><br/>';
-            liHTMLString += '<span class="epSeasonEpisode">s' + pad(value.season, 2) + 'e' + pad(value.episode, 2) + '</span>';
-            liHTMLString += '<span class="ep_name">' + value.ep_name + '</span>';
+            var li = $('<li class="'+imgType+' '+popWidth+'">');
+            var liHTMLString_name = '<span class="show_name" id="' + value.tvdbid + '">' + value.show_name + '</span><br/>';
+            liHTMLString_ep = '<span class="epSeasonEpisode">s' + pad(value.season, 2) + 'e' + pad(value.episode, 2) + '</span>';
+            liHTMLString_ep += '<span class="ep_name">' + value.ep_name + '</span>';
             var img = "";
             if(imgType == 'poster'){
                 img = '<img class="future_poster" src="'+constructShowPosterUrl(value.tvdbid)+'"/>';
             }else if(imgType == 'banner'){
                 img = '<img class="future_banner" src="'+constructShowBannerUrl(value.tvdbid)+'"/>';
             }
-            textCon.append(createSearchImg(value.tvdbid, value.season, value.episode));
-            textCon.append(liHTMLString);
+
             if(img)
                 li.append(img);
-            li.append(textCon);
+
+            if(imgType != "banner"){
+                li.append(liHTMLString_name);
+            }else if(imgType != "none"){
+                li.append('<div class="clearRight clearLeft"></div>');
+            }
+            li.append(liHTMLString_ep);
+            if(imgType != "none")
+                li.append(createSearchImg(value.tvdbid, value.season, value.episode));
+            else
+                li.prepend(createSearchImg(value.tvdbid, value.season, value.episode));
             li.append('<div class="clearRight clearLeft"></div>');
             curUl.append(li);
             entrys = true;
@@ -432,7 +441,7 @@ function recalculateHeight(id, setHeight) {
     lastHeight[id] = element.css("height");
     log("saving height for " + id + ": " + lastHeight[id], "GUI", DEBUG);
     element.addClass("animated"); // add animation back to the panel
-    //return false;
+    return false;
     if (setHeight) {
         setHeightFor(id, lastHeight[id]);
     }

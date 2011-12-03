@@ -219,26 +219,24 @@ body.big {
     postition: relative;
     overflow: hidden;
 }
-#future-tab li.banner{
-    min-height: 100px;
-}
+
 .future_banner{
     width: 100%;
 }
+#future-tab li.banner.small{
+    height: 61px;
+}
+#future-tab li.banner.medium{
+    height: 80px;
+}
+#future-tab li.banner.big{
+    height: 98px;
+}
+
 .future_poster{
     float: left;
     max-width: 50px;
-}
-#future-tab li.banner .future_text{
-    position: absolute;
-    top: 20px;
-    display: none;
-}
-#future-tab li.banner:hover .future_banner{
-    opacity: 0;
-}
-#future-tab li.banner:hover .future_text{
-    display: block;
+    margin-right: 2px;
 }
 
 /*
