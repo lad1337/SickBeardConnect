@@ -361,7 +361,8 @@ function futureAfterDone() {
  */
 function historyBuild(response, params) {
     var data = response.data;
-    var filter = settings.getItem("config_history_filter")
+    var filter = settings.getItem("config_history_filter");
+    $("#history").html("");
     var ul = $("<ul>");
     $.each(data, function(key, value) {
         if(filter == "both" || filter == value.status){

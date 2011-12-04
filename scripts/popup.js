@@ -25,6 +25,9 @@ function initContent() {
 }
 function refreshContent() {
     // deleting all last call times
+    $("#contend").tabs('select', 0); // select first tab
+    $('#shows-arc').accordion('activate', 0); // select first arc in shows
+    $('#future-arc').accordion('activate', 0); // select first arc in future
     age.clear();
     $("#loadContainer").show();
     initContent();
