@@ -25,6 +25,46 @@ var cache = new Store("cache");
 var age = new Store("age");
 
 
+chrome.extension.onRequest.addListener(
+        function(request, sender, sendResponse) {
+          console.log(sender.tab ?
+                      "from a content script:" + sender.tab.url :
+                      "from the extension","MSG", DEBUG);
+          console.log(request,"MSG", DEBUG);
+          if (request.settings == "all")
+              sendResponse({url: getApiUrl()});
+          else if(request.cmd == "show.addnew"){
+              sendFail = function(data){sendResponse({'result':false});};
+              sendSuccess = function(data,params){
+                      sendResponse({'result':true,'name':data.name});
+                  };
+              var params = new Params();
+              params.cmd = "show.addnew";
+              params.tvdbid = request.tvdbid;
+              params.initial = request.quality;
+              params.status = request.status;
+              age.clear();
+              genericRequest(params, sendSuccess, sendFail, 0, null);
+          }else if(request.cmd == "own"){
+              succescallback = function(data,param){
+                  if(data['data'])
+                      data = data['data'];
+                  
+                  var showList = {};
+                  $.each(data, function(name, show) {
+                      showList[show.tvdbid] = name;
+                  });
+                  cache.setItem("shows",showList);
+                  var own = typeof showList[param.tvdbid] !== 'undefined';
+                  sendResponse({'result':own});
+              };
+              sendUpdatedShowListRespaonse(request,succescallback);
+          }
+          else
+            sendResponse({}); // snub them.
+        });
+
+
 function setMSGTimer(rate) {
     if (msgTimer)
         clearInterval(msgTimer);

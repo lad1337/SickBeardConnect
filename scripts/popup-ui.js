@@ -107,14 +107,16 @@ function setMainContentHeight() {
 
 function showsBuild(data, params) {
     var shows = $("#shows");
+    var showList = {};
     shows.html("");
     var ul = $("<ul>");
-    $.each(data, function(key, show) {
+    $.each(data, function(name, show) {
         var li = $("<li>");
+        showList[show.tvdbid] = name;
         var nameSpan = $("<span>");
         nameSpan.addClass("name");
         nameSpan.attr("id", show.tvdbid);
-        nameSpan.html(key);
+        nameSpan.html(name);
         var liHTMLString = '<span class="quality ' + show.quality + '">' + show.quality + '</span>';
         liHTMLString += '<div class="clearer"></div>';
         li.append(nameSpan);
@@ -125,6 +127,7 @@ function showsBuild(data, params) {
     showsAfterDone();
     // save the html for later
     cache.setItem("html_" + params, shows.html());
+    cache.setItem("shows",showList);
     age.setItem("html_" + params, $.now());
 }
 

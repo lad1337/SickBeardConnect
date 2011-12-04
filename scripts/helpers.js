@@ -267,6 +267,14 @@ function stripHtmlTags(strInputCode) {
 function stripDotsAndStuff(strInputCode) {
     return strInputCode.replace(/[:.' !]/g, "");
 }
+function sendUpdatedShowListRespaonse(request,succescallback){
+    var params = new Params();
+    params.cmd = "shows";
+    params.sort = "name";
+    params.tvdbid = request.tvdbid;
+    genericRequest(params, succescallback, genericResponseError, 60000, succescallback);
+}
+
 
 var monthNames = [ chrome.i18n.getMessage("gui_month_january"),
                    chrome.i18n.getMessage("gui_month_february"),
