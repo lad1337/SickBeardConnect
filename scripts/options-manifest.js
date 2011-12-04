@@ -121,6 +121,13 @@ this.manifest = {
         },
         {
             "tab": chrome.i18n.getMessage("options_tab_lookAndFeel"),
+            "group": chrome.i18n.getMessage("options_group_look"),
+            "text": chrome.i18n.getMessage("options_imageFuture_description"),
+            "name": "myDescription_image",
+            "type": "description"
+        },
+        {
+            "tab": chrome.i18n.getMessage("options_tab_lookAndFeel"),
             "group": chrome.i18n.getMessage("options_group_feel"),
             "label": chrome.i18n.getMessage("options_badgeRefreshRate_label"),
             "name": "config_refresh_rate",

@@ -34,9 +34,9 @@ chrome.extension.onRequest.addListener(
           if (request.settings == "all")
               sendResponse({url: getApiUrl()});
           else if(request.cmd == "show.addnew"){
-              sendFail = function(data){sendResponse({'result':false});};
-              sendSuccess = function(data,params){
-                      sendResponse({'result':true,'name':data.name});
+              sendFail = function(response,params){sendResponse({'result':false,'msg':response.message});};
+              sendSuccess = function(response,params){
+                      sendResponse({'result':true,'name':response.data.name});
                   };
               var params = new Params();
               params.cmd = "show.addnew";
@@ -117,7 +117,8 @@ function refreshFuture() {
     genericRequest(params, setBadge, null, 0, null); // timeout disabeld
 
 }
-function msgCallback(data, params) {
+function msgCallback(response, params) {
+    var data = response.data;
     $.each(data, function(k, value) {
         var notification = webkitNotifications.createNotification('images/icon48.png', // icon url - can be relative
         value.title, // notification title
@@ -135,7 +136,9 @@ function msgCallback(data, params) {
         setMSGTimer();
 }
 
-function setBadge(data, params) {
+function setBadge(response, params) {
+    console.log("setBadge",response);
+    var data = response['data'];
     var mode = settings.getItem("config_icon_badge");
 
     if (data.missed.length > 0 && mode != "today") {

@@ -105,7 +105,8 @@ function setMainContentHeight() {
  * Shows
  */
 
-function showsBuild(data, params) {
+function showsBuild(response, params) {
+    var data = response.data;
     var shows = $("#shows");
     var showList = {};
     shows.html("");
@@ -131,12 +132,12 @@ function showsBuild(data, params) {
     age.setItem("html_" + params, $.now());
 }
 
-function showsTimeout(data, params, timeout) {
+function showsTimeout(response, params, timeout) {
     if (cache.getItem("html_" + params) && ($.now() - age.getItem("html_" + params) < timeout)) {
         $("#shows").html(cache.getItem("html_" + params));
         showsAfterDone();
     } else {
-        showsBuild(data['data'], params);
+        showsBuild(response, params);
     }
 }
 function showsAfterDone() {
@@ -150,7 +151,8 @@ function showsAfterDone() {
 /*
  * Show
  */
-function showBuild(data, params) {
+function showBuild(response, params) {
+    var data = response.data;
     log("build show not FULLY implemented", "GUI", WARNING);
     var show = $("#show");
 
@@ -202,12 +204,12 @@ function showBuild(data, params) {
     showAfterDone();
 }
 
-function showTimeout(data, params, timeout) {
+function showTimeout(response, params, timeout) {
     if (cache.getItem("html_" + params) && ($.now() - age.getItem("html_" + params) < timeout)) {
         $("#show").html(cache.getItem("html_" + params));
         showAfterDone();
     } else {
-        showBuild(data['data'], params);
+        showBuild(response, params);
     }
 }
 
@@ -231,7 +233,8 @@ function showAfterDone() {
 /*
  * Seasons
  */
-function seasonBuild(data, params) {
+function seasonBuild(response, params) {
+    var data = response.data;
     $("#seasonEpisodes ul").html("");
     var arrayData = [];
     $.each(data, function(key, value) {
@@ -255,12 +258,12 @@ function seasonBuild(data, params) {
     seasonAfterDone();
 }
 
-function seasonTimeout(data, params, timeout) {
+function seasonTimeout(response, params, timeout) {
     if (cache.getItem("html_" + params) && ($.now() - age.getItem("html_" + params) < timeout)) {
         $("#seasonEpisodes ul").html(cache.getItem("html_" + params));
         seasonAfterDone();
     } else {
-        seasonBuild(data['data'], params);
+        seasonBuild(response, params);
     }
 }
 
@@ -272,7 +275,8 @@ function seasonAfterDone() {
 /*
  * Future
  */
-function futureBuild(data, params) {
+function futureBuild(response, params) {
+    var data = response.data;
     var imgType = settings.getItem("config_images_future");
     var popWidth = settings.getItem("config_width");
     
@@ -321,11 +325,11 @@ function futureBuild(data, params) {
     cache.setItem("html_" + params, $("#future-arc").html());
     age.setItem("html_" + params, $.now());
     // refresh the badge
-    chrome.extension.getBackgroundPage().setBadge(data, params);
+    chrome.extension.getBackgroundPage().setBadge(response, params);
     futureAfterDone();
 }
 
-function futureTimeout(data, params, timeout) {
+function futureTimeout(response, params, timeout) {
     if (cache.getItem("html_" + params) && ($.now() - age.getItem("html_" + params) < timeout)) {
         var types = [ "missed", "today", "soon", "later" ];
         $.each(types, function(k, type) {
@@ -333,7 +337,7 @@ function futureTimeout(data, params, timeout) {
         });
         futureAfterDone();
     } else {
-        futureBuild(data['data'], params);
+        futureBuild(response, params);
     }
 }
 
@@ -355,7 +359,8 @@ function futureAfterDone() {
 /*
  * History
  */
-function historyBuild(data, params) {
+function historyBuild(response, params) {
+    var data = response.data;
     var filter = settings.getItem("config_history_filter")
     var ul = $("<ul>");
     $.each(data, function(key, value) {
@@ -377,12 +382,12 @@ function historyBuild(data, params) {
     historyAfterDone();
 }
 
-function historyTimeout(data, params, timeout) {
+function historyTimeout(response, params, timeout) {
     if (cache.getItem("html_" + params) && ($.now() - age.getItem("html_" + params) < timeout)) {
         $("#history").html(cache.getItem("html_" + params));
         historyAfterDone();
     } else {
-        historyBuild(data['data'], params);
+        historyBuild(response, params);
     }
 }
 
@@ -398,7 +403,8 @@ function historyAfterDone() {
  * Episode Search
  */
 
-function searchSuccess(data, params) {
+function searchSuccess(response, params) {
+    var data = response.data;
     var img = $("img." + params.tvdbid + "-" + params.season + "-" + params.episode);
     img.attr("src", chrome.extension.getURL('images/yes16.png'));
     img.siblings(".ep_name").addClass("success");
@@ -406,7 +412,8 @@ function searchSuccess(data, params) {
     listenForNotificationsFast(20000); // 20 sec
 }
 
-function searchError(data, params) {
+function searchError(response, params) {
+    var data = response.data;
     var img = $("img." + params.tvdbid + "-" + params.season + "-" + params.episode);
     img.attr("src", chrome.extension.getURL('images/no16.png'));
     img.siblings(".ep_name").addClass("error");

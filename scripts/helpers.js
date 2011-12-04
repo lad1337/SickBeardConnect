@@ -85,14 +85,14 @@ function checkForError(response, params, succes_callback, error_callback) {
         if (shouldLvlBeLoged(DEBUG))
             console.log(response);
         if (error_callback)
-            error_callback(response.data, params);
+            error_callback(response, params);
     } else {
         log("Reg successful for: " + params, "REQ", DEBUG);
         connectionStatus = true;
         if (shouldLvlBeLoged(DEBUG))
             console.log(response);
         if (succes_callback)
-            succes_callback(response.data, params);
+            succes_callback(response, params);
     }
 }
 /**
@@ -131,7 +131,8 @@ function genricRequestError(data, params, succes_callback, error_callback) {
  * @param data
  * @param params
  */
-function genericResponseError(data, params) {
+function genericResponseError(response, params) {
+    var data = response.data;
     log("an error in response for reg: " + params, "REQ", WARNING);
     console.log(data);
 

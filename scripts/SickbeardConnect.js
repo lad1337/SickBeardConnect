@@ -123,10 +123,11 @@ function initGui(){
                                                     'HD':'hdtv|hdwebdl|hdbluray',
                                                     'ANY':'sdtv|sddvd|hdtv|hdwebdl|hdbluray|unknown'}));
     addForm.appendChild(create('br',{}));
-    addForm.appendChild(_buildSelect('sb_initial_status',{'Defauld':'',
+    addForm.appendChild(_buildSelect('sb_initial_status',{'Default':'',
                                                         'Wanted':'&status=wanted',
                                                         'Skipped':'&status=skipped',
-                                                        'Ignored':'&status=ignored'
+                                                        'Ignored':'&status=ignored',
+                                                        'Archived':'&status=archived'
     }));
     addForm.appendChild(create('br',{}));
     addForm.appendChild(create('input',{
@@ -146,6 +147,8 @@ function initGui(){
                                                 window.setTimeout(function(){close();popup.style.background = '#C7DB39';},2000);
                                             }else
                                                 popup.innerHTML = 'Could not add the show';
+                                                if(response.msg)
+                                                    popup.innerHTML += ': '+response.msg;
             });
         }
     }));

@@ -101,6 +101,9 @@
     "options_imageFuture_label": {
         "message": "Images in CommingEp Tab"
     },
+    "options_imageFuture_description":{
+        "message": "If images fail to load check the username and password"
+    },
     "options_iconBadge_label": {
         "message": "Icon badge displays"
     },
