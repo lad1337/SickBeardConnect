@@ -143,12 +143,13 @@ function initGui(){
                                         status:curS
                                         },function(response) {
                                             if(response.result){
-                                                popup.innerHTML = response.name+' was added <img src="' + yes + '" />';
-                                                window.setTimeout(function(){close();popup.style.background = '#C7DB39';},2000);
-                                            }else
+                                                popup.innerHTML = '<img src="' + yes + '" />'+response.name+' was added';
+                                                popup.style.background = '#C7DB39';
+                                            }else{
                                                 popup.innerHTML = 'Could not add the show';
                                                 if(response.msg)
                                                     popup.innerHTML += ': '+response.msg;
+                                            }
             });
         }
     }));
