@@ -21,6 +21,15 @@ function initContent() {
     var params = new Params();
     params.cmd = "history";
     genericRequest(params, historyBuild, genericResponseError, 60000, historyTimeout); // timeout 1 min
+    
+    var addshowset = settings.getItem('config_addshow');
+
+    if((addshowset == 'popup' || addshowset == 'both'))
+        pageTVDBID(injectAddNewShow);
+
+    if(settings.getItem('config_switchToShow'))
+        pageTVDBID(openShow);
+    
 
 }
 function refreshContent() {
@@ -45,6 +54,36 @@ function listenForNotificationsFast(lastFor) {
         }, lastFor / 2);
     }, lastFor / 2); // first pull interval
 }
+
+function injectAddNewShow(tvdbid, name){
+    var showList = cache.getItem("shows");
+    if(typeof showList[tvdbid] === 'undefined')
+        buildAddShow(tvdbid, name);
+}
+
+function pageTVDBID(callback){
+    var tvdbid;
+    var name;
+    chrome.tabs.getSelected(null, function(tab) {
+        chrome.tabs.sendRequest(tab.id, {show: "get"}, function(response) {
+            console.log(response);
+            if(response.tvdbid){
+                callback(response.tvdbid,response.name);
+            }
+        });
+    });
+}
+
+
+
+function setPopupOwn(){
+    chrome.tabs.getSelected(null, function(tab) {
+        chrome.tabs.sendRequest(tab.id, {own: "set"}, function(response) {
+            log(response,"POP",DEBUG);
+        });
+    });
+}
+
 
 /**
  * open the show panel with the requested show info for the tvdbid

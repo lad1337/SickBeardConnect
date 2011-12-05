@@ -107,6 +107,15 @@
     "options_iconBadge_label": {
         "message": "Icon badge displays"
     },
+    "options_addshow_label": {
+        "message": "Add new show in"
+    },
+    "options_switchToShow_label": {
+        "message": "Switch to current Show"
+    },
+    "options_switchToShow_description": {
+        "message": "Load the show view of the Show currently vied on e.g. trakt.tv"
+    },
     "options_badgeRefreshRate_label": {
         "message": "Refresh badge counter every"
     },

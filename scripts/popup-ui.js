@@ -148,6 +148,69 @@ function showsAfterDone() {
     unlockContent("shows");
 }
 
+function buildAddShow(tvdbid,name){
+    var newLi = $('<li>');
+    var spanText = $('<span>');
+    spanText.append('<b>Add '+name+'</b><br/>');
+    spanText.addClass('addShow');
+    var buttonSpan = $('<span class="quality" style="background:none;">');
+    var selectQ = $('<select>');
+    selectQ.append('<option value="sdtv|sddvd">SD</option>');
+    selectQ.append('<option value="hdtv|hdwebdl|hdbluray">HD</option>');
+    selectQ.append('<option value="sdtv|sddvd|hdtv|hdwebdl|hdbluray|unknown">ANY</option>');
+    var selectS = $('<select>');
+    selectS.append('<option value="">Default</option>');
+    selectS.append('<option value="wanted">Wanted</option>');
+    selectS.append('<option value="skipped">Skipped</option>');
+    selectS.append('<option value="ignored">Ignored</option>');
+    selectS.append('<option value="archived">Archived</option>');
+    
+    addFail = function(response,params){
+        newLi.html('');
+        spanText.html('<b>Could not add show:'+response.message+'</b>');
+        spanText.addClass('error');
+        newLi.append(spanText);
+        buttonSpan.html('<img src="'+yesORnoPic(false)+'"/>');
+        newLi.append(buttonSpan);
+    };
+    addSuccess = function(response,params){
+        newLi.html('');
+        spanText.html('<b>'+name+' succesfuly added</b>');
+        spanText.addClass('success');
+        newLi.append(spanText);
+        buttonSpan.html('<img src="'+yesORnoPic(true)+'"/>');
+        newLi.append(buttonSpan);
+        setPopupOwn();
+    };
+    
+    var noImg = $('<img>');
+    noImg.attr('src',yesORnoPic(false));
+    noImg.click(function(){newLi.hide('slow');});
+    noImg.css('cursor','pointer');
+    var yesImg = $('<img>');
+    yesImg.attr('src',yesORnoPic(true));
+    yesImg.css('cursor','pointer');
+    yesImg.click(function(){
+        var params = new Params();
+        params.cmd = "show.addnew";
+        params.tvdbid = tvdbid;
+        params.initial = selectQ.val();
+        params.status = selectS.val();
+        age.clear();
+        noImg.hide();
+        yesImg.attr('src',chrome.extension.getURL('images/throbber.svg'));
+        genericRequest(params, addSuccess, addFail, 0, null);    
+    });
+    newLi.append(spanText);
+    newLi.append(selectQ);
+    newLi.append(selectS);
+    buttonSpan.append(yesImg);
+    buttonSpan.append(noImg);
+    newLi.prepend(buttonSpan);
+    $("#shows ul").prepend(newLi);
+    
+}
+
 /*
  * Show
  */
@@ -175,8 +238,9 @@ function showBuild(response, params) {
     $("#language").html(data.language);
     $("#season_folder").attr("src", yesORnoPic(data.season_folders));
     
-    yesORnoActive = data.paused == 0 && data.status != "Ended";
-    $("#active").attr("src", yesORnoPic(yesORnoActive));
+    
+    yesORno = data.paused == 0 && data.status != "Ended";
+    $("#active").attr("src", yesORnoPic(yesORno));
     $("#air_by_date").attr("src", yesORnoPic(data.air_by_date));
 
     var bannerURL = constructShowBannerUrl(params.tvdbid);
@@ -513,8 +577,8 @@ function createErrorWarning(msg, lvl, cssClass, identifier) {
 }
 function yesORnoPic(yesORno) {
     if (yesORno)
-        return "images/no16.png";
-    else
         return "images/yes16.png";
+    else
+        return "images/no16.png";
 
 }

@@ -15,6 +15,8 @@ var defaultSettings = { "sb_url" : "",
         "config_images_future" : "none",
         "config_icon_badge" : "auto",
         "config_history_filter" : "both",
+        "config_addshow": "both",
+        "config_switchToShow": true,
         "config_refresh_rate" : 5,
         "config_notification_timeout" : 4,
         "config_notification_default_rate" : 20,
@@ -59,6 +61,9 @@ chrome.extension.onRequest.addListener(
                   sendResponse({'result':own});
               };
               sendUpdatedShowListRespaonse(request,succescallback);
+          }else if(request.activate == "yesORno"){
+              var addshowset = settings.getItem('config_addshow');
+              sendResponse({'result':(addshowset == 'inpage' || addshowset == 'both')});
           }
           else
             sendResponse({}); // snub them.

@@ -208,12 +208,16 @@ body.big {
 /*
  * Season / Future
  */
-#seasonEpisodes li .status.error,#future-arc li .ep_name.error {
-    color: #994444;
+#seasonEpisodes li .status.error,
+#future-arc li .ep_name.error,
+#shows li .addShow.error {
+    color: #994444 !important;
 }
 
-#seasonEpisodes li .status.success,#future-arc li .ep_name.success {
-    color: #449944;
+#seasonEpisodes li .status.success,
+#future-arc li .ep_name.success,
+#shows li .addShow.success  {
+    color: #449944 !important;
 }
 #future-tab li{
     postition: relative;

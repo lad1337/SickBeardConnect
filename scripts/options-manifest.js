@@ -129,6 +129,33 @@ this.manifest = {
         {
             "tab": chrome.i18n.getMessage("options_tab_lookAndFeel"),
             "group": chrome.i18n.getMessage("options_group_feel"),
+            "label": chrome.i18n.getMessage("options_switchToShow_label"),
+            "name": "config_switchToShow",
+            "type": "checkbox"
+        },
+        {
+            "tab": chrome.i18n.getMessage("options_tab_lookAndFeel"),
+            "group": chrome.i18n.getMessage("options_group_look"),
+            "text": chrome.i18n.getMessage("options_switchToShow_description"),
+            "name": "myDescription_switchtoshow",
+            "type": "description"
+        },
+        {
+            "tab": chrome.i18n.getMessage("options_tab_lookAndFeel"),
+            "group": chrome.i18n.getMessage("options_group_feel"),
+            "label": chrome.i18n.getMessage("options_addshow_label"),
+            "name": "config_addshow",
+            "type": "popupButton",
+            "options": [
+                        ["none", "None"],
+                        ["both", "Page & Popup"],
+                        ["inpage", "Page"],
+                        ["popup", "Popup"]
+                    ]
+        },
+        {
+            "tab": chrome.i18n.getMessage("options_tab_lookAndFeel"),
+            "group": chrome.i18n.getMessage("options_group_feel"),
             "label": chrome.i18n.getMessage("options_badgeRefreshRate_label"),
             "name": "config_refresh_rate",
             "type": "slider",

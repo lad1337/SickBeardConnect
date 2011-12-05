@@ -4,7 +4,8 @@ var no = chrome.extension.getURL('images/no16.png');
 var yes = chrome.extension.getURL('images/yes16.png');
 var bg = chrome.extension.getURL('images/bg.gif');
 var loading = chrome.extension.getURL('images/throbber.svg');
- 
+
+
 function create() {
     switch (arguments.length) {
     case 1:
@@ -76,48 +77,67 @@ function getS(){
     var e = document.getElementById("sb_initial_status");
     return e.options[e.selectedIndex].value;
 }
-
+function checkDomain(domain){
+    var url = ""+window.location;
+    var regex = new RegExp(domain+"\.", "g");
+    return url.match(regex);
+}
 function getCurrentTVDBID(){
     var tvdbid = 0;
-    //trakt.tv
-    tvdbid = document.getElementById("meta-tvdb-id");
-    if(tvdbid)
-        return tvdbid.value;
-    //tvdb
-    tvdbid = get_GET_param('id');
-    if(tvdbid)
-        return tvdbid;
-    return 0;
+
+    if(checkDomain('trakt'))
+        tvdbid = document.getElementById("meta-tvdb-id").value;
+    else if(checkDomain('thetvdb'))
+        tvdbid = get_GET_param('id');
+    
+    return tvdbid;
+    
+}
+function getCurrentName(){
+    var name = "";
+
+    if(checkDomain('trakt'))
+        name = document.getElementsByTagName("h2")[0].innerHTML;
+    else if(checkDomain('thetvdb'))
+        name = document.getElementsByTagName("h1")[0].innerHTML;
+    
+    return name;
     
 }
 
+var haveShow = false;
 function initGui(){
 
     var navbar, newElement;
     var addToText = '<a class="addTo" href="#"></a>';
-    var popupId = 'sickbeardc';
-    var haveShow = false;
+
     var close;
     var popup = create('div', {
       id : popupId,
-      style: 'background: url("'+bg+'")'
+      style: 'background: url("'+bg+'"); display: none;'
     });
     var addForm = create('div',{
         id: 'addForm'
     });
+    var curTVDBID = getCurrentTVDBID();
+    var curName = getCurrentName();
 
-    chrome.extension.sendRequest({cmd: "own",
-        tvdbid:getCurrentTVDBID()
+    chrome.extension.sendRequest({cmd: "own", tvdbid: curTVDBID
         },function(response) {
             if(response.result){
                 haveShow = true;
                 popup.style.background = '#C7DB39';
-                closeButton.onclick = function(){console.log('not implmented');};
             }else{
                 popup.style.background = 'url("'+bg+'")';
             }
     });
-
+    chrome.extension.sendRequest({activate: "yesORno"},
+        function(response) {
+             if(response.result){
+                 popup.style.display = 'block';
+             }
+         }
+     );
     
     addForm.appendChild(_buildSelect('sb_quality',{'SD':'sdtv|sddvd',
                                                     'HD':'hdtv|hdwebdl|hdbluray',
@@ -138,7 +158,7 @@ function initGui(){
             var curS = getS();
             addForm.innerHTML = 'Loading <img src="' + loading + '" />';
             chrome.extension.sendRequest({cmd: "show.addnew",
-                                        tvdbid:getCurrentTVDBID(),
+                                        tvdbid:curTVDBID,
                                         quality:curQ,
                                         status:curS
                                         },function(response) {
@@ -188,7 +208,27 @@ function initGui(){
     document.getElementsByTagName("head")[0].appendChild(fileref)
     popup.appendChild(addButton);
     document.body.appendChild(popup);
-}
 
+
+    chrome.extension.onRequest.addListener(
+        function(request, sender, sendResponse) {
+                console.log(sender.tab ?
+                        "from a content script:" + sender.tab.url :
+                        "from the extension");
+                if(request.show == "get"){
+                    sendResponse({tvdbid: curTVDBID,
+                                    name: curName});
+                }else if(request.own == "set"){
+                    popup.style.background = '#C7DB39';
+                    haveShow = true;
+                } else
+                    sendResponse({}); // snub them.
+    });
+
+
+}
+function editShow(){}
+
+var popupId = 'sickbeardc';
 initGui();
 
