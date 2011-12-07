@@ -116,6 +116,12 @@
     "options_switchToShow_label": {
         "message": "Switch to current Show"
     },
+    "options_sectionSelect_label": {
+        "message": "On open switch to"
+    },
+    "options_sectionSelect_description": {
+        "message": "'Remember Last' does not remember if a show was viewed last. It will fallback to Shows<br/>It will always remember the last section in ComingEP if not set directly."
+    },
     "options_switchToShow_description": {
         "message": "Load the show view of the Show currently viewed on e.g. trakt.tv"
     },

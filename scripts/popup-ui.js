@@ -41,6 +41,9 @@ function _initGui() {
             $("#contend").tabs('select', parseInt(id));
         }
     });
+    $('#contend').bind('tabsshow', function(event, ui) {
+        cache.setItem('last_tab', ui.index);
+    });
 
     $("img.search").live('click', function(e) {
         var id = $(this).attr("id");
@@ -62,10 +65,6 @@ function _initGui() {
 
 }
 
-var unlockShows = false;
-var unlockFuture = false;
-var unlockHistory = false;
-
 function unlockContent(area) {
     switch (area) {
     case "shows":
@@ -83,11 +82,15 @@ function unlockContent(area) {
 
     if (unlockShows && unlockFuture && unlockHistory) {
         log("every areay is UNlocked", "POP", DEBUG);
-        window.setTimeout(setMainContentHeight, 300);
+        activateSection();
+        if(settings.getItem('config_switchToShow'))
+            pageTVDBID(openShow);
+        window.setTimeout(setMainContentHeight, 500);
     }
 }
 
 function setMainContentHeight() {
+
     if (settings.getItem("config_tab_animation"))
         $(".tab").addClass("animated");
     log("setting the content height to AUTO", "POP", DEBUG);
@@ -348,7 +351,6 @@ function futureBuild(response, params) {
     $.each(types, function(k, type) {
         var curUl = $("<ul>");
         var entrys = false;
-        console.log("data",data);
         $.each(data[type], function(key, value) {
             
             var li = $('<li class="'+imgType+' '+popWidth+'">');
@@ -506,6 +508,10 @@ function handleArccChange(ui) {
         var id = ui.newContent.attr('id');
         setHeightFor(id, lastHeight[id]);
     }
+    var curIndex = indexForComingArc(ui.newContent.attr('id'));
+    cache.setItem('last_arc', curIndex);
+    if(cache.getItem('last_tab') == 1)
+        cache.setItem('last_future_arc', curIndex);
 }
 
 function recalculateHeight(id, setHeight) {
@@ -531,7 +537,7 @@ function setHeightFor(id, height) {
     _setHeightFor(id, height);
 }
 function _setHeightFor(id, height) {
-    element = $("#" + id)
+    element = $("#" + id);
     element.css("height", height);
 }
 
@@ -582,3 +588,17 @@ function yesORnoPic(yesORno) {
         return "images/no16.png";
 
 }
+
+function indexForComingArc(id){
+    if(id == 'missed')
+        return 0;
+    else if(id == 'today')
+        return 1;
+    else if(id == 'soon')
+        return 2;
+    else if(id == 'later')
+        return 3;
+    else
+        return 0;
+}
+

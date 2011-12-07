@@ -156,6 +156,29 @@ this.manifest = {
         {
             "tab": chrome.i18n.getMessage("options_tab_lookAndFeel"),
             "group": chrome.i18n.getMessage("options_group_feel"),
+            "label": chrome.i18n.getMessage("options_sectionSelect_label"),
+            "name": "config_section",
+            "type": "popupButton",
+            "options": [
+                        ["auto", "Remember Last"],
+                        ["shows", "Shows"],
+                        ["coming_m", "ComingEP Missing"],
+                        ["coming_t", "ComingEP Today"],
+                        ["coming_s", "ComingEP Soon"],
+                        ["coming_l", "ComingEP Later"],
+                        ["history", "History"]
+                    ]
+        },
+        {
+            "tab": chrome.i18n.getMessage("options_tab_lookAndFeel"),
+            "group": chrome.i18n.getMessage("options_group_feel"),
+            "text": chrome.i18n.getMessage("options_sectionSelect_description"),
+            "name": "myDescription_sectionSelect",
+            "type": "description"
+        },
+        {
+            "tab": chrome.i18n.getMessage("options_tab_lookAndFeel"),
+            "group": chrome.i18n.getMessage("options_group_feel"),
             "label": chrome.i18n.getMessage("options_badgeRefreshRate_label"),
             "name": "config_refresh_rate",
             "type": "slider",
@@ -286,6 +309,7 @@ this.manifest = {
     "alignment": [
         ["sb_url","sb_api_key"],
         ["config_width","config_icon_badge","config_history_filter","config_images_future"],
+        ["config_addshow","config_section"],
         ["config_chromeToGrowl_host","config_chromeToGrowl_icon_path"],
         ["config_notification_default_rate","config_refresh_rate","config_notification_timeout"]
     ]

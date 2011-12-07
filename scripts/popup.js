@@ -1,3 +1,7 @@
+var unlockShows = false;
+var unlockFuture = false;
+var unlockHistory = false;
+
 function initGui() {
     // see popup-ui.js
     _initGui();
@@ -6,6 +10,7 @@ function initGui() {
  * 
  */
 function initContent() {
+
     log("opening the popup", "POP", DEBUG);
     // load shows into gui
 
@@ -23,23 +28,24 @@ function initContent() {
     genericRequest(params, historyBuild, genericResponseError, 60000, historyTimeout); // timeout 1 min
     
     var addshowset = settings.getItem('config_addshow');
-
     if((addshowset == 'popup' || addshowset == 'both'))
         pageTVDBID(injectAddNewShow);
-
-    if(settings.getItem('config_switchToShow'))
-        pageTVDBID(openShow);
-    
 
 }
 function refreshContent() {
     // deleting all last call times
+    age.clear();
+    // reset view
+    unlockShows = false;
+    unlockFuture = false;
+    unlockHistory = false;
     $("#contend").tabs('select', 0); // select first tab
     $('#shows-arc').accordion('activate', 0); // select first arc in shows
     $('#future-arc').accordion('activate', 0); // select first arc in future
-    age.clear();
+    
     $("#loadContainer").show();
     initContent();
+
 }
 
 function listenForNotificationsFast(lastFor) {
@@ -66,9 +72,8 @@ function pageTVDBID(callback){
     var name;
     chrome.tabs.getSelected(null, function(tab) {
         chrome.tabs.sendRequest(tab.id, {show: "get"}, function(response) {
-            console.log(response);
             if(response.tvdbid){
-                callback(response.tvdbid,response.name);
+                callback(response.tvdbid, response.name);
             }
         });
     });
@@ -82,6 +87,40 @@ function setPopupOwn(){
             log(response,"POP",DEBUG);
         });
     });
+}
+
+function activateSection(){
+    var section = settings.getItem('config_section');
+    if(section == 'shows'){
+        //$("#contend").tabs('select', 0);
+        //$('#shows-arc').accordion('activate', 1);
+        $('#future-arc').accordion('activate', cache.getItem('last_future_arc'));
+    }else if(section == 'coming_m'){
+        $("#contend").tabs('select', 1);
+        $('#future-arc').accordion('activate', 0);
+    }else if(section == 'coming_t'){
+        $("#contend").tabs('select', 1);
+        $('#future-arc').accordion('activate', 1);
+    }else if(section == 'coming_s'){
+        $("#contend").tabs('select', 1);
+        $('#future-arc').accordion('activate', 2);
+    }else if(section == 'coming_l'){
+        $("#contend").tabs('select', 1);
+        $('#future-arc').accordion('activate', 3);
+    }else if(section == 'history'){
+        $("#contend").tabs('select', 2);
+        $('#future-arc').accordion('activate', cache.getItem('last_future_arc'));
+    }else if(section == 'auto'){
+        var tabIndex = cache.getItem('last_tab');
+        $("#contend").tabs('select', tabIndex);
+        if(tabIndex == 1){
+            var arcIndex = cache.getItem('last_arc');
+            $('#future-arc').accordion('activate', arcIndex);
+        }else{
+            $('#future-arc').accordion('activate', cache.getItem('last_future_arc'));
+        }
+    }
+    
 }
 
 
