@@ -144,10 +144,10 @@ function initGui(){
                                                     'ANY':'sdtv|sddvd|hdtv|hdwebdl|hdbluray|unknown'}));
     addForm.appendChild(create('br',{}));
     addForm.appendChild(_buildSelect('sb_initial_status',{'Default':'',
-                                                        'Wanted':'&status=wanted',
-                                                        'Skipped':'&status=skipped',
-                                                        'Ignored':'&status=ignored',
-                                                        'Archived':'&status=archived'
+                                                        'Wanted':'wanted',
+                                                        'Skipped':'skipped',
+                                                        'Ignored':'ignored',
+                                                        'Archived':'archived'
     }));
     addForm.appendChild(create('br',{}));
     addForm.appendChild(create('input',{
