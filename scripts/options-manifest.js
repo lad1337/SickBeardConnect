@@ -96,7 +96,7 @@ this.manifest = {
         {
             "tab": chrome.i18n.getMessage("options_tab_lookAndFeel"),
             "group": chrome.i18n.getMessage("options_group_look"),
-            "label": chrome.i18n.getMessage("options_iconBadge_label"),
+            "label": chrome.i18n.getMessage("options_historyFilter_label"),
             "name": "config_history_filter",
             "type": "popupButton",
             "options": [
@@ -135,7 +135,7 @@ this.manifest = {
         },
         {
             "tab": chrome.i18n.getMessage("options_tab_lookAndFeel"),
-            "group": chrome.i18n.getMessage("options_group_look"),
+            "group": chrome.i18n.getMessage("options_group_feel"),
             "text": chrome.i18n.getMessage("options_switchToShow_description"),
             "name": "myDescription_switchtoshow",
             "type": "description"

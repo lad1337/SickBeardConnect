@@ -107,6 +107,9 @@
     "options_iconBadge_label": {
         "message": "Icon badge displays"
     },
+    "options_historyFilter_label": {
+        "message": "Show in history tab"
+    },
     "options_addshow_label": {
         "message": "Add new show in"
     },
@@ -114,7 +117,7 @@
         "message": "Switch to current Show"
     },
     "options_switchToShow_description": {
-        "message": "Load the show view of the Show currently vied on e.g. trakt.tv"
+        "message": "Load the show view of the Show currently viewed on e.g. trakt.tv"
     },
     "options_badgeRefreshRate_label": {
         "message": "Refresh badge counter every"
@@ -132,7 +135,7 @@
         "message": "Activate Chrome2Growl"
     },
     "options_useChrome2growl_describtion": {
-        "message": "TODO: write description how to use that/install server<br/>This is very advanced !<br/>You need <a href='http://nodejs.org/'>NodeJS</a> and <a href='https://gist.github.com/1219028' >this</a> file"
+        "message": "Real instuctions how to use this/install server will follow.<br/>This is very advanced !<br/>If this is setup correctly all notification will display as real growl notifications!<br/>You need <a href='http://nodejs.org/'>NodeJS</a> and <a href='https://gist.github.com/1219028' >this</a> file<br/>install the 'websocket' node module by running 'npm install websocket' and you need 'growlnotify'"
     },
     "options_chrome2growlIconPath_label": {
         "message": "Absolute icon path"
