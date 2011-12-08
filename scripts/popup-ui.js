@@ -316,7 +316,7 @@ function seasonBuild(response, params) {
         liHTMLString += '<span class="status ' + value.status + '">' + value.status + '</span>';
         liHTMLString += '<span class="date">' + getAirDate(value.airdate) + '</span>';
 
-        li.append(createSearchImg(params.tvdbid, params.season, key));
+        li.append(createSearchImg(params.tvdbid, params.season, value.episode));
         li.append(liHTMLString);
         $("#seasonEpisodes ul").append(li);
     });
