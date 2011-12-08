@@ -132,7 +132,7 @@
         "message": "Look for Notifications every"
     },
     "options_notificationRefreshRate_description": {
-        "message": "The refresh rate is increades for 60 seconds when a notification is anticipated"
+        "message": "The refresh rate is increased for 60 seconds when a notification is anticipated"
     },
     "options_notificationVisable_label": {
         "message": "Display Notification for"
