@@ -11,18 +11,42 @@ function getRefreshRate() {
 }
 
 function getUrl() {
-    var url = settings.getItem("sb_url");
-    if (url.search("http") != 0)
-        url = "http://" + url;
-    return checkEndSlash(url);
+    var url = getUrlObj();
+    return url.full;
 }
-function getHTTPLoginUrl() {
-    if (settings.getItem("sb_username") && settings.getItem("sb_password")) {
-        var url = getUrl();
-        url = url.substr(7, url.length - 7);
-       return "http://"+settings.getItem("sb_username")+":"+settings.getItem("sb_password")+"@"+url;
+
+function getUrlObj(){
+    var curUrl = settings.getItem("sb_url");
+    var full = "";
+    var urlObj = {};
+    if (curUrl.search("http") != 0){ // user did not enter anything we will assume http
+        urlObj.protocol = 'http://';
+        urlObj.plain = curUrl;
+        full = "http://" + curUrl;
+    }else if(curUrl.search("https://") == 0){ // user entered https
+        urlObj.protocol = 'https://';
+        urlObj.plain = curUrl.substr(8, curUrl.length - 8);
+        full = curUrl;
+    }else if(curUrl.search("http://") == 0){ // user entered http
+        urlObj.protocol = 'http://';
+        urlObj.plain = curUrl.substr(7, curUrl.length - 7);
+        full = curUrl;
+    }else{ //we have an url that starts with http...something like httpweb.com...but no protocol...crazy
+        urlObj.protocol = 'http://';
+        urlObj.plain = curUrl;
+        full = "http://" + curUrl;
     }
-    return getUrl();
+    urlObj.full = checkEndSlash(full);
+    return urlObj;
+}
+
+function getHTTPLoginUrl() {
+    var urlObj= getUrlObj();
+    if (settings.getItem("sb_username") && settings.getItem("sb_password")) {
+        var imgUrl = urlObj.protocol+settings.getItem("sb_username")+":"+settings.getItem("sb_password")+"@"+urlObj.plain;
+        return checkEndSlash(imgUrl);
+    }
+    return urlObj.full;
 }
 
 function getApiUrl() {
