@@ -19,8 +19,14 @@ function getUrl() {
 function getHTTPLoginUrl() {
     if (settings.getItem("sb_username") && settings.getItem("sb_password")) {
         var url = getUrl();
-        url = url.substr(7, url.length - 7);
-       return "http://"+settings.getItem("sb_username")+":"+settings.getItem("sb_password")+"@"+url;
+    	var proto = "http://";
+		if (url.search("https") == 1){
+			proto = "https://";
+			url = url.substr(8, url.length - 8);
+		} else {
+			url = url.substr(7, url.length - 7);
+		}
+       return proto+settings.getItem("sb_username")+":"+settings.getItem("sb_password")+"@"+url;
     }
     return getUrl();
 }
