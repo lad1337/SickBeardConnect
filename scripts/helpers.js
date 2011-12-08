@@ -12,7 +12,7 @@ function getRefreshRate() {
 
 function getUrl() {
     var url = settings.getItem("sb_url");
-    if (url.search("http://") != 0)
+    if (url.search("http") != 0)
         url = "http://" + url;
     return checkEndSlash(url);
 }
