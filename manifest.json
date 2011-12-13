@@ -1,6 +1,6 @@
 {
     "name": "__MSG_ext_name__",
-    "version": "0.1.15",
+    "version": "0.1.16",
     "permissions": [ "http://*/*", "https://*/*", "tabs", "notifications" ],
     "description": "SickBeard extension for Google Chrome.",
     "background_page": "background.html",
@@ -13,7 +13,7 @@
     },
     "content_scripts": [
         {
-            "matches": ["http://trakt.tv/show/*","http://thetvdb.com/*series*"],
+            "matches": ["http://trakt.tv/show/*","http://*.trakt.tv/show/*","http://thetvdb.com/*series*","http://*.thetvdb.com/*series*"],
             "js": ["scripts/SickBeardConnect.js"]
         }
     ],
