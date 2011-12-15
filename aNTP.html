@@ -62,14 +62,10 @@
     
         var params = new Params();
         params.cmd = "future";
-        var types = [ "missed", "today", "soon", "later" ];
-        $.each(types, function(k, type) {
-            $("#" + type).html(cache.getItem("html_" + params + "_" + type));
-        });
-        futureAfterDone();
+
+        futureTimeout(cache.getItem("json_" + params), params, 6000);
         setMainContentHeight();
         activateSection();
-
         initSearchImageEventHook();
     </script>
 </body>

@@ -398,7 +398,11 @@ function futureBuild(response, params) {
     cache.setItem("html_" + params, $("#future-arc").html());
     age.setItem("html_" + params, $.now());
     // refresh the badge
-    chrome.extension.getBackgroundPage().setBadge(response, params);
+    try { // this will fail if called from the aNTP iframe
+        chrome.extension.getBackgroundPage().setBadge(response, params);
+    } catch (e){
+        // do nothing
+    }
     futureAfterDone();
 }
 
