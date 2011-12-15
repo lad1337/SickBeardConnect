@@ -1,6 +1,10 @@
 var lastHeight = {};
 var initialHeight = {};
 
+var unlockShows = false;
+var unlockFuture = false;
+var unlockHistory = false;
+
 function _initGui() {
     log("initialising the gui", "POP", DEBUG);
     $("body").addClass(settings.getItem("config_width"));
@@ -44,7 +48,10 @@ function _initGui() {
     $('#contend').bind('tabsshow', function(event, ui) {
         cache.setItem('last_tab', ui.index);
     });
+    initSearchImageEventHook();
+}
 
+function initSearchImageEventHook(){
     $("img.search").live('click', function(e) {
         var id = $(this).attr("id");
         var splitID = id.split("-");
@@ -61,9 +68,9 @@ function _initGui() {
         params.episode = episode;
         genericRequest(params, searchSuccess, searchError, 0, null); // no timeout
         listenForNotificationsFast(); // for 1 min
-    });
-
+    });    
 }
+
 
 function unlockContent(area) {
     switch (area) {

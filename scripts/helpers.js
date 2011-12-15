@@ -1,6 +1,25 @@
-var settings = chrome.extension.getBackgroundPage().settings;
-var cache = chrome.extension.getBackgroundPage().cache;
-var age = chrome.extension.getBackgroundPage().age;
+var defaultSettings = { "sb_url" : "",
+        "sb_api_key": "",
+        "sb_username": "",
+        "sb_password": "",
+        "config_log_lvl" : 20,
+        "config_width" : "medium",
+        "config_tab_animation" : true,
+        "config_images_banner" : false,
+        "config_images_future" : "none",
+        "config_icon_badge" : "auto",
+        "config_history_filter" : "both",
+        "config_addshow": "both",
+        "config_switchToShow": true,
+        "config_section": 'auto',
+        "config_refresh_rate" : 5,
+        "config_notification_timeout" : 4,
+        "config_notification_default_rate" : 20,
+        "config_chromeToGrowl_use" : false,
+        "config_chromeToGrowl_icon_path" : "" };
+var settings = new Store("settings", defaultSettings); // globaly used
+var cache = new Store("cache");
+var age = new Store("age");
 
 var connectionStatus = chrome.extension.getBackgroundPage().connectionStatus;
 

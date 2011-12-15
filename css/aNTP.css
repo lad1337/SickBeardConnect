@@ -1,0 +1,16 @@
+
+.panel{
+    max-height: 340px;
+}
+
+body.aNTP #future-tab li.banner{
+    height: 88px;
+}
+
+img.search{
+    display: none;
+}
+
+img.search.visible,li:hover img.search {
+    display: none;
+}

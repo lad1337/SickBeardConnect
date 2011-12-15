@@ -1,6 +1,3 @@
-var unlockShows = false;
-var unlockFuture = false;
-var unlockHistory = false;
 
 function initGui() {
     // see popup-ui.js
@@ -152,23 +149,4 @@ function openSBPage() {
     chrome.tabs.create( { url : getUrl() });
     closeWindow = true;
     window.close();
-}
-
-if (lastOpened > 0) {
-    if (NOW - lastOpened < 700) {
-        openSBPage();
-    }
-}
-
-if (!closeWindow) {
-    age.setItem("lastOpened", NOW);
-    // this comes before the bottom one
-    $(document).ready(function() {
-        initGui();
-        initContent();
-    });
-    // this is called after the above one
-    window.onload = function() {
-        // what can we do here ?
-    };
 }
