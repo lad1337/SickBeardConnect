@@ -165,6 +165,7 @@ function buildAddShow(tvdbid,name){
     spanText.addClass('addShow');
     var buttonSpan = $('<span class="quality" style="background:none;">');
     var selectQ = $('<select>');
+    selectQ.append('<option value="">Default</option>');
     selectQ.append('<option value="sdtv|sddvd">SD</option>');
     selectQ.append('<option value="hdtv|hdwebdl|hdbluray">HD</option>');
     selectQ.append('<option value="sdtv|sddvd|hdtv|hdwebdl|hdbluray|unknown">ANY</option>');

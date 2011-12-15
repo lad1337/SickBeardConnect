@@ -139,7 +139,8 @@ function initGui(){
          }
      );
     
-    addForm.appendChild(_buildSelect('sb_quality',{'SD':'sdtv|sddvd',
+    addForm.appendChild(_buildSelect('sb_quality',{ 'Default': '',
+                                                    'SD':'sdtv|sddvd',
                                                     'HD':'hdtv|hdwebdl|hdbluray',
                                                     'ANY':'sdtv|sddvd|hdtv|hdwebdl|hdbluray|unknown'}));
     addForm.appendChild(create('br',{}));
