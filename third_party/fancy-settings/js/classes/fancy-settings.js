@@ -53,9 +53,10 @@
             if (tab.groups[params.group] === undefined) {
                 tab.groups[params.group] = {};
                 group = tab.groups[params.group];
-                
+                var id = params.group.replace(/ /g, "_").replace(/&/g, "");
                 group.content = (new Element("table", {
-                    "class": "setting group"
+                    "class": "setting group",
+                    "id": id
                 })).inject(tab.content);
                 
                 row = (new Element("tr")).inject(group.content);

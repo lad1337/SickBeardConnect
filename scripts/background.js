@@ -3,6 +3,7 @@ var msgTimer;
 var futureTimer;
 
 var connectionStatus = false;
+var apiVersion = 0;
 
 chrome.extension.onRequest.addListener(
         function(request, sender, sendResponse) {
@@ -138,16 +139,18 @@ function setBadge(response, params) {
 function testConnection(){
     log("Testing connection","BAK",INFO);
     var params = new Params();
-    params.cmd = "sb.ping";
+    params.cmd = "sb";
     genericRequest(params, connectionEstablished, noConnection, 0, null); // timeout disabeld
 }
 
-function connectionEstablished(){
+function connectionEstablished(response, params){
     connectionStatus = true;
+    apiVersion = response.data.api_version;
 }
 
 function noConnection(){
     connectionStatus = false;
+    apiVersion = 0;
 }
 
 function reloadBackgroundPage() {

@@ -29,13 +29,13 @@ this.manifest = {
         {
             "tab": chrome.i18n.getMessage("options_tab_sickbeard"),
             "group": chrome.i18n.getMessage("options_group_connection"),
-            "text": chrome.i18n.getMessage("options_connectionStatus_label")+' <img style="width:16px;vertical-align:middle;" src="images/throbber.svg" id="connectionStatus"/>',
+            "text": chrome.i18n.getMessage("options_connectionStatus_label")+' <img style="width:16px;vertical-align:middle;" src="images/throbber.svg" id="connectionStatus"/> <span id="apiVersion"></span>',
             "name": "myDescription_connection_status",
             "type": "description"
         },
         {
             "tab": chrome.i18n.getMessage("options_tab_sickbeard"),
-            "group": chrome.i18n.getMessage(""),
+            "group": chrome.i18n.getMessage("options_username_label") + " & " + chrome.i18n.getMessage("options_password_label"),
             "label": chrome.i18n.getMessage("options_username_label"),
             "text": chrome.i18n.getMessage("options_username_example"),
             "name": "sb_username",
@@ -43,7 +43,7 @@ this.manifest = {
         },
         {
             "tab": chrome.i18n.getMessage("options_tab_sickbeard"),
-            "group": chrome.i18n.getMessage(""),
+            "group": chrome.i18n.getMessage("options_username_label") + " & " + chrome.i18n.getMessage("options_password_label"),
             "label": chrome.i18n.getMessage("options_password_label"),
             "text": chrome.i18n.getMessage("options_password_example"),
             "name": "sb_password",
@@ -52,7 +52,7 @@ this.manifest = {
         },
         {
             "tab": chrome.i18n.getMessage("options_tab_sickbeard"),
-            "group": chrome.i18n.getMessage(""),
+            "group": chrome.i18n.getMessage("options_username_label") + " & " + chrome.i18n.getMessage("options_password_label"),
             "text": chrome.i18n.getMessage("options_usernamePassword_description"),
             "name": "myDescription_username_password",
             "type": "description"

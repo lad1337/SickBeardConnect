@@ -22,6 +22,7 @@ var cache = new Store("cache");
 var age = new Store("age");
 
 var connectionStatus = chrome.extension.getBackgroundPage().connectionStatus;
+var apiVersion = chrome.extension.getBackgroundPage().connectionStatus;
 
 var NOW = $.now();
 
@@ -217,9 +218,14 @@ Params.prototype.toString = function() {
  * @returns {String}
  */
 function constructShowPosterUrl(tvdbid) {
-    // /showPoster/?show=73741&amp;which=poster
-    var imgPart = "showPoster/?show=" + tvdbid + "&which=poster";
-    return getHTTPLoginUrl() + imgPart;
+    if(apiVersion >= 0.2){
+        // /api/1234/?cmd=show.getbanner&tvdbid=
+        return getApiUrl() + "?cmd=show.getposter&tvdbid=" + tvdbid;
+    }else{
+        // /showPoster/?show=73741&amp;which=poster
+        var imgPart = "showPoster/?show=" + tvdbid + "&which=poster";
+        return getHTTPLoginUrl() + imgPart;
+    }
 
 }
 /**
@@ -227,11 +233,15 @@ function constructShowPosterUrl(tvdbid) {
  * @returns {String}
  */
 function constructShowBannerUrl(tvdbid) {
-    // /showPoster/?show=73741&amp;which=poster
-    var imgPart = "showPoster/?show=" + tvdbid + "&which=banner";
-    return getHTTPLoginUrl() + imgPart;
+    if(apiVersion >= 0.2){
+        // /api/1234/?cmd=show.getposter&tvdbid
+        return getApiUrl() + "?cmd=show.getbanner&tvdbid=" + tvdbid;
+    }else{
+        // /showPoster/?show=73741&amp;which=poster
+        var imgPart = "showPoster/?show=" + tvdbid + "&which=banner";
+        return getHTTPLoginUrl() + imgPart;
+    }
 }
-
 /**
  * @param provider
  * @returns {String}

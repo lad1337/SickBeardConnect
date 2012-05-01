@@ -1,4 +1,29 @@
 window.addEvent("domready", function() {
+    // http://davidwalsh.name/mootools-show-hide
+    //time to implement basic show / hide
+    Element.implement({
+      //implement show
+      show: function() {
+        this.setStyle('display','');
+      },
+      //implement hide
+      hide: function() {
+        this.setStyle('display','none');
+      }
+    });
+    //time to implement fancy show / hide
+    Element.implement({
+        //implement show
+        fancyShow: function() {
+          this.fade('in');
+        },
+        //implement hide
+        fancyHide: function() {
+          this.fade('out');
+        }
+      });
+    
+    
     // special settings need some callback functions
     new FancySettings.initWithManifest(function(settings) {
 
@@ -57,15 +82,31 @@ window.addEvent("domready", function() {
         });
 
     });
+    
+    var userPWGroup = document.id(chrome.i18n.getMessage("options_username_label") + "__" + chrome.i18n.getMessage("options_password_label"));
+    userPWGroup.hide();
+    console.log(userPWGroup);
+    
     window.setInterval(function() {
 
         var img = document.id("connectionStatus");
+        var versionSpan = document.id("apiVersion");
+        var apiVersion = chrome.extension.getBackgroundPage().apiVersion;
         if (chrome.extension.getBackgroundPage().connectionStatus) {
             img.setProperty('src', "images/yes16.png");
+            versionSpan.set('html', "v"+chrome.extension.getBackgroundPage().apiVersion);    
         } else {
             img.setProperty('src', "images/no16.png");
+            versionSpan.set('html', "v???");
         }
-    }, 2000);
+        if(apiVersion >= 0.2){
+            userPWGroup.fancyHide();
+        }else{
+            userPWGroup.fancyShow();
+            userPWGroup.show(); 
+        }
+        
+    }, 3000);
     window.setInterval(function() {
 
         var img = document.id("connectionStatus_c2g");
