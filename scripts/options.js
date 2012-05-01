@@ -85,7 +85,6 @@ window.addEvent("domready", function() {
     
     var userPWGroup = document.id(chrome.i18n.getMessage("options_username_label") + "__" + chrome.i18n.getMessage("options_password_label"));
     userPWGroup.hide();
-    console.log(userPWGroup);
     
     window.setInterval(function() {
 
