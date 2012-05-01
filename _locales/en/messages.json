@@ -87,7 +87,7 @@
         "message": "SickBeard Password"
     },
     "options_usernamePassword_description": {
-        "message": "You only need to provide the Username and password if you want to display images"
+        "message": "You only need to provide the username and password if you want to display images and are below API v0.2"
     },
     "options_width_label": {
         "message": "Popup width"
