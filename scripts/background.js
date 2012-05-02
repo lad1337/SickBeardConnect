@@ -1,8 +1,12 @@
 
 var msgTimer;
 var futureTimer;
+var profileSwitchTimer;
+
+var profiles = new ProfileManager();
 
 var connectionStatus = false;
+var connectionStatusProfile = {}
 var apiVersion = 0;
 
 chrome.extension.onRequest.addListener(
@@ -67,11 +71,26 @@ function setFutureTimer(rate) {
     if (!rate)
         rate = settings.getItem("config_refresh_rate") * 1000 * 60;
     if (rate > 0) {
-        log("Will pull future / badge info from SickBeard every " + settings.getItem("config_refresh_rate") + " min.", "BAK", INFO);
+        log("Will pull future / badge info from SickBeard every " + (rate / 1000 )/ 60 + " min.", "BAK", INFO);
         refreshFuture();
-        msgTimer = setInterval(refreshFuture, rate);
+        futureTimer = setInterval(refreshFuture, rate);
     } else {
         log("Will NOT pull future / badge info from SickBeard automatically (refresh disabled in options).", "BAK", INFO);
+    }
+}
+
+function setProfileSwitchTimer(rate) {
+    if (profileSwitchTimer)
+        clearInterval(profileSwitchTimer);
+    else
+        checkProfileConnections();
+    if (!rate)
+        rate = settings.getItem("profile_switch_check") * 1000 * 60;
+    if (rate > 0) {
+        log("Will check profile connections every " + (rate / 1000 )/ 60 + " min.", "BAK", INFO);
+        profileSwitchTimer = setInterval(checkProfileConnections, rate);
+    } else {
+        log("Will NOT check profile connections automatically (check disabled in options).", "BAK", INFO);
     }
 }
 
@@ -100,6 +119,23 @@ function refreshFuture() {
     genericRequest(params, setBadge, null, 0, null); // timeout disabeld
 
 }
+function checkProfileConnections(){
+    if(settings.getItem('in_config') || settings.getItem('in_popup')){
+        log("Not Checking Profiles connections because popup or config is open", "BAK", DEBUG);
+        return false;
+    }
+    log("Checking all Profiles connections", "BAK", DEBUG);
+    connectionStatusProfile = {};
+    var allProfiles = profiles.getAll();
+    $.each(allProfiles, function(name, curP) {
+        if(curP.profile_priority){
+            console.log(curP);
+            testConnection(name);
+        }
+    });
+
+}
+
 function msgCallback(response, params) {
     var data = response.data;
     $.each(data, function(k, value) {
@@ -136,11 +172,19 @@ function setBadge(response, params) {
 
 }
 
-function testConnection(){
-    log("Testing connection","BAK",INFO);
+function testConnection(profileName){
     var params = new Params();
     params.cmd = "sb";
-    genericRequest(params, connectionEstablished, noConnection, 0, null); // timeout disabeld
+    if(typeof profileName === "undefined"){
+        log("Testing connection","BAK",INFO);
+        genericRequest(params, connectionEstablished, noConnection, 0, null); // timeout disabeld
+    }else{
+        log("Testing connection for profile '"+profileName+"'","BAK",INFO);
+        genericRequest(params,
+                (function(response, params){connectionEstablishedForProfile(profileName);}),
+                (function(response, params){noConnectionForProfile(profileName);}),
+                0, null, profileName); // timeout disabeld
+    }
 }
 
 function connectionEstablished(response, params){
@@ -148,18 +192,114 @@ function connectionEstablished(response, params){
     apiVersion = response.data.api_version;
 }
 
+function connectionEstablishedForProfile(profileName){
+    connectionStatusProfile[profileName] = true;
+    checkProfileTestDone();
+}
+
 function noConnection(){
     connectionStatus = false;
     apiVersion = 0;
+    console.log("noConnection", connectionStatus, apiVersion)
+}
+
+function noConnectionForProfile(profileName){
+    connectionStatusProfile[profileName] = false;
+    checkProfileTestDone();
+}
+
+
+
+function checkProfileTestDone(){
+    var allProfiles = profiles.getAll();
+    var toCompare = [];
+    var testsNotDone = false;
+    
+    $.each(allProfiles, function(name, values) {
+        if(values.profile_priority){
+            if(!connectionStatusProfile.hasOwnProperty(name)){
+                testsNotDone = true;
+                return false;   
+            }
+            values.name = name;
+            values.connectionStatus = connectionStatusProfile[name];
+            toCompare.push(values);
+        }
+    });
+    if(testsNotDone)
+        return false;
+    
+    var sorted = toCompare.sort(profileCompare);
+    console.log("sorted list",sorted)
+    $.each(sorted, function(index, curP) {
+       console.log(curP);
+       if(curP.connectionStatus){
+           var curActive = settings.getItem('profile_name');
+           log("active profile: '"+curActive+"' new profile: '"+curP.name+"'","BAK",DEBUG);
+           if(curActive != curP.name){
+               log("automatic switching to "+curP.name,"BAK",INFO);
+               switchProfile(curP.name);
+           }else{
+               log("no need for automatic switching to "+curP.name,"BAK",DEBUG);
+           }
+           return false;
+        }
+    });
+}
+
+function profileCompare(a, b){
+    if (a.profile_priority < b.profile_priority)
+        return 1;
+     if (a.profile_priority > b.profile_priority)
+       return -1;
+     return 0;
 }
 
 function reloadBackgroundPage() {
     window.location.reload();
 }
 
+
+function switchProfile(profileName){
+    profile = profiles.getProfile(profileName);
+    
+    settings.setItem('profile_name', profile.name);
+    
+    settings.setItem('sb_url', profile.values.sb_url);
+    settings.setItem('sb_api_key', profile.values.sb_api_key);
+    settings.setItem('sb_username', profile.values.sb_username);
+    settings.setItem('sb_password', profile.values.sb_password);
+    
+    cache.clear();
+    age.clear();
+}
+
+function migration(){
+
+    console.log("migration: init check");
+    
+    if(!settings.getItem('migration'))
+        settings.setItem('migration', 0);
+        
+    // from version 0.1.17 -> 0.1.18
+    if(settings.getItem('migration') < 1){
+        console.log("migration: creating profile");
+
+        settings.setItem('profile_name', 'Default');
+        settings.setItem('profile_priority', 0);
+        settings.setItem('profile_switch_check', 5);
+        settings.setItem('profiles', getDefaultProfiles());
+        profiles.syncActive();
+        settings.setItem('migration', 1);
+    }
+}
+migration();
+
 setMSGTimer();
 setFutureTimer();
-//testConnection();
+setProfileSwitchTimer();
+testConnection();
+
 
 if (settings.getItem("config_chromeToGrowl_use")){
     chrome2growl.init(settings.getItem("config_chromeToGrowl_host"), settings.getItem("config_chromeToGrowl_icon_path"));

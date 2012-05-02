@@ -5,7 +5,19 @@
     "sb_name": {
         "message": "SickBeard" 
     },
-    
+
+    "default_profile_name": {
+        "message": "Default"
+    },
+    "options_profile_create_button":{
+        "message": "New Profile"
+    },
+    "options_profile_copy_button":{
+        "message": "Copy Profile"
+    },
+    "options_profile_delete_button":{
+        "message": "Delete Profile"
+    },
     
     "settings": {
         "message": "Settings"
@@ -71,6 +83,12 @@
     "options_apiKey_description": {
         "message": "Get the ApiKey from the SickBeard config page"
     },
+    "options_priority_label": {
+      "message": "Priority"
+    },
+    "options_prority_description":{
+        "message": "Higher number means higher priority."
+    },
     "options_connectionStatus_label": {
         "message": "Connections status"
     },
@@ -89,6 +107,15 @@
     "options_usernamePassword_description": {
         "message": "You only need to provide the username and password if you want to display images and are below API v0.2"
     },
+    "options_group_profile_switching": {
+        "message": "Profile Auto Switching"
+    },
+    "options_profile_switching_label": {
+        "message": "Check Profile every"
+    },
+    "options_profile_switching_description": {
+        "message": "If auto profile switching is on, it will try to find the profile with the highst priority which is online and will change to that profile. Only profiles with a priority are checked. It will not automatically switch if config or popup is open."
+    },
     "options_width_label": {
         "message": "Popup width"
     },
@@ -100,9 +127,6 @@
     },
     "options_imageFuture_label": {
         "message": "Images in CommingEp Tab"
-    },
-    "options_imageFuture_description":{
-        "message": "If images fail to load check the username and password"
     },
     "options_iconBadge_label": {
         "message": "Icon badge displays"

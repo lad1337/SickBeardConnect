@@ -11,6 +11,12 @@ function initContent() {
     log("opening the popup", "POP", DEBUG);
     // load shows into gui
 
+    //set flag to not auto change the profile while pop is open
+    settings.setItem('in_popup', true);
+    
+    // set current profile
+    setupProfileSwitcher();
+    
     var params = new Params();
     params.cmd = "shows";
     params.sort = "name";
@@ -27,6 +33,7 @@ function initContent() {
     var addshowset = settings.getItem('config_addshow');
     if((addshowset == 'popup' || addshowset == 'both'))
         pageTVDBID(injectAddNewShow);
+
 
 }
 function refreshContent() {
@@ -150,3 +157,7 @@ function openSBPage() {
     closeWindow = true;
     window.close();
 }
+
+addEventListener("unload", function (event) {
+    settings.setItem('in_popup', false);
+}, true);

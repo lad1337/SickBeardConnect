@@ -3,6 +3,7 @@
 <head>
 
     <link rel="stylesheet" type="text/css" href="third_party/jquery/css/smoothness/jquery-ui-1.8.16.custom.css" />
+    <link rel="stylesheet" type="text/css" href="third_party/qtip/jquery.qtip.min.css" />
     <link rel="stylesheet" type="text/css" href="css/popup.css" />
     <link rel="stylesheet" type="text/css" href="css/popup-jquery.css" />
     <link rel="stylesheet" type="text/css" href="css/shorthand.css" />
@@ -10,6 +11,7 @@
     <script src="third_party/jquery/js/jquery-1.6.2.min.js"></script>
     <script src="third_party/jquery/js/jquery-ui-1.8.16.custom.min.js"></script>
     <script src="third_party/store/store.js" type="text/javascript"></script>
+    <script src="third_party/qtip/jquery.qtip.min.js" type="text/javascript"></script>
     
     <script src="scripts/helpers.js"></script>
     <script src="scripts/popup-ui.js"></script>
@@ -123,6 +125,7 @@
         <span id="open_sb" onclick="openSBPage()">SickBeard</span>
         <span id="extension_settings" onclick="chrome.tabs.create({url: 'options.html'});window.close();">Settings</span>
         <span id="refresh" onclick="refreshContent();">Refresh</span>
+        <span id="profile" style="display:none;">...</span>
     <div>
 </body>
 

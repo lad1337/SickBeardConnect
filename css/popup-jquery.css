@@ -197,3 +197,9 @@
     -khtml-border-bottom-right-radius: 0px;
     border-bottom-right-radius: 0px;
 }
+
+
+.ui-sb-profile-switcher .ui-tooltip-content{
+    color: #333;
+    background: url("/images/bg.gif") repeat scroll 0 0 transparent;
+}

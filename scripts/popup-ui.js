@@ -48,6 +48,7 @@ function _initGui() {
     $('#contend').bind('tabsshow', function(event, ui) {
         cache.setItem('last_tab', ui.index);
     });
+    
     initSearchImageEventHook();
 }
 
@@ -213,7 +214,9 @@ function buildAddShow(tvdbid,name){
         genericRequest(params, addSuccess, addFail, 0, null);    
     });
     newLi.append(spanText);
+    newLi.append('<span>Q:</span>');
     newLi.append(selectQ);
+    newLi.append('<span>   S:</span>');
     newLi.append(selectS);
     buttonSpan.append(yesImg);
     buttonSpan.append(noImg);
@@ -404,7 +407,51 @@ function futureBuild(response, params) {
     } catch (e){
         // do nothing
     }
+
     futureAfterDone();
+}
+
+function setupProfileSwitcher(){
+    if(profiles.count() <= 1)
+        return false;
+    $('#profile').show();
+    var allProfiles = profiles.getAll();
+    var ul = $('<ul>');
+    $.each(allProfiles, function(name, values) {
+
+        var curLi = $('<li>');
+        curLi.html(name);
+        curLi.click(function(){
+            chrome.extension.getBackgroundPage().switchProfile(name);
+            refreshContent();
+        });
+        ul.append(curLi);
+    });
+        
+    $('#profile').qtip({
+        content: {
+            text: function(api) {
+                return $('<h5>Switch to Profile</h5>').append(ul);
+            }
+        },
+        show: {
+            event: 'click'
+        },
+        style: {
+            classes: 'ui-tooltip-shadow ui-tooltip-rounded ui-sb-profile-switcher ui-tooltip-tipped'
+        },
+        position: {
+            my: 'bottom center',
+            at: 'top center'
+        },
+        hide: {
+            fixed: true,
+            delay: 500
+        }
+    });
+    
+    
+    $('#profile').html(settings.getItem('profile_name'));
 }
 
 function futureTimeout(response, params, timeout) {

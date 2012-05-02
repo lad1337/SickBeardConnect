@@ -13,7 +13,7 @@ snatched Custom blue #449
 * {
     font-size: 12px;
     font-family: tahoma, sans-serif;
-    color: #000;
+    /*color: #000;*/
 }
 
 body {
@@ -85,6 +85,14 @@ body.big {
 
 #refresh:hover {
     background-image: url(../images/menu/restart16_over.png);
+}
+
+#profile {
+    background-image: url(../images/menu/profile16.png);
+}
+
+#profile:hover {
+    background-image: url(../images/menu/profile16_over.png);
 }
 
 /*
@@ -364,6 +372,31 @@ span.Downloaded {
     color: whiteSmoke;
 }
 
+/*
+ * profile switcher
+ */
+
+.ui-sb-profile-switcher .ui-tooltip-content{
+    border-width: 1px;
+    border-color: #000001;
+    border-style: solid;
+}
+.ui-sb-profile-switcher .ui-tooltip-content h5{
+    margin: 0;
+}
+.ui-sb-profile-switcher .ui-tooltip-content ul{
+    padding-left: 0;
+}
+.ui-sb-profile-switcher .ui-tooltip-content li{
+    list-style: none;
+    cursor: pointer;
+    margin-bottom: 2px;
+    padding: 2px;
+}
+.ui-sb-profile-switcher .ui-tooltip-content li:hover{
+    background: #333;
+    color: whitesmoke;
+}
 /*
  * helpers / common things
  */
