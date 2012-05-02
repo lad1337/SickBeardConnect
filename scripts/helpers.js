@@ -37,7 +37,7 @@ function getDefaultSettings(){
             "config_chromeToGrowl_use" : false,
             "config_chromeToGrowl_icon_path" : "",
             "in_config": false,
-            "migration": 1}; // migration=1 since version 0.1.18
+            "migration": 0}; // migration=0 since version 0.1.19
     return defaultSettings;
 }
 

@@ -1,6 +1,6 @@
 {
     "name": "__MSG_ext_name__",
-    "version": "0.1.18",
+    "version": "0.1.19",
     "permissions": [ "http://*/*", "https://*/*", "tabs", "notifications" ],
     "description": "SickBeard extension for Google Chrome.",
     "background_page": "background.html",

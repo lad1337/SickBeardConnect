@@ -278,13 +278,14 @@ function migration(){
 
     console.log("migration: init check");
     
-    if(!settings.getItem('migration'))
+    var migrationLvl = settings.getItem('migration');
+    if(typeof migrationLvl === undefined){
         settings.setItem('migration', 0);
-        
+    }
+
     // from version 0.1.17 -> 0.1.18
     if(settings.getItem('migration') < 1){
         console.log("migration: creating profile");
-
         settings.setItem('profile_name', 'Default');
         settings.setItem('profile_priority', 0);
         settings.setItem('profile_switch_check', 5);

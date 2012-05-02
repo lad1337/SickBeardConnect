@@ -203,9 +203,11 @@ window.addEvent("domready", function() {
         console.log(apiVersion);
         if(apiVersion >= 0.2){
             userPWGroup.fancyHide();
-        }else{
+        }else if(apiVersion != 0){
             userPWGroup.fancyShow();
             userPWGroup.show(); 
+        }else{
+            userPWGroup.fancyHide();
         }
         
     }, 3000);
@@ -278,7 +280,7 @@ function createProfile(name, data){
     var newName = generateUniqueName(name);
     console.log("creating new profile with name", newName);
     if(typeof data === "undefined")
-        profiles.add(newName, chrome.extension.getBackgroundPage().getDefaultProfiles());
+        profiles.add(newName, chrome.extension.getBackgroundPage().getDefaultProfileData());
     else
         profiles.add(newName, data);
         
