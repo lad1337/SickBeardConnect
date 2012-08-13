@@ -16,21 +16,6 @@
     <script src="scripts/helpers.js"></script>
     <script src="scripts/popup-ui.js"></script>
     <script src="scripts/popup.js"></script>
-    <script>
-    if (lastOpened > 0) {
-        if (NOW - lastOpened < 700) {
-            openSBPage();
-        }
-    }
-    if (!closeWindow) {
-        age.setItem("lastOpened", NOW);
-        // this comes before the bottom one
-        $(document).ready(function() {
-            initGui();
-            initContent();
-        });
-    }    
-    </script>
     
     <title>Sick Beard Connect</title>
 </head>
@@ -122,9 +107,9 @@
     </div>
     <div id="loadContainer" style="text-align:center;"><img src="images/loadingBar.gif"/></div>
     <div id="menu">
-        <span id="open_sb" onclick="openSBPage()">SickBeard</span>
-        <span id="extension_settings" onclick="chrome.tabs.create({url: 'options.html'});window.close();">Settings</span>
-        <span id="refresh" onclick="refreshContent();">Refresh</span>
+        <span id="open_sb">SickBeard</span>
+        <span id="extension_settings">Settings</span>
+        <span id="refresh">Refresh</span>
         <span id="profile" style="display:none;">...</span>
     <div>
 </body>

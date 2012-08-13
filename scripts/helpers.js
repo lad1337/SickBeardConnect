@@ -218,6 +218,11 @@ function genricRequestError(data, params, succes_callback, error_callback, timeo
  * @param params
  */
 function genericResponseError(response, params) {
+    if(typeof response === "undefined"){
+        log("empty/broken Response" + params, "REQ", WARNING);
+        return
+    }
+
     var data = response.data;
     log("an error in response for reg: " + params, "REQ", WARNING);
     console.log(data);

@@ -1,5 +1,9 @@
 
 function initGui() {
+    $("#open_sb").click(function(){openSBPage();});
+    $("#extension_settings").click(function(){openSettings();});
+    $("#refresh").click(function(){refreshContent();});
+    
     // see popup-ui.js
     _initGui();
 }
@@ -158,6 +162,30 @@ function openSBPage() {
     window.close();
 }
 
+function openSettings(){
+    chrome.tabs.create({url: 'options.html'});
+    window.close();
+}
+
 addEventListener("unload", function (event) {
     settings.setItem('in_popup', false);
 }, true);
+
+
+if (lastOpened > 0) {
+    if (NOW - lastOpened < 700) {
+        openSBPage();
+        window.close();
+    }
+}
+if (!closeWindow) {
+    age.setItem("lastOpened", NOW);
+    // this comes before the bottom one
+    $(document).ready(function() {
+        initGui();
+        initContent();
+    });
+}else{
+    window.close();
+}
+

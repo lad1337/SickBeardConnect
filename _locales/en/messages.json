@@ -161,18 +161,6 @@
     "options_notificationVisable_label": {
         "message": "Display Notification for"
     },
-    "options_useChrome2growl_label": {
-        "message": "Activate Chrome2Growl"
-    },
-    "options_useChrome2growl_describtion": {
-        "message": "Real instuctions how to use this/install server will follow.<br/>This is very advanced !<br/>If this is setup correctly all notification will display as real growl notifications!<br/>You need <a href='http://nodejs.org/'>NodeJS</a> and <a href='https://gist.github.com/1219028' >this</a> file<br/>install the 'websocket' node module by running 'npm install websocket' and you need 'growlnotify'"
-    },
-    "options_chrome2growlIconPath_label": {
-        "message": "Absolute icon path"
-    },
-    "options_chrome2growlHost_label": {
-        "message": "NodeJS Server"
-    },
     "options_resetSettings_text": {
         "message": "Reset to default settings"
     },

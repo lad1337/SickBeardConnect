@@ -334,43 +334,6 @@ this.manifest = {
         },
         {
             "tab": chrome.i18n.getMessage("options_tab_advanced"),
-            "label": chrome.i18n.getMessage("options_useChrome2growl_label"),
-            "group": "Chrome2Growl",
-            "name": "config_chromeToGrowl_use",
-            "type": "checkbox"
-        },
-        {
-            "tab": chrome.i18n.getMessage("options_tab_advanced"),
-            "group": "Chrome2Growl",
-            "name": "myDescription_useC2G",
-            "type": "description",
-            "text": chrome.i18n.getMessage("options_useChrome2growl_describtion")
-        },
-        {
-            "tab": chrome.i18n.getMessage("options_tab_advanced"),
-            "label": chrome.i18n.getMessage("options_chrome2growlIconPath_label"),
-            "group": "Chrome2Growl",
-            "name": "config_chromeToGrowl_icon_path",
-            "type": "text",
-            "text": "/Applications/Sick-Beard/data/images/sickbeard_touch_icon.png"
-        },
-        {
-            "tab": chrome.i18n.getMessage("options_tab_advanced"),
-            "label": chrome.i18n.getMessage("options_chrome2growlHost_label"),
-            "group": "Chrome2Growl",
-            "name": "config_chromeToGrowl_host",
-            "type": "text",
-            "text": "localhost:8000"
-        },
-        {
-            "tab": chrome.i18n.getMessage("options_tab_advanced"),
-            "group": "Chrome2Growl",
-            "text": chrome.i18n.getMessage("options_connectionStatus_label")+' <img style="width:16px;vertical-align:middle;" src="images/throbber.svg" id="connectionStatus_c2g"/>',
-            "name": "myDescription_connection_status_c2g",
-            "type": "description"
-        },
-        {
-            "tab": chrome.i18n.getMessage("options_tab_advanced"),
             "group": chrome.i18n.getMessage("options_group_localStorage"),
             "text": chrome.i18n.getMessage("options_resetSettings_text"),
             "name": "reset_to_default",
@@ -388,7 +351,6 @@ this.manifest = {
         ["profile_name","sb_url","sb_api_key"],
         ["config_width","config_icon_badge","config_history_filter","config_images_future"],
         ["config_addshow","config_section"],
-        ["config_chromeToGrowl_host","config_chromeToGrowl_icon_path"],
         ["config_notification_default_rate","config_refresh_rate","config_notification_timeout"]
     ]
 };

@@ -117,13 +117,6 @@ window.addEvent("domready", function() {
             alert(chrome.i18n.getMessage("options_clearCache_message"))
         });
 
-        settings.manifest.config_chromeToGrowl_use.addEvent("action", function(value) {
-            var img = document.id("connectionStatus_c2g");
-            if(img.getProperty("src") != "images/throbber.svg")
-                document.id("connectionStatus_c2g").setProperty('src', "images/throbber.svg");
-            chrome.extension.getBackgroundPage().reloadBackgroundPage();
-        });
-
         settings.manifest.sb_url.addEvent("action", function(value) {
             chrome.extension.getBackgroundPage().testConnection();
             var img = document.id("connectionStatus");
@@ -198,7 +191,7 @@ window.addEvent("domready", function() {
             versionSpan.set('html', "v"+apiVersion);    
         } else {
             img.setProperty('src', "images/no16.png");
-            versionSpan.set('html', "v???");
+            versionSpan.set('html', "");
         }
         console.log(apiVersion);
         if(apiVersion >= 0.2){
@@ -211,15 +204,7 @@ window.addEvent("domready", function() {
         }
         
     }, 3000);
-    window.setInterval(function() {
-
-        var img = document.id("connectionStatus_c2g");
-        if (chrome.extension.getBackgroundPage().chrome2growl.opened) {
-            img.setProperty('src', "images/yes16.png");
-        } else {
-            img.setProperty('src', "images/no16.png");
-        }
-    }, 3000);
+    
     window.setInterval(function() {
         var curProfile = store.get('profile_name');
         if(curProfile != profileList.getSelection()){
@@ -232,8 +217,6 @@ window.addEvent("domready", function() {
     
     
     var p = document.id("connectionStatus").getParent();
-    p.setStyle('color', "black");
-    var p = document.id("connectionStatus_c2g").getParent();
     p.setStyle('color', "black");
     chrome.extension.getBackgroundPage().testConnection();
 
