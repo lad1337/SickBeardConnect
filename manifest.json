@@ -24,5 +24,13 @@
         "128": "images/icon128.png",
         "16": "images/icon16.png",
         "48": "images/icon48.png"
-    }
+    },
+    "web_accessible_resources": [
+        "images/icon48.png",
+	    "images/no16.png",
+	    "css/sbconnect_content.css",
+	    "images/bg.gif",
+	    "images/yes16.png",
+	    "images/throbber.svg"
+  ]
 }
