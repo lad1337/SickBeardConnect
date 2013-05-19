@@ -1,25 +1,34 @@
 var info = {
-        poke:   1,
-        width:  2,
-        height: 2,
-        path:   "aNTP.html"
+        "poke"    :   3,              // poke version 3
+        "width"   :   2,              // 406 px default width
+        "height"  :   1,              // 200 px default height
+        "path"    :   "aNTP.html",
+        "v2"      :   {
+                        "resize"    :   false,  // Set to true ONLY if you create a range below.
+                                               // Set to false to disable resizing
+                        "min_width" :   1,     // 200 px min width
+                        "max_width" :   2,     // 406 px max width
+                        "min_height":   1,     // 200 px min height
+                        "max_height":   1      // 200 px max height
+        },
+        "v3"      :   {
+                        "multi_placement": false // Allows the widget to be placed more than once
+                                                // Set to false unless you allow users to customize each one
+                      }
 };
 
-// This listener is essential to building a widget.
-chrome.extension.onRequestExternal.addListener(function(request, sender, sendResponse) {
-  // The NTP extension will "poke" all installed extensions. Only extensions listening
-  // will respond with the necessary information (entered above). Changing this value
-  // will cause your widget to not display within the NTP widget manager.
-  if(request === "mgmiemnjjchgkmgbeljfocdjjnpjnmcg-poke") {
-    // Now let's respond with our details. I decided to go with this method instead of
-    // the sendResponse function for security. Responses carry no identification, but
-    // luckily, normal sendRequests do.
-    chrome.extension.sendRequest(
-      sender.id,
-      {
-        head: "mgmiemnjjchgkmgbeljfocdjjnpjnmcg-pokeback",
-        body: info
-      }
-    );
-  }
+//Below is the required poke listener
+//DO NOT MODIFY ANY OF THE BELOW CODE
+chrome.extension.onMessageExternal.addListener(function(request, sender, sendResponse) {
+if(request === "mgmiemnjjchgkmgbeljfocdjjnpjnmcg-poke") {
+ chrome.extension.sendMessage(
+   sender.id,
+   {
+     head: "mgmiemnjjchgkmgbeljfocdjjnpjnmcg-pokeback",
+     body: info
+   }
+ );
+}
 });
+//Above is the required poke listener
+//DO NOT MODIFY ANY OF THE ABOVE CODE
