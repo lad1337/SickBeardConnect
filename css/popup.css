@@ -290,6 +290,10 @@ img.search.visible,li:hover img.search {
     margin-right: 5px;
 }
 
+.ep_airs {
+    float: right;
+}
+
 /*
  * Lists
  */
