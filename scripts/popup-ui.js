@@ -368,6 +368,7 @@ function futureBuild(response, params) {
             var liHTMLString_name = '<span class="show_name" id="' + value.tvdbid + '">' + value.show_name + '</span><br/>';
             liHTMLString_ep = '<span class="epSeasonEpisode">s' + pad(value.season, 2) + 'e' + pad(value.episode, 2) + '</span>';
             liHTMLString_ep += '<span class="ep_name">' + value.ep_name + '</span>';
+            liHTMLString_ep += '<span class="ep_airs">' + value.airs + '</span>';
             var img = "";
             if(imgType == 'poster'){
                 img = '<img class="future_poster" src="'+constructShowPosterUrl(value.tvdbid)+'"/>';
