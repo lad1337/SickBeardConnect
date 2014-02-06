@@ -327,7 +327,7 @@ function seasonBuild(response, params) {
         liHTMLString += '<span class="status ' + value.status + '">' + value.status + '</span>';
         liHTMLString += '<span class="date">' + getAirDate(value.airdate) + '</span>';
 
-        li.append(createSearchImg(params.tvdbid, params.season, value.episode));
+        li.append(createSearchImg(params.tvdbid, params.season, value.episode,2));
         li.append(liHTMLString);
         $("#seasonEpisodes ul").append(li);
     });
@@ -375,7 +375,7 @@ function futureBuild(response, params) {
             }else if(imgType == 'banner'){
                 liHTMLString_ep += '<span class="ep_airs_banner">' + value.airs + '</span>';
                 img = '<div style="width:343px;height:63px;background-image: url(\''+constructShowBannerUrl(value.tvdbid)+'\');background-size:343px 63px;text-align:right;"><div style="float:right;padding: 5px 5px 5px 5px;">';
-				img += createSearchImg(value.tvdbid, value.season, value.episode);
+				img += createSearchImg(value.tvdbid, value.season, value.episode, 1);
 				img += '</div></div>';
             }
 
@@ -389,7 +389,7 @@ function futureBuild(response, params) {
             }
             li.append(liHTMLString_ep);
             if(imgType == "poster") {
-                li.prepend(createSearchImg(value.tvdbid, value.season, value.episode));
+                li.prepend(createSearchImg(value.tvdbid, value.season, value.episode, 2));
 			}
             curUl.append(li);
             entrys = true;
@@ -549,9 +549,16 @@ function searchError(response, params) {
     listenForNotificationsFast(20000); // 20 sec
 }
 
-function createSearchImg(tvdbid, season, episode) {
-	return '<img class="search ' + tvdbid + "-" + season + "-" + episode+ '" id="'+ tvdbid + "-" + season + "-" + episode +'" src="chrome-extension://ljfjkhejnkopmfdadafjoklibhggokpb/images/search16.png">';
-}
+function createSearchImg(tvdbid, season, episode, type) {
+	var img = '<img ';
+	if (type == 1)
+	{
+	img += 'style="background-color: white; padding: 5px 5px 5px 5px;"';
+	}
+	img += 'class="search ' + tvdbid + "-" + season + "-" + episode+ '" id="'+ tvdbid + "-" + season + "-" + episode +'" src="chrome-extension://ljfjkhejnkopmfdadafjoklibhggokpb/images/search16.png">';
+	return img;
+
+	}
 /*
  * generic gui helper functions
  */
