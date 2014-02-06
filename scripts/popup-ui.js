@@ -368,13 +368,12 @@ function futureBuild(response, params) {
             var liHTMLString_name = '<span class="show_name" id="' + value.tvdbid + '">' + value.show_name + '</span><br/>';
             liHTMLString_ep = '<span class="epSeasonEpisode">S' + pad(value.season, 2) + 'E' + pad(value.episode, 2) + '</span>';
             liHTMLString_ep += '<span class="ep_name">' + value.ep_name + '</span>';
-            liHTMLString_ep += '<span class="ep_airs">' + value.airs + '</span>';
             var img = "";
             if(imgType == 'poster'){
-                liHTMLString_ep += '<br /><span class="ep_name">' + value.airs + '</span>';
+                liHTMLString_ep += '<br /><span class="ep_airs">' + value.airs + '</span>';
                 img = '<img class="future_poster" src="'+constructShowPosterUrl(value.tvdbid)+'"/>';
             }else if(imgType == 'banner'){
-                liHTMLString_ep += ' | <span class="ep_name">' + value.airs + '</span>';
+                liHTMLString_ep += ' | <span class="ep_airs">' + value.airs + '</span>';
                 img = '<img class="future_banner" src="'+constructShowBannerUrl(value.tvdbid)+'"/>';
             }
 
