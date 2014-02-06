@@ -371,10 +371,12 @@ function futureBuild(response, params) {
             var img = "";
             if(imgType == 'poster'){
                 liHTMLString_ep += '<br /><span class="ep_airs_poster">' + value.airs + '</span>';
-                img = '<img class="future_poster" src="'+constructShowPosterUrl(value.tvdbid)+'"/>';
+				img = '<img class="future_poster" src="'+constructShowPosterUrl(value.tvdbid)+'"/>';
             }else if(imgType == 'banner'){
                 liHTMLString_ep += '<span class="ep_airs_banner">' + value.airs + '</span>';
-                img = '<img class="future_banner" src="'+constructShowBannerUrl(value.tvdbid)+'"/>';
+                img = '<div style="width:343px;height:63px;background-image: url(\''+constructShowBannerUrl(value.tvdbid)+'\');background-size:343px 63px;text-align:right;"><div style="float:right;padding: 5px 5px 5px 5px;">';
+				img += createSearchImg(value.tvdbid, value.season, value.episode);
+				img += '</div></div>';
             }
 
             if(img)
@@ -386,11 +388,9 @@ function futureBuild(response, params) {
                 li.append('<div class="clearRight clearLeft"></div>');
             }
             li.append(liHTMLString_ep);
-            if(imgType != "none")
-                li.append(createSearchImg(value.tvdbid, value.season, value.episode));
-            else
+            if(imgType == "poster") {
                 li.prepend(createSearchImg(value.tvdbid, value.season, value.episode));
-            li.append('<div class="clearRight clearLeft"></div>');
+			}
             curUl.append(li);
             entrys = true;
         });
@@ -550,13 +550,8 @@ function searchError(response, params) {
 }
 
 function createSearchImg(tvdbid, season, episode) {
-    var img = $("<img>");
-    img.addClass("search " + tvdbid + "-" + season + "-" + episode);
-    img.attr("id", tvdbid + "-" + season + "-" + episode);
-    img.attr("src", chrome.extension.getURL('images/search16.png'));
-    return img;
+	return '<img class="search ' + tvdbid + "-" + season + "-" + episode+ '" id="'+ tvdbid + "-" + season + "-" + episode +'" src="chrome-extension://ljfjkhejnkopmfdadafjoklibhggokpb/images/search16.png">';
 }
-
 /*
  * generic gui helper functions
  */
