@@ -366,12 +366,14 @@ function futureBuild(response, params) {
             
             var li = $('<li class="'+imgType+' '+popWidth+'">');
             var liHTMLString_name = '<span class="show_name" id="' + value.tvdbid + '">' + value.show_name + '</span><br/>';
-            liHTMLString_ep = '<span class="epSeasonEpisode">s' + pad(value.season, 2) + 'e' + pad(value.episode, 2) + '</span>';
+            liHTMLString_ep = '<span class="epSeasonEpisode">S' + pad(value.season, 2) + 'E' + pad(value.episode, 2) + '</span>';
             liHTMLString_ep += '<span class="ep_name">' + value.ep_name + '</span>';
             var img = "";
             if(imgType == 'poster'){
+                liHTMLString_ep += '<br /><span class="ep_name">' + value.airs + '</span>';
                 img = '<img class="future_poster" src="'+constructShowPosterUrl(value.tvdbid)+'"/>';
             }else if(imgType == 'banner'){
+                liHTMLString_ep += ' | <span class="ep_name">' + value.airs + '</span>';
                 img = '<img class="future_banner" src="'+constructShowBannerUrl(value.tvdbid)+'"/>';
             }
 
@@ -494,7 +496,7 @@ function historyBuild(response, params) {
             var li = $("<li>");
             var liHTMLString = '<span class="show_name" id="' + value.tvdbid + '">' + value.show_name + '</span>';
             liHTMLString += '<span class="date">' + getNiceHistoryDate(value.date) + '</span><br/>';
-            liHTMLString += '<span class="epSeasonEpisode">s' + pad(value.season, 2) + 'e' + pad(value.episode, 2) + '</span>';
+            liHTMLString += '<span class="epSeasonEpisode">S' + pad(value.season, 2) + 'E' + pad(value.episode, 2) + '</span>';
             liHTMLString += '<span class="status ' + value.status + '">' + value.status + '</span>';
             liHTMLString += '<span class="historyQuality">' + value.quality + '</span>';
             li.append(liHTMLString);
