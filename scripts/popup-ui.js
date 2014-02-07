@@ -374,9 +374,17 @@ function futureBuild(response, params) {
 				img = '<img class="future_poster" src="'+constructShowPosterUrl(value.tvdbid)+'"/>';
             }else if(imgType == 'banner'){
                 liHTMLString_ep += '<span class="ep_airs_banner">' + value.airs + '</span>';
-                img = '<div style="width:343px;height:63px;background-image: url(\''+constructShowBannerUrl(value.tvdbid)+'\');background-size:343px 63px;text-align:right;"><div style="float:right;padding: 5px 5px 5px 5px;">';
-				img += createSearchImg(value.tvdbid, value.season, value.episode, 1);
-				img += '</div></div>';
+                img = '<div style="height:';
+		if(popWidth == 'small'){
+			img += '45px;';
+		}else if(popWidth == 'medium'){
+			img += '63px;';
+		}if(popWidth == 'big'){
+			img += '82px;';
+		}
+		img += 'background-image: url(\''+constructShowBannerUrl(value.tvdbid)+'\');background-size:100%;text-align:right;"><div style="float:right;padding: 5px 5px 5px 5px;">';
+		img += createSearchImg(value.tvdbid, value.season, value.episode, 1);82
+		img += '</div></div>';
             }
 
             if(img)
