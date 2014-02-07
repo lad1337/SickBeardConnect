@@ -555,7 +555,7 @@ function createSearchImg(tvdbid, season, episode, type) {
 	{
 	img += 'style="background-color: white; padding: 5px 5px 5px 5px;"';
 	}
-	img += 'class="search ' + tvdbid + "-" + season + "-" + episode+ '" id="'+ tvdbid + "-" + season + "-" + episode +'" src="chrome-extension://ljfjkhejnkopmfdadafjoklibhggokpb/images/search16.png">';
+	img += 'class="search ' + tvdbid + "-" + season + "-" + episode+ '" id="'+ tvdbid + "-" + season + "-" + episode +'" src="'+chrome.extension.getURL('images/search16.png')+'">';
 	return img;
 
 	}
