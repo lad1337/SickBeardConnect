@@ -327,7 +327,7 @@ function seasonBuild(response, params) {
         liHTMLString += '<span class="status ' + value.status + '">' + value.status + '</span>';
         liHTMLString += '<span class="date">' + getAirDate(value.airdate) + '</span>';
 
-        li.append(createSearchImg(params.tvdbid, params.season, value.episode));
+        li.append(createSearchImg(params.tvdbid, params.season, value.episode,2));
         li.append(liHTMLString);
         $("#seasonEpisodes ul").append(li);
     });
@@ -370,11 +370,21 @@ function futureBuild(response, params) {
             liHTMLString_ep += '<span class="ep_name">' + value.ep_name + '</span>';
             var img = "";
             if(imgType == 'poster'){
-                liHTMLString_ep += '<br /><span class="ep_airs">' + value.airs + '</span>';
-                img = '<img class="future_poster" src="'+constructShowPosterUrl(value.tvdbid)+'"/>';
+                liHTMLString_ep += '<br /><span class="ep_airs_poster">' + value.airs + '</span>';
+				img = '<img class="future_poster" src="'+constructShowPosterUrl(value.tvdbid)+'"/>';
             }else if(imgType == 'banner'){
-                liHTMLString_ep += ' | <span class="ep_airs">' + value.airs + '</span>';
-                img = '<img class="future_banner" src="'+constructShowBannerUrl(value.tvdbid)+'"/>';
+                liHTMLString_ep += '<span class="ep_airs_banner">' + value.airs + '</span>';
+                img = '<div style="height:';
+		if(popWidth == 'small'){
+			img += '45px;';
+		}else if(popWidth == 'medium'){
+			img += '63px;';
+		}if(popWidth == 'big'){
+			img += '82px;';
+		}
+		img += 'background-image: url(\''+constructShowBannerUrl(value.tvdbid)+'\');background-size:100%;text-align:right;"><div style="float:right;padding: 5px 5px 5px 5px;">';
+		img += createSearchImg(value.tvdbid, value.season, value.episode, 1);82
+		img += '</div></div>';
             }
 
             if(img)
@@ -386,11 +396,9 @@ function futureBuild(response, params) {
                 li.append('<div class="clearRight clearLeft"></div>');
             }
             li.append(liHTMLString_ep);
-            if(imgType != "none")
-                li.append(createSearchImg(value.tvdbid, value.season, value.episode));
-            else
-                li.prepend(createSearchImg(value.tvdbid, value.season, value.episode));
-            li.append('<div class="clearRight clearLeft"></div>');
+            if(imgType == "poster") {
+                li.prepend(createSearchImg(value.tvdbid, value.season, value.episode, 2));
+			}
             curUl.append(li);
             entrys = true;
         });
@@ -549,14 +557,16 @@ function searchError(response, params) {
     listenForNotificationsFast(20000); // 20 sec
 }
 
-function createSearchImg(tvdbid, season, episode) {
-    var img = $("<img>");
-    img.addClass("search " + tvdbid + "-" + season + "-" + episode);
-    img.attr("id", tvdbid + "-" + season + "-" + episode);
-    img.attr("src", chrome.extension.getURL('images/search16.png'));
-    return img;
-}
+function createSearchImg(tvdbid, season, episode, type) {
+	var img = '<img ';
+	if (type == 1)
+	{
+	img += 'style="background-color: white; padding: 5px 5px 5px 5px;"';
+	}
+	img += 'class="search ' + tvdbid + "-" + season + "-" + episode+ '" id="'+ tvdbid + "-" + season + "-" + episode +'" src="'+chrome.extension.getURL('images/search16.png')+'">';
+	return img;
 
+	}
 /*
  * generic gui helper functions
  */
