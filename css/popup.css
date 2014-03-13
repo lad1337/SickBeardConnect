@@ -290,8 +290,12 @@ img.search.visible,li:hover img.search {
     margin-right: 5px;
 }
 
-.ep_airs {
+.ep_airs_banner {
     float: right;
+}
+
+.ep_airs_poster {
+    float: left;
 }
 
 /*
