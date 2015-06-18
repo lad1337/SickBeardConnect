@@ -510,6 +510,16 @@ function historyBuild(response, params) {
             li.append(liHTMLString);
             ul.append(li);
         }
+		else if(filter == "Snatched Not Downloaded"){
+			var li = $("<li>");
+            var liHTMLString = '<span class="show_name" id="' + value.tvdbid + '">' + value.show_name + '</span>';
+            liHTMLString += '<span class="date">' + getNiceHistoryDate(value.date) + '</span><br/>';
+            liHTMLString += '<span class="epSeasonEpisode">S' + pad(value.season, 2) + 'E' + pad(value.episode, 2) + '</span>';
+            liHTMLString += '<span class="status ' + value.status + '">' + value.status + '</span>';
+            liHTMLString += '<span class="historyQuality">' + value.quality + '</span>';
+            li.append(liHTMLString);
+            ul.append(li);
+		}
     });
     $("#history").append(ul);
 
