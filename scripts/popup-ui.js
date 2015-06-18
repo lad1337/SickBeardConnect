@@ -510,7 +510,7 @@ function historyBuild(response, params) {
             li.append(liHTMLString);
             ul.append(li);
         }
-		else if(filter == "Snatched Not Downloaded"){
+		else if(filter == "Failed"){
 			var li = $("<li>");
             var liHTMLString = '<span class="show_name" id="' + value.tvdbid + '">' + value.show_name + '</span>';
             liHTMLString += '<span class="date">' + getNiceHistoryDate(value.date) + '</span><br/>';
