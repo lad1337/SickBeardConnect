@@ -187,7 +187,8 @@ this.manifest = {
             "options": [
                         ["both", "Snatched & Downloaded"],
                         ["Snatched", "Snatched"],
-                        ["Downloaded", "Downloaded"]
+                        ["Downloaded", "Downloaded"],
+						["Failed", "Snatched Not Downloaded"]
                     ]
         },
         {
