@@ -520,7 +520,7 @@ function historyBuild(response, params) {
 								   'season_episode': 'S' + pad(value.season, 2) + 'E' + pad(value.episode, 2),
 								   'quality': value.quality,
 								   'snatched': false,
-								   'downloaded': true
+								   'downloaded': false
 									};
 			}
 			if(value.status == 'Snatched'){
