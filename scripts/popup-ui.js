@@ -513,7 +513,7 @@ function historyBuild(response, params) {
         }
 		else if(filter == "Failed"){
 			var hash = value.tvdbid.toString() + value.season.toString() + value.episode.toString();
-			if !(hash in failedObj){
+			if (!(hash in failedObj)){
 				failedObj[hash] = {'tvdbid': value.tvdbid,
 								   'show_name': value.show_name,
 								   'date': getNiceHistoryDate(value.date),
@@ -533,7 +533,7 @@ function historyBuild(response, params) {
     });
 	if(filter == "Failed"){
 		for(item in failedObj){
-			if(failedObj[item].snatched && !failedObj[item].downloaded){
+			if(failedObj[item].snatched && !(failedObj[item].downloaded)){
 				var li = $("<li>");
 				var liHTMLString = '<span class="show_name" id="' + failedObj[item].tvdbid + '">' + failedObj[item].show_name + '</span>';
 				liHTMLString += '<span class="date">' + failedObj[item].date + '</span><br/>';
