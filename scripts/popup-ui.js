@@ -538,7 +538,7 @@ function historyBuild(response, params) {
 				var liHTMLString = '<span class="show_name" id="' + failedObj[item].tvdbid + '">' + failedObj[item].show_name + '</span>';
 				liHTMLString += '<span class="date">' + failedObj[item].date + '</span><br/>';
 				liHTMLString += '<span class="epSeasonEpisode">' + failedObj[item].season_episode + '</span>';
-				liHTMLString += '<span class="status failed">Item Not Downloaded</span>';
+				liHTMLString += '<span class="status Failed">Item Not Downloaded</span>';
 				liHTMLString += '<span class="historyQuality">' + failedObj[item].quality + '</span>';
 				li.append(liHTMLString);
 				ul.append(li);
