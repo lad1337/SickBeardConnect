@@ -499,6 +499,7 @@ function historyBuild(response, params) {
     var filter = settings.getItem("config_history_filter");
     $("#history").html("");
     var ul = $("<ul>");
+	var failedObj = [];
     $.each(data, function(key, value) {
         if(filter == "both" || filter == value.status){
             var li = $("<li>");
@@ -510,7 +511,40 @@ function historyBuild(response, params) {
             li.append(liHTMLString);
             ul.append(li);
         }
+		else if(filter == "Failed"){
+			var hash = value.tvdbid.toString() + value.season.toString() + value.episode.toString();
+			if (!(hash in failedObj)){
+				failedObj[hash] = {'tvdbid': value.tvdbid,
+								   'show_name': value.show_name,
+								   'date': getNiceHistoryDate(value.date),
+								   'season_episode': 'S' + pad(value.season, 2) + 'E' + pad(value.episode, 2),
+								   'quality': value.quality,
+								   'snatched': false,
+								   'downloaded': false
+									};
+			}
+			if(value.status == 'Snatched'){
+				failedObj[hash].snatched = true;
+			}
+			if(value.status == 'Downloaded'){
+				failedObj[hash].downloaded = true;
+			}
+		}
     });
+	if(filter == "Failed"){
+		for(item in failedObj){
+			if(failedObj[item].snatched && !(failedObj[item].downloaded)){
+				var li = $("<li>");
+				var liHTMLString = '<span class="show_name" id="' + failedObj[item].tvdbid + '">' + failedObj[item].show_name + '</span>';
+				liHTMLString += '<span class="date">' + failedObj[item].date + '</span><br/>';
+				liHTMLString += '<span class="epSeasonEpisode">' + failedObj[item].season_episode + '</span>';
+				liHTMLString += '<span class="status Failed">Item Not Downloaded</span>';
+				liHTMLString += '<span class="historyQuality">' + failedObj[item].quality + '</span>';
+				li.append(liHTMLString);
+				ul.append(li);
+			}
+		}
+	}
     $("#history").append(ul);
 
     cache.setItem("html_" + params, $("#history").html());

@@ -376,6 +376,11 @@ span.Downloaded {
     background: #C3E3C8;
 }
 
+span.Failed {
+	background: #FF0000;
+	color: whitesmoke;
+}
+
 .status.Unaired,span.Skipped {
     color: whiteSmoke;
 }
