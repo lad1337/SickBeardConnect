@@ -518,7 +518,7 @@ function historyBuild(response, params) {
 								   'show_name': value.show_name,
 								   'date': getNiceHistoryDate(value.date),
 								   'season_episode': 'S' + pad(value.season, 2) + 'E' + pad(value.episode, 2),
-								   'quality': value.quality
+								   'quality': value.quality,
 								   'snatched': false,
 								   'downloaded': true
 									}
