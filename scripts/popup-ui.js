@@ -499,7 +499,7 @@ function historyBuild(response, params) {
     var filter = settings.getItem("config_history_filter");
     $("#history").html("");
     var ul = $("<ul>");
-	var failedObj = []
+	var failedObj = [];
     $.each(data, function(key, value) {
         if(filter == "both" || filter == value.status){
             var li = $("<li>");
@@ -512,7 +512,7 @@ function historyBuild(response, params) {
             ul.append(li);
         }
 		else if(filter == "Failed"){
-			var hash = value.tvdbid.toString() + value.season.toString() + value.episode.toString()
+			var hash = value.tvdbid.toString() + value.season.toString() + value.episode.toString();
 			if !(hash in failedObj){
 				failedObj[hash] = {'tvdbid': value.tvdbid,
 								   'show_name': value.show_name,
@@ -521,13 +521,13 @@ function historyBuild(response, params) {
 								   'quality': value.quality,
 								   'snatched': false,
 								   'downloaded': true
-									}
+									};
 			}
 			if(value.status == 'Snatched'){
-				failedObj[hash].snatched = true
+				failedObj[hash].snatched = true;
 			}
 			if(value.status == 'Downloaded'){
-				failedObj[hash].downloaded = true
+				failedObj[hash].downloaded = true;
 			}
 		}
     });
