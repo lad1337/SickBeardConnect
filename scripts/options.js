@@ -284,7 +284,7 @@ function deleteActiveProfile(){
 
 function loadProfile(settings, profileName){
     
-    console.log("loading profile: '"+profileName+"'");
+    //console.log("loading profile: '"+profileName+"'");
     profile = profiles.getProfile(profileName);
     
     settings.manifest.profile_name.element.value = profile.name;

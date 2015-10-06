@@ -3,16 +3,16 @@
     "manifest_version": 2,
     "version": "0.1.22",
     "permissions": [ "http://*/*", "https://*/*", "tabs", "notifications" ],
-    "description": "SickBeard extension for Google Chrome.",
+    "description": "SickBeard (CW) extension for Google Chrome. (Edited to enable SickRage Compatibility)",
     "background": {
         "page": "background.html"
      },
     "options_page": "options.html",
     "default_locale": "en",
     "browser_action": {
-        "default_icon": "images/icon19.png",
+        "default_icon": "images/icon19cw.png",
         "default_popup": "popup.html",
-        "default_title": "Sick Beard Connect"
+        "default_title": "Sick Beard Connect (CW)"
     },
     "content_scripts": [
         {
@@ -21,12 +21,12 @@
         }
     ],
     "icons": {
-        "128": "images/icon128.png",
-        "16": "images/icon16.png",
-        "48": "images/icon48.png"
+        "128": "images/icon128cw.png",
+        "16": "images/icon16cw.png",
+        "48": "images/icon48cw.png"
     },
     "web_accessible_resources": [
-        "images/icon48.png",
+        "images/icon48cw.png",
 	    "images/no16.png",
 	    "css/sbconnect_content.css",
 	    "images/bg.gif",

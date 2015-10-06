@@ -58,7 +58,9 @@ function getRefreshRate() {
 
 function getUrl(profileName) {
     var url = getUrlObj(profileName);
+	//alert(url.full);
     return url.full;
+	//return 'http://10.0.0.2:8081/sickrage/'
 }
 
 function getUrlObj(profileName){
@@ -101,6 +103,8 @@ function getHTTPLoginUrl() {
 }
 
 function getApiUrl(profileName) {
+	//return "http://10.0.0.2:8081/sickrage/api/8c858f2614cfb95ea79a30accc1c67c6";
+	
     if(typeof profileName === "undefined")
         return getUrl() + "api/" + settings.getItem("sb_api_key");
     else{
@@ -131,7 +135,7 @@ function genericRequest(params, succes_callback, error_callback, timeout, timeou
         }
 
     var apiUrl = getApiUrl(profileName);
-    $.ajax( { type : "POST", url : apiUrl, data : params, dataType : 'json', success : function(data) {
+    $.ajax( { type : "GET", url : apiUrl, data : params, dataType : 'json', success : function(data) {
         age.setItem("json_" + params, $.now()); // time of last successful call
         cache.setItem("json_" + params, data); // json string of last response
         checkForError(data, params, succes_callback, error_callback);
